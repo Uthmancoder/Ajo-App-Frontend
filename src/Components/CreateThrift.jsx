@@ -82,7 +82,7 @@ const CreateThrift = () => {
         // Sending  thrift data to the server
         console.log(ThriftData);
         await axios
-          .post("http://localhost:3000/user/CreateThrift", ThriftData, {
+          .post("https://ultimate-thrift.onrender.com/user/CreateThrift", ThriftData, {
             headers: {
               Authorization: `Bearer ${token}`, // Include the token in the Authorization header
             },

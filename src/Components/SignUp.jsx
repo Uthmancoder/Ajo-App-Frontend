@@ -81,7 +81,7 @@ const SignUp = () => {
         try {
           setloadData(!loaddata);
           const response = await axios.post(
-            "http://localhost:3000/user/signup",
+            "https://ultimate-thrift.onrender.com/user/signup",
             values
           );
           console.log(response.data);

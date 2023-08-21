@@ -5,6 +5,7 @@ import GroupUsers from "../Redux/GroupUsers";
 import { useSelector } from "react-redux";
 import GetLink from "../Redux/GetLink";
 import CopyToClipboard from "./CopyToClipboard";
+import Loading from "./Loading";
 
 const EachgroupUser = () => {
   const { fetchedUser } = useSelector((state) => state.GroupUsers);
@@ -12,12 +13,32 @@ const EachgroupUser = () => {
   const groupname = fetchedUser.groupName;
   const groupMembers = fetchedUser.groupMembers;
   const plan = fetchedUser.plan;
-
-//   getting the grouplink
   const { fetchedLink } = useSelector((state) => state.GetLink);
+
+  const isLoading = fetchedUser?.loading; // Add a loading check
+
+  if (isLoading) {
+    // Show a loading indicator or message
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
+  }
+
+  //   getting the grouplink
   const grouplink = fetchedLink?.link;
   console.log(grouplink);
+  const linkLoading = fetchedLink?.loading; // Add a loading check
 
+  if (linkLoading) {
+    // Show a loading indicator or message
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
+  }
 
   const renderTableHeader = () => {
     if (plan === "Daily") {
@@ -97,7 +118,7 @@ const EachgroupUser = () => {
           <h1 className="fs-1 text-center text-primary fw-bolder mt-2">
             {groupname.toUpperCase()}
           </h1>
-          <table className="border rounded-3 w-100 p-2">
+          <table className="border rounded-3 w-100 p-3">
             {renderTableHeader()}
             {renderTableData()}
           </table>
@@ -114,10 +135,9 @@ const EachgroupUser = () => {
               </div>
               <div className="d-grid">
                 <h5 className="text-primary fw-bolder">Group Link</h5>
-                <CopyToClipboard text={grouplink} />  
+                <CopyToClipboard text={grouplink} />
               </div>
             </div>
-            
           </div>
         </div>
       </div>

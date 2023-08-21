@@ -31,7 +31,7 @@ const Login = () => {
       toast.error("Input fields cannot be empty");
     } else {
       setloadData(!loaddata);
-      const uri = "http://localhost:3000/user/signin";
+      const uri = "https://ultimate-thrift.onrender.com/user/signin";
       const data = { username, password };
       try {
         dispatch(PostingUser());
@@ -48,12 +48,7 @@ const Login = () => {
           // save the userdata to store
           dispatch(PostingSuccessful(response.data.result));
 
-          // Dispatch action to fetch and update user data
-          if (remember) {
-            fetchUserData();
-          }
-
-          // Delayed the time for navigation
+          // delayed the time for navigation
           setTimeout(() => {
             navigate("/dashboard");
           }, 2000);

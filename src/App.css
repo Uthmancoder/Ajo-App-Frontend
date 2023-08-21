@@ -368,6 +368,9 @@
   font-size: 1em;
   font-weight: 500;
 }
+.dash{
+  text-decoration: none;
+}
 
 #button {
   z-index: 2;
@@ -523,6 +526,10 @@
 table tr, td{
   border: 1px solid gray ;
   padding: 0 10px;
+}
+.table {
+  padding: 10px;
+  border-radius : 10px;
 }
 .track{
   position: fixed;

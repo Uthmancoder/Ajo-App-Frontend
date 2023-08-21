@@ -1,13 +1,24 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Sidenav from "./Sidenav";
 import AppNav from "./AppNav";
+import { Link } from "react-router-dom";
 import AllUsers from "../Redux/AllUsers";
 import { useSelector } from "react-redux";
+import Loading from "./Loading";
 
 const Dashboard = () => {
   const { fetchedUser } = useSelector((state) => state.AllUsers);
-  const balance = fetchedUser?.user.wallet
-  console.log(balance);
+  const balance = fetchedUser?.user?.wallet;
+  const isLoading = fetchedUser?.loading; // Add a loading check
+
+  if (isLoading) {
+    // Show a loading indicator or message
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -22,12 +33,15 @@ const Dashboard = () => {
           </h1>
 
           <div className="row container ">
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6 my-2 ">
+            <Link
+              to="/account"
+              className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
+            >
               <div className="card p-3 bbb text-light ">
                 <h4>₦{balance}.00</h4>
                 <h4>Account Balance</h4>
               </div>
-            </div>
+            </Link>
             <div className="col-12 col-sm-12 col-md-6 col-lg-6 my-2">
               <div className="card p-3 bbb text-light">
                 <h4>0</h4>
@@ -54,7 +68,11 @@ const Dashboard = () => {
             </div>
             <div className="col-12 col-sm-12 col-md-6 col-lg-6 my-2">
               <div className=" p-3  text-light">
-               <img className="img-fluid w-75" src={require("../images/get.png")} alt="" />
+                <img
+                  className="img-fluid w-75"
+                  src={require("../images/get.png")}
+                  alt=""
+                />
               </div>
             </div>
           </div>

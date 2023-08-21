@@ -22,20 +22,20 @@ const Groups = () => {
   const [showLoader, setShowLoader] = useState(false);
   const Navigate = useNavigate();
 
-  // getting the current signed user
+  // Getting the current signed user
   const { fetchedUser } = useSelector((state) => state.AllUsers);
   const currentUserUsername = fetchedUser?.user.username;
-
+  const isLoading = fetchedUser?.loading;
 
   const token = localStorage.getItem("token");
 
-  //  Fetching all the existing thrifts from the server
+  // Fetching all the existing thrifts from the server
   useEffect(() => {
-    if (token) {
+    if (!isLoading && token) {
       axios
-        .get("http://localhost:3000/user/ExistingThrift", {
+        .get("https://ultimate-thrift.onrender.com/user/ExistingThrift", {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
@@ -47,14 +47,14 @@ const Groups = () => {
           setLoading(false);
           console.error("Error fetching thrift groups:", error);
         });
-    } else {
+    } else if (!isLoading) {
       alert("Error fetching thrift groups");
     }
-  }, []);
+  }, [isLoading, token]);
 
-  // fetching all the group members from the server
+  // Fetching all the group members from the server
   const handleGroupMembers = async (groupName) => {
-    const url = "http://localhost:3000/user/getmembers";
+    const url = "https://ultimate-thrift.onrender.com/user/getmembers";
     try {
       setShowLoader(true); // Show the loader before making the API call
       const response = await axios.post(
@@ -62,7 +62,7 @@ const Groups = () => {
         { groupName },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -70,10 +70,10 @@ const Groups = () => {
       dispatch(fetchingMembersSuccessful(response.data));
       Navigate("/contribution");
     } catch (error) {
-      console.error("Error fetching group members :", error);
+      console.error("Error fetching group members:", error);
       dispatch(fetchingMembersFailed(error));
       // Handle the error (e.g., show an error message)
-      alert("Error fetching group members :", error);
+      alert("Error fetching group members:", error);
     } finally {
       setShowLoader(false);
     }
@@ -128,10 +128,10 @@ const Groups = () => {
                     </div>
                   </div>
 
-                  {thriftGroup.verifiedMembers.map((isVerified, index) => (
+                  {thriftGroup.verifiedMembers.map((member, index) => (
                     <span key={index}>
-                      {isVerified &&
-                      currentUserUsername === thriftGroup.groupName
+                      {member.verified &&
+                      currentUserUsername === member.username
                         ? "✅"
                         : "🚫"}
                     </span>
