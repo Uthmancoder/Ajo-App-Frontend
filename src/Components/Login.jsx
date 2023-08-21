@@ -19,6 +19,7 @@ const Login = () => {
   const [username, setusername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loaddata, setloadData] = useState(true);
+  const [remember, setRemember] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const fetchedUser = useSelector((state) => state.AllUsers);
@@ -47,13 +48,15 @@ const Login = () => {
           // save the userdata to store
           dispatch(PostingSuccessful(response.data.result));
 
-  
+          // Dispatch action to fetch and update user data
+          if (remember) {
+            fetchUserData();
+          }
 
-          // delayed the time for navigation
+          // Delayed the time for navigation
           setTimeout(() => {
             navigate("/dashboard");
           }, 2000);
-
         } else {
           toast(response?.data?.message || "Server error");
           dispatch(PostingFailed("Server error"));
@@ -66,6 +69,10 @@ const Login = () => {
         setloadData(true); // Hide the loader
       }
     }
+  };
+
+  const handleClick = () => {
+    setRemember(true);
   };
 
   const toggleShowPassword = (ev) => {
@@ -109,21 +116,31 @@ const Login = () => {
           </div>
           <div className="checkbox-container">
             <label className="checkbox">
-              <input type="checkbox" id="checkbox" />
+              <input onChange={handleClick} type="checkbox" id="checkbox" />
             </label>
             <label htmlFor="checkbox" className="checkbox-text">
               Remember me
             </label>
           </div>
-          <button className="sigin-btn" type="submit" onClick={signin}>
+
+          {/* signin button */}
+          <button
+            className={`sigin-btn ${!remember ? "disabled" : ""}`}
+            type="submit"
+            onClick={signin}
+            disabled={!remember || !loaddata}
+          >
             {loaddata ? (
               "Submit"
             ) : (
-              <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
               </div>
             )}
           </button>
+
+          {/* end of signin button */}
+
           <a className="forget" href="#">
             Forget password?
           </a>

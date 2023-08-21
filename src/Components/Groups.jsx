@@ -12,21 +12,26 @@ import {
 } from "../Redux/GroupUsers";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import AllUsers from "../Redux/AllUsers";
 
 const Groups = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showLoader, setShowLoader] = useState(false); 
+  const [showLoader, setShowLoader] = useState(false);
   const Navigate = useNavigate();
+
+  // getting the current signed user
+  const { fetchedUser } = useSelector((state) => state.AllUsers);
+  const currentUserUsername = fetchedUser?.user.username;
+
 
   const token = localStorage.getItem("token");
 
   //  Fetching all the existing thrifts from the server
   useEffect(() => {
-    console.log(token);
     if (token) {
-      console.log(token);
       axios
         .get("http://localhost:3000/user/ExistingThrift", {
           headers: {
@@ -84,7 +89,7 @@ const Groups = () => {
         <div className="col-12 col-sm-9 mx-auto ">
           <h1>Groups</h1>
 
-           {showLoader ? <Loading /> : null} 
+          {showLoader ? <Loading /> : null}
 
           {loading ? (
             <Loading />
@@ -125,27 +130,10 @@ const Groups = () => {
 
                   {thriftGroup.verifiedMembers.map((isVerified, index) => (
                     <span key={index}>
-                      {isVerified ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="42"
-                          height="42"
-                          viewBox="0 0 42 42"
-                          fill="none"
-                        >
-                          {/* SVG path data for verified members */}
-                        </svg>
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="42"
-                          height="42"
-                          viewBox="0 0 42 42"
-                          fill="none"
-                        >
-                          {/* SVG path data for non-verified members */}
-                        </svg>
-                      )}
+                      {isVerified &&
+                      currentUserUsername === thriftGroup.groupName
+                        ? "✅"
+                        : "🚫"}
                     </span>
                   ))}
                 </div>

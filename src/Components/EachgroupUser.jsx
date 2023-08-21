@@ -102,7 +102,7 @@ const EachgroupUser = () => {
             {renderTableData()}
           </table>
 
-          <div className="card py-2 px-5 text-center w-75 track  position-fixed mb-4 mr-2 bottom-5 ">
+          <div className="card shadow py-2 px-5 text-center w-75 track  position-fixed mb-4 mr-2 bottom-5 ">
             <div className="d-flex align-items-center justify-content-between w-100">
               <div className="d-grid ">
                 <h5 className="text-primary fw-bolder">Next Withdrawer</h5>

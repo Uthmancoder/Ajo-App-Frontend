@@ -6,7 +6,8 @@ import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const { fetchedUser } = useSelector((state) => state.AllUsers);
-  const balance = fetchedUser?.wallet
+  const balance = fetchedUser?.user.wallet
+  console.log(balance);
 
   return (
     <div>

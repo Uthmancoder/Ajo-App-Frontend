@@ -6,13 +6,25 @@ import AllUsers from "../Redux/AllUsers";
 import { useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
-import PaystackConfig  from "./paystackConfig";
+// import PaystackConfig  from "./paystackConfig";
 import { PaystackButton } from 'react-paystack';
 
 
+
+
+
 const Account = () => {
+
+  const { fetchedUser } = useSelector((state) => state.AllUsers);
+  const username = fetchedUser?.user.username;
+  const name = username.toUpperCase();
+  const email = fetchedUser.email;
+  const publickKey = 'pk_test_dbcb6b7004be89b6c6f9b41c5c1a2d11ade8023f'
+
+
   const [payment, setpayment] = useState(false);
   const [amount, setamount] = useState("");
+
 
   // Trigger the modal
   const fundWallet = () => {
@@ -24,40 +36,35 @@ const Account = () => {
     setpayment(!true);
   };
 
-
-  // generate random number for the payment reference
-  const generateRef = () => {
-    const timestamp = Date.now(); // Get the current timestamp
-    const random = Math.floor(Math.random() * 10000); // Generate a random number between 0 and 9999
-    return `TX-${timestamp}-${random}`;
+  const handlePaystackSuccessAction = (reference) => {
+    console.log(reference);
   };
-  
 
-  const { fetchedUser } = useSelector((state) => state.AllUsers);
-  const username = fetchedUser?.user.username;
-  const name = username.toUpperCase();
-  const email = fetchedUser.email;
 
-  const paymentDetails = {
+  const handlePaystackCloseAction = () => {
+    console.log('closed')
+  }
+
+
+
+
+  // declaring the payment details
+  const componentProps = {
+    reference: (new Date()).getTime().toString(),
     email: email,
     amount: amount,
-  };
+    publickKey,
+    text: 'Add Fund',
+    onSuccess: (reference) => handlePaystackSuccessAction(reference),
+    onClose: handlePaystackCloseAction,
+};
 
-  const handlePaymentSuccess = (response) => {
-    console.log("Payment successful!", response);
-    // Handle success: Update your app's state, display success message, etc.
-  };
-
-  const handlePaymentClose = () => {
-    console.log("Payment closed");
-    // Handle payment window closed by user
-  };
 
   return (
     <div>
       <AppNav />
       <div className="row w-100 h-100">
-        <div className="col-12 col-sm-3 col-md-3 ">
+        <div className="d-none d-sm-block  col-3 ">
           <Sidenav />
         </div>
         <div className="col-9 account_rel">
@@ -142,7 +149,7 @@ const Account = () => {
             <div
               onClick={cancelModal}
               title="cancel"
-              className="bg-white p-1 rounded-circle closebtn"
+              className="bg-white  rounded-circle closebtn"
             >
               <AiOutlineClose className="text-dark fw-bolder" size={20} />
             </div>
@@ -156,19 +163,7 @@ const Account = () => {
                 type="number"
                 placeholder="Enter Amount"
               />
-              <PaystackButton
-                text="Pay Now"
-                className="paystack-button"
-                {...paymentDetails}
-                onSuccess={handlePaymentSuccess}
-                onClose={handlePaymentClose}
-                reference={generateRef()} 
-                publicKey={
-                  PaystackConfig.isProduction
-                    ? PaystackConfig.liveKey
-                    : PaystackConfig.testKey
-                }
-              />
+               <PaystackButton className="btn btn-primary mx-2" {...componentProps} />
             </div>
           </div>
         </div>

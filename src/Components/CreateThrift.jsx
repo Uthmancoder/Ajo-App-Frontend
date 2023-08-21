@@ -114,7 +114,6 @@ const CreateThrift = () => {
     <div>
       {/* imported the app nav */}
       <AppNav />
-
       <div className="row w-100">
         <div className="col-3">
           {/* imported the sidenav */}
