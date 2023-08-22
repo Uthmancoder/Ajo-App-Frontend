@@ -100,7 +100,7 @@ const EachgroupUser = () => {
         {groupMembers.map((user, index) => (
           <tr key={index}>
             <td>{user.username}</td>
-            {user.payment === "true" ? <td>T</td> : <td>F</td>}
+            {user.payment === "true" ?  "✅"  : "🚫"}
           </tr>
         ))}
       </tbody>

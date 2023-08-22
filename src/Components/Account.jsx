@@ -6,32 +6,27 @@ import AllUsers from "../Redux/AllUsers";
 import { useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
-// import PaystackConfig  from "./paystackConfig";
-import { PaystackButton } from 'react-paystack';
+import { PaystackButton } from "react-paystack";
 import Loading from "./Loading";
-
-
-
-
+import { useNavigate } from "react-router-dom";
 
 const Account = () => {
   const [payment, setPayment] = useState(false);
   const [amount, setAmount] = useState("");
+  const [serverResponse, setserverResponse] = useState({});
+  const [loaddata, setloadData] = useState(true);
 
   // Memoize the selector using useMemo
-  const fetchedUser = useSelector((state) => state.AllUsers, []);
+  const { fetchedUser } = useSelector((state) => state.AllUsers, []);
 
   const username = fetchedUser?.user?.username || "";
   const name = username.toUpperCase();
-  const email = fetchedUser?.email;
-  const isLoading = fetchedUser?.loading;
+  const email = fetchedUser?.user?.email || ""; // Add a conditional check for email
+  const isLoading = fetchedUser?.user?.loading; // Update the loading property path
 
-  if(isLoading){
-    return (
-      <Loading/>
-    )
+  if (isLoading) {
+    return <Loading />;
   }
-
 
   // Trigger the modal
   const fundWallet = () => {
@@ -44,45 +39,36 @@ const Account = () => {
   };
 
   // make payments
-  const paymentReference =  (new Date()).getTime().toString()
+  const paymentReference = new Date().getTime().toString();
 
   const paymentDetails = {
-      username : username,
-      email : email,
-      paymentReference : paymentReference,
-      amount : amount
+    username: username,
+    email: email,
+    tx_ref: paymentReference,
+    amount: amount,
+  };
 
-  }
-
-  const makePayment = async()=>{
+  // Inside the makePayment function in Account.js
+  // Inside the makePayment function in Account.js
+  const makePayment = async () => {
+    setloadData(!loaddata);
     try {
-        await axios.post("https://ultimate-thrift.onrender.com/user/InitiatePayment", paymentDetails)
+      const response = await axios.post(
+        "http://localhost:3000/user/InitiatePayment",
+        {
+          ...paymentDetails,
+          redirect_url: "http://localhost:3000/user/getPayment",
+        }
+      );
+      setserverResponse(response.data);
+      alert("Payment initiation successful");
+      window.location.href = response.data.flutterwaveResponse.data.link;
     } catch (error) {
       console.log(error);
+    } finally {
+      setloadData(true);
     }
-  }
-
-  // const handlePaystackSuccessAction = (reference) => {
-  //   console.log(reference);
-  // };
-  // const handlePaystackCloseAction = () => {
-  //   console.log('closed')
-  // }
-
-
-
-
-//   // declaring the payment details
-//   const componentProps = {
-//     // reference: (new Date()).getTime().toString(),
-//     email: email,
-//     amount: amount,
-//     publickKey : "pk_test_dbcb6b7004be89b6c6f9b41c5c1a2d11ade8023f",
-//     text: 'Add Fund',
-//     onSuccess: (reference) => handlePaystackSuccessAction(reference),
-//     onClose: handlePaystackCloseAction,
-// };
-
+  };
 
   return (
     <div>
@@ -187,8 +173,16 @@ const Account = () => {
                 type="number"
                 placeholder="Enter Amount"
               />
-              <button onClick={makePayment} className="btn btn-primary">Add Fund</button>
-               {/* <PaystackButton className="btn btn-primary mx-2" {...componentProps} /> */}
+              <button onClick={makePayment} className="btn btn-primary w-50">
+                {loaddata ? (
+                  "Add Fund"
+                ) : (
+                  <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                )}
+              </button>
+              {/* <PaystackButton className="btn btn-primary mx-2" {...componentProps} /> */}
             </div>
           </div>
         </div>

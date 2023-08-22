@@ -25,13 +25,13 @@ const Groups = () => {
   // Getting the current signed user
   const { fetchedUser } = useSelector((state) => state.AllUsers);
   const currentUserUsername = fetchedUser?.user.username;
-  const isLoading = fetchedUser?.loading;
+  const isLoadingUser = fetchedUser?.loading;
 
   const token = localStorage.getItem("token");
 
   // Fetching all the existing thrifts from the server
   useEffect(() => {
-    if (!isLoading && token) {
+    if (!isLoadingUser && token) {
       axios
         .get("https://ultimate-thrift.onrender.com/user/ExistingThrift", {
           headers: {
@@ -47,10 +47,16 @@ const Groups = () => {
           setLoading(false);
           console.error("Error fetching thrift groups:", error);
         });
-    } else if (!isLoading) {
+    } else if (!isLoadingUser) {
       alert("Error fetching thrift groups");
     }
-  }, [isLoading, token]);
+  }, [isLoadingUser, token]);
+
+  // ...
+
+  if (isLoadingUser) {
+    return <Loading />;
+  }
 
   // Fetching all the group members from the server
   const handleGroupMembers = async (groupName) => {
