@@ -16,6 +16,21 @@ const Account = () => {
   const [serverResponse, setserverResponse] = useState({});
   const [loaddata, setloadData] = useState(true);
 
+  // kept this here for a purpose
+  // if (payment.response) {
+  //   // Send GET request to update wallet balance
+  //   const txRef = response.data.flutterwaveResponse.data.tx_ref;
+  //   const updateWalletResponse =  axios.get(
+  //     `http://localhost:3000/user/updateWallet?tx_ref=${txRef}`
+  //   );
+
+  //   if (updateWalletResponse.data.success) {
+  //     console.log("Wallet updated successfully");
+  //   } else {
+  //     console.log("Failed to update wallet");
+  //   }
+  // }
+
   // Memoize the selector using useMemo
   const { fetchedUser } = useSelector((state) => state.AllUsers, []);
 
@@ -49,7 +64,6 @@ const Account = () => {
   };
 
   // Inside the makePayment function in Account.js
-  // Inside the makePayment function in Account.js
   const makePayment = async () => {
     setloadData(!loaddata);
     try {
@@ -57,14 +71,17 @@ const Account = () => {
         "http://localhost:3000/user/InitiatePayment",
         {
           ...paymentDetails,
-          redirect_url: "http://localhost:3000/user/getPayment",
+          email: email,
         }
       );
       setserverResponse(response.data);
       alert("Payment initiation successful");
+
+      // Assuming payment.response indicates success
       window.location.href = response.data.flutterwaveResponse.data.link;
     } catch (error) {
       console.log(error);
+      alert(error.message);
     } finally {
       setloadData(true);
     }

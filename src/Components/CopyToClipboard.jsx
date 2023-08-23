@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { AiOutlineCopy } from "react-icons/ai";
+import { AiOutlineCopyright } from "react-icons/ai";
 
 const CopyToClipboard = ({ text }) => {
   const inputRef = useRef(null);
@@ -18,15 +18,15 @@ const CopyToClipboard = ({ text }) => {
   };
 
   return (
-    <div className="d-flex align-items-center rounded-2 border justify-content-between mx-3 mt-3">
+    <div className="d-flex align-items-center  justify-content-between mx-3 link  border pt-3 " >
       <p
         className={`text-primary grouplink ${isCopied ? "highlight" : ""}`}
       >
         {text}
       </p>
-      <button title="Copy Link" className="copy-Icon mx-2" onClick={handleCopy}>
-        <AiOutlineCopy />
-      </button>
+      <p title="Copy Link" className=" mx-2 pb-1" onClick={handleCopy}>
+        <AiOutlineCopyright />
+      </p>
       {/* Hidden input to facilitate copying */}
       <input
         type="text"

@@ -10,6 +10,7 @@ import Messages from "./Components/Messages";
 import CreateThrift from "./Components/CreateThrift";
 import EachgroupUser from "./Components/EachgroupUser";
 import Fetch from "./Components/Fetch";
+import JoinGroup from "./Components/JoinGroup";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/messages" element={<Messages/>}/> 
         <Route path="/create" element={<CreateThrift/>} />
         <Route path="/pay" element={<Fetch/>} />
+        <Route path="/jointhrift" element={<JoinGroup/>}/>
       </Routes>
     </div>
   );

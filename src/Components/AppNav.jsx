@@ -72,7 +72,7 @@ const AppNav = () => {
   
   return (
     <div>
-      <AppBar position="sticky" className="bg-primary">
+      <AppBar className="bg-primary position-sticky top-0">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography

@@ -24,7 +24,7 @@ const Groups = () => {
 
   // Getting the current signed user
   const { fetchedUser } = useSelector((state) => state.AllUsers);
-  const currentUserUsername = fetchedUser?.user.username;
+  const currentUserUsername = fetchedUser?.user?.username;
   const isLoadingUser = fetchedUser?.loading;
 
   const token = localStorage.getItem("token");
@@ -60,7 +60,7 @@ const Groups = () => {
 
   // Fetching all the group members from the server
   const handleGroupMembers = async (groupName) => {
-    const url = "https://ultimate-thrift.onrender.com/user/getmembers";
+    const url = "http://localhost:3000/user/getmembers";
     try {
       setShowLoader(true); // Show the loader before making the API call
       const response = await axios.post(
@@ -139,7 +139,7 @@ const Groups = () => {
                       {member.verified &&
                       currentUserUsername === member.username
                         ? "✅"
-                        : "🚫"}
+                        : "✖️"}
                     </span>
                   ))}
                 </div>

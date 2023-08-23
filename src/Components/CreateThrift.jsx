@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidenav from "./Sidenav";
 import { useSelector, useDispatch } from "react-redux";
 import AppNav from "./AppNav";
 import useFetch from "./Fetch";
 import axios from "axios";
-import GetLink, { fetchingSuccessful } from "../Redux/GetLink";
+import { fetchingSuccessful } from "../Redux/GetLink";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { fetchedLink } from "../Redux/GetLink";
@@ -13,6 +13,7 @@ import GroupLink from "./GroupLink";
 const CreateThrift = () => {
   // import useNavigate
   const Navigate = useNavigate();
+
   const dispatch = useDispatch();
 
   const { fetchedUser } = useSelector((state) => state.AllUsers);
@@ -23,10 +24,15 @@ const CreateThrift = () => {
   const creatorUsername = fetchedUser?.user?.username;
   // inputs intialization
   const [groupName, setgroupName] = useState("");
+
   const [Amount, setAmount] = useState("");
+
   const [users, setusers] = useState("");
+
   const [interest, setInterest] = useState("");
+
   const [plan, setPlan] = useState("");
+
   // state for setting loader
   const [loaddata, setloadData] = useState(true);
 
@@ -40,13 +46,14 @@ const CreateThrift = () => {
       setimageFile(reader.result);
     };
   };
+  // end of image selection
 
   // Handle changes in the plan select element
   const handlePlanChange = (event) => {
     setPlan(event.target.value);
   };
 
-  // submitting the form
+  // Creating thrifts
   const handleSubmit = async (ev) => {
     ev.preventDefault();
 
@@ -82,20 +89,24 @@ const CreateThrift = () => {
         // Sending  thrift data to the server
         console.log(ThriftData);
         await axios
-          .post("https://ultimate-thrift.onrender.com/user/CreateThrift", ThriftData, {
-            headers: {
-              Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-            },
-          })
+          .post(
+            "https://ultimate-thrift.onrender.com/user/CreateThrift",
+            ThriftData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+              },
+            }
+          )
           .then((res) => {
-            dispatch(fetchingSuccessful(res.data));
-            console.log(res);
-            toast.success("Thrift group created successfully");     
+            dispatch(fetchingSuccessful(res.data.link));
+            localStorage.setItem("fetchedLink", JSON.stringify(res.data.link));
+
+            toast.success("Thrift group created successfully");
             if (res.status === 200) {
-              setThriftGroupCreated(true); // Set the state variable to true if group creation was successful
+              setThriftGroupCreated(true);
             }
             setloadData(true);
-
 
             //  delayed the time for the navigation
             setTimeout(() => {
@@ -109,6 +120,7 @@ const CreateThrift = () => {
       }
     }
   };
+  // end of create thrift
 
   return (
     <div>
@@ -170,8 +182,6 @@ const CreateThrift = () => {
                   placeholder="Amount"
                 />
               </div>
-
-              
 
               <div className="inputContainer col-12 col-sm-6 d-grid ">
                 <label htmlFor="Thriftname" className="text-dark fw-bolder ">
@@ -238,15 +248,12 @@ const CreateThrift = () => {
                 </div>
               )}
             </button>
-{/* Checking the thrift group created status */}
+            {/* Checking the thrift group created status */}
             {thriftGroupCreated ? (
-                <div>
-                  <GroupLink />
-                </div>
-              ) :( 
-                null
-                )}
-
+              <div>
+                <GroupLink />
+              </div>
+            ) : null}
           </form>
         </div>
       </div>

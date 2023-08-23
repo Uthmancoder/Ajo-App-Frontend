@@ -370,6 +370,41 @@
     padding-top: 20%;
   }
 }
+.link{
+  width: 100%;
+  height: 22px;
+  background-color: rgb(223, 220, 220);
+}
+.border-div{
+  border-left: 1px solid rgb(206, 200, 200)!important;
+  border-right: 1px solid rgb(211, 200, 200)!important;
+}
+.joinGroup{
+  background-image: linear-gradient(to right, #132f39,#212c30, #1e2b2a);
+  background-size: cover ;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center ;
+  justify-content: center;
+}
+.joinGroup_card{
+  background-image: linear-gradient(to right, #344b53,#3d6876, #285351);
+}
+.withraws{
+  position: fixed!important;
+  bottom: 2%;
+  width: 73%;
+  padding:0  10px;
+
+}
+.join_logo{
+  width : 50px;
+  height: 50px;
+  border-radius: 10%;
+  margin: auto;
+}
 .line{
   transform: rotate(90deg);
   width: 17%;
@@ -653,6 +688,9 @@ table tr, td{
   align-items: center;
   justify-content: center;
 }
+
+
+/* join thrift styles */
 
 
 
