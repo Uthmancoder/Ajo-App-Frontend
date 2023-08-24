@@ -392,6 +392,23 @@
 .joinGroup_card{
   background-image: linear-gradient(to right, #344b53,#3d6876, #285351);
 }
+.groupname{
+  color: #13c1f1;
+}
+.join_header{
+  background: linear-gradient(to bottom, #13c1f1, #4a6871 );
+  -webkit-background-clip: text; /* Clip the background to the text */
+  -webkit-text-fill-color: transparent;
+}
+.group_Details{
+  font-size: 12px;
+  color: rgb(139, 169, 195);
+  font-weight: 500;
+}
+.joingroup{
+  background: linear-gradient(to bottom, #13c1f1, #4a6871 );
+  color: rgb(192, 214, 234)!important;
+}
 .withraws{
   position: fixed!important;
   bottom: 2%;

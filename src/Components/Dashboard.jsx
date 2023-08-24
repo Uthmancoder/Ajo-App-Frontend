@@ -3,13 +3,40 @@ import Sidenav from "./Sidenav";
 import AppNav from "./AppNav";
 import { Link } from "react-router-dom";
 import AllUsers from "../Redux/AllUsers";
+import axios from "axios";
 import { useSelector } from "react-redux";
 import Loading from "./Loading";
 
 const Dashboard = () => {
   const { fetchedUser } = useSelector((state) => state.AllUsers);
   const balance = fetchedUser?.user?.wallet;
+  const username = fetchedUser?.user?.username;
   const isLoading = fetchedUser?.loading; // Add a loading check
+  
+
+    // After successful signup and login
+    useEffect(() => {
+      const joinGroupIntent = sessionStorage.getItem("joinGroupIntent") || "";
+      if (joinGroupIntent) {
+        // User had an intention to join a group
+        try {
+          const response = axios.post(
+            "https://ultimate-thrift.onrender.com/addusertogroup",
+            { username }
+          );
+          console.log(response.data);
+          // Clear the stored intent
+          sessionStorage.removeItem("joinGroupIntent");
+          // You can proceed with some action like displaying a success message or updating state
+        } catch (error) {
+          console.log(error);
+          // Handle errors if needed
+        }
+      }
+    }, [username]);
+  
+
+
 
   if (isLoading) {
     // Show a loading indicator or message

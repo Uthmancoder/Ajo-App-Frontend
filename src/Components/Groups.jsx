@@ -60,7 +60,7 @@ const Groups = () => {
 
   // Fetching all the group members from the server
   const handleGroupMembers = async (groupName) => {
-    const url = "http://localhost:3000/user/getmembers";
+    const url = "https://ultimate-thrift.onrender.com/user/getmembers";
     try {
       setShowLoader(true); // Show the loader before making the API call
       const response = await axios.post(
@@ -74,6 +74,12 @@ const Groups = () => {
       );
       console.log("Group Members:", response.data);
       dispatch(fetchingMembersSuccessful(response.data));
+      // Serialize the data before saving to localStorage
+      const serializedData = JSON.stringify(response.data);
+      localStorage.setItem("groupdata", serializedData);
+      localStorage.setItem("currentUser", currentUserUsername);
+      
+
       Navigate("/contribution");
     } catch (error) {
       console.error("Error fetching group members:", error);

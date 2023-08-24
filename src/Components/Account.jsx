@@ -68,7 +68,7 @@ const Account = () => {
     setloadData(!loaddata);
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/InitiatePayment",
+        "https://ultimate-thrift.onrender.com/user/InitiatePayment",
         {
           ...paymentDetails,
           email: email,

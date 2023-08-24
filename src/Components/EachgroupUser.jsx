@@ -70,9 +70,9 @@ const EachgroupUser = () => {
       return (
         <thead>
           <tr className="px-3">
-            <th>Contributors</th>
+            <th className="px-2">Contributors</th>
             {week?.map((Week, index) => (
-              <th key={index}>{Week}</th>
+              <th className="" key={index}>{Week}</th>
             ))}
           </tr>
         </thead>
@@ -89,7 +89,7 @@ const EachgroupUser = () => {
           <tr className="px-3">
             <th>Contributors</th>
             {Month?.map((month, index) => (
-              <th key={index}>{month}</th>
+              <th className="px-2" key={index}>{month}</th>
             ))}
           </tr>
         </thead>
@@ -109,7 +109,7 @@ const EachgroupUser = () => {
         <tbody>
           {groupMembers.map((user, index) => (
             <tr key={index}>
-              <td>{user.username}</td>
+              <td className="px-2">{user.username}</td>
               {user.payment === "true" ? "✅" : "✖️"}
             </tr>
           ))}
@@ -130,7 +130,7 @@ const EachgroupUser = () => {
           <h1 className="fs-1 text-center text-primary fw-bolder mt-2">
             {groupname?.toUpperCase()}
           </h1>
-          <table className="border rounded-3 w-100 p-3">
+          <table className="border rounded-3 w-100 p-3 text-center">
             {renderTableHeader()}
             {renderTableData()}
           </table>

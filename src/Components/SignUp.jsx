@@ -90,7 +90,7 @@ const SignUp = () => {
             Navigate("/login");
           }, 6000);
         } catch (error) {
-          toast.error(error.response.data.message);
+          toast.error(error.data.response.data.message);
           console.error(error);
         } finally {
           setloadData(true); // Hide the loader
@@ -235,7 +235,7 @@ const SignUp = () => {
                 </div>
               )}
             </button>
-            <p className="signup-link">
+            <p className="signup-link mt-2">
               Alredy have an account? <Link to="/login">Log In</Link>
             </p>
           </div>
