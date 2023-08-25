@@ -473,6 +473,9 @@
   margin: 5px 0 10px 0;
   z-index: 2;
 }
+.payment_status{
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
 
 .inputContainer {
   width: 100%;

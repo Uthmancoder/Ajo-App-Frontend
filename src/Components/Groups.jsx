@@ -78,7 +78,6 @@ const Groups = () => {
       const serializedData = JSON.stringify(response.data);
       localStorage.setItem("groupdata", serializedData);
       localStorage.setItem("currentUser", currentUserUsername);
-      
 
       Navigate("/contribution");
     } catch (error) {
@@ -140,14 +139,18 @@ const Groups = () => {
                     </div>
                   </div>
 
-                  {thriftGroup.verifiedMembers.map((member, index) => (
-                    <span key={index}>
-                      {member.verified &&
-                      currentUserUsername === member.username
-                        ? "✅"
-                        : "✖️"}
-                    </span>
-                  ))}
+                  <div>
+                    
+                    {thriftGroup.verifiedMembers.map((member, index) => (
+                      <span key={index}>
+                        {member.username === currentUserUsername
+                          ? member.verified
+                            ? "✅"
+                            : "✖️"
+                          : null}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))

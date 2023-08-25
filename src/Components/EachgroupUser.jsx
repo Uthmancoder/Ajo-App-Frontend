@@ -53,9 +53,11 @@ const EachgroupUser = () => {
       return (
         <thead>
           <tr className="px-3">
-            <th>Contributors</th>
+            <th className=" border payment_status">Contributors</th>
             {days?.map((day, index) => (
-              <th key={index}>{day}</th>
+              <th className=" payment_status" key={index}>
+                {day}
+              </th>
             ))}
           </tr>
         </thead>
@@ -70,9 +72,11 @@ const EachgroupUser = () => {
       return (
         <thead>
           <tr className="px-3">
-            <th className="px-2">Contributors</th>
+            <th className="px-2 payment_status">Contributors</th>
             {week?.map((Week, index) => (
-              <th className="" key={index}>{Week}</th>
+              <th className="payment_status" key={index}>
+                {Week}
+              </th>
             ))}
           </tr>
         </thead>
@@ -87,9 +91,11 @@ const EachgroupUser = () => {
       return (
         <thead>
           <tr className="px-3">
-            <th>Contributors</th>
+            <th className="payment_status">Contributors</th>
             {Month?.map((month, index) => (
-              <th className="px-2" key={index}>{month}</th>
+              <th className="px-2 payment_status" key={index}>
+                {month}
+              </th>
             ))}
           </tr>
         </thead>
@@ -101,7 +107,7 @@ const EachgroupUser = () => {
   // rendering table data
   const renderTableData = () => {
     if (!groupMembers) {
-      return ( 
+      return (
         <p>Loading...</p>
       );
     } else {
@@ -109,21 +115,31 @@ const EachgroupUser = () => {
         <tbody>
           {groupMembers.map((user, index) => (
             <tr key={index}>
-              <td className="px-2">{user.username}</td>
-              {user.payment === "true" ? "✅" : "✖️"}
+              <td className="px-2 text-start">{user.username}</td>
+              <td className="payment_status">
+                {Array.isArray(user.payment) ? (
+                  user.payment.map((payment, i) => (
+                    payment.paid === true ? "✅" : "✖️"
+                  ))
+                ) : (
+                  user.payment?.paid === true ? "✅" : "✖️"
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
       );
     }
   };
+  
+  
   // end of table data
 
   return (
     <div>
       <AppNav />
       <div className="row w-100">
-        <div className="col-3">
+        <div className="col-3 d-none  d-md-block">
           <Sidenav />
         </div>
         <div className="col-9">
@@ -137,7 +153,7 @@ const EachgroupUser = () => {
 
           <div className=" shadow  rounded-2 withraws ">
             <div className="row w-100  py-2">
-              <div className="d-grid col-12 col-sm-4 ">
+              <div className="d-grid col-12 col-lg-4 text-center ">
                 <h5 className="text-primary pt-1 fw-bolder">Next Withdrawer</h5>
                 <p>Uthman</p>
               </div>

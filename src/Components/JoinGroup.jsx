@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../images/Microfinance.png";
 import GroupUsers from "../Redux/GroupUsers";
 import { useSelector } from "react-redux";
@@ -8,6 +8,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const JoinGroup = () => {
+  const [loaddata, setloadData] = useState(true);
+
   const groupData = JSON.parse(localStorage.getItem("groupdata")) || [];
 
   console.log(groupData);
@@ -19,7 +21,7 @@ const JoinGroup = () => {
   const navigate = useNavigate();
 
   const handleJoin = async () => {
-    alert("clicked");
+    setloadData(!loaddata);
     try {
       const response = await axios.post("http://localhost:3000/user/addusers", {
         username,
@@ -29,19 +31,26 @@ const JoinGroup = () => {
 
       if (response.status === 200) {
         toast.success(response.data.message);
+        setTimeout(() => {
+          navigate("/groups");
+        }, 3000);
       }
     } catch (error) {
       console.log(error);
       if (error.response) {
         const errorMessage = error.response.data.message; // Access the error message from the server response
         toast.error(errorMessage);
-
+        setTimeout(() => {
+          navigate("/groups");
+        }, 3000);
         if (error.response.status === 404) {
           sessionStorage.setItem("joinGroupIntent", groupData.groupName);
           // Redirect to signup page
-          // navigate("/signup");
+          navigate("/signup");
         }
       }
+    } finally {
+      setloadData(true); // Hide the loader
     }
   };
 
@@ -61,7 +70,13 @@ const JoinGroup = () => {
           onClick={handleJoin}
           className="btn btn joingroup  fw-bold w-50 mx-auto"
         >
-          Join Group
+          {loaddata ? (
+            "Join Group"
+          ) : (
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          )}
         </button>
       </div>
       <ToastContainer />
