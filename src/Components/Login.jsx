@@ -33,7 +33,7 @@ const Login = () => {
       toast.error("Input fields cannot be empty");
     } else {
       setloadData(!loaddata);
-      const uri = "https://ultimate-thrift.onrender.com/user/signin";
+      const uri = "http://localhost:3000/user/signin";
       const data = { username, password };
       try {
         dispatch(PostingUser());

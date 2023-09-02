@@ -21,7 +21,7 @@ const Dashboard = () => {
         // User had an intention to join a group
         try {
           const response = axios.post(
-            "https://ultimate-thrift.onrender.com/addusertogroup",
+            "https://ultimate-thrift.onrender.com/user/addusertogroup",
             { username }
           );
           console.log(response.data);
@@ -65,7 +65,7 @@ const Dashboard = () => {
               className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
             >
               <div className="card p-3 bbb text-light ">
-                <h4>₦{balance}.00</h4>
+                <h4>{Number(balance) > 0 ? `₦ ${balance}` : "0.00"}</h4>
                 <h4>Account Balance</h4>
               </div>
             </Link>

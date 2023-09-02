@@ -4,6 +4,8 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { MdGroups, MdAccountBalance } from "react-icons/md";
 import { TiMessages } from "react-icons/ti";
 import { FiSettings } from "react-icons/fi";
+import { BiExit } from "react-icons/bi";
+import Tooltip from "@mui/material/Tooltip";
 
 const Sidenav = () => {
   const Navigate = useNavigate();
@@ -14,7 +16,7 @@ const Sidenav = () => {
   };
   return (
     <div>
-      <div className="bg-dark px-3 user_dashboard">
+      <div className="bg-dark px-3 user_dashboard sidenav">
         <Link to="/dashboard">
           <button className="text-light btn btn-dark w-100 rounded-5 p-3 shadow">
             <BiSolidDashboard style={{ fontSize: "23px" }} /> Dashboard
@@ -35,14 +37,23 @@ const Sidenav = () => {
             <TiMessages style={{ fontSize: "23px" }} /> Messages
           </button>
         </Link>
-        <button className="text-light btn btn-dark w-100 rounded-5 mt-4 p-3 shadow">
-          <FiSettings style={{ fontSize: "20px" }} /> Settings
-        </button>
+
+        <Link to="/settings">
+          <button className="text-light btn btn-dark w-100 rounded-5 mt-4 p-3 shadow">
+            <FiSettings style={{ fontSize: "20px" }} /> Settings
+          </button>
+        </Link>
+
         <button
           onClick={LogUserOut}
           className="text-light btn btn-dark w-100 rounded-5 mt-4 p-3 shadow"
         >
           Log out
+          <Tooltip title="Logout">
+            <span style={{ cursor: "pointer", marginLeft: "8px" }}>
+              <BiExit style={{ fontSize: "20px" }} />
+            </span>
+          </Tooltip>
         </button>
       </div>
     </div>

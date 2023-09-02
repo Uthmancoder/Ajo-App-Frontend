@@ -72,7 +72,7 @@ const Groups = () => {
           },
         }
       );
-      console.log("Group Members:", response.data);
+      console.log("Group Members :", response.data);
       dispatch(fetchingMembersSuccessful(response.data));
       // Serialize the data before saving to localStorage
       const serializedData = JSON.stringify(response.data);
@@ -109,7 +109,8 @@ const Groups = () => {
               <div
                 onClick={() => handleGroupMembers(thriftGroup.groupName)}
                 key={thriftGroup._id}
-                className="card w-100 mx-auto   rounded-3 my-3 py-1  px-3 shadow"
+                title="Contribuctions"
+                className="card w-100 mx-auto   rounded-3 my-3 py-1  px-3 shadow eachgroups clickable"
               >
                 <div className="d-flex align-items-center justify-content-between">
                   <div className="d-flex align-items-center">

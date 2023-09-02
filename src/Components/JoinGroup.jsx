@@ -12,6 +12,8 @@ const JoinGroup = () => {
 
   const groupData = JSON.parse(localStorage.getItem("groupdata")) || [];
 
+  const groupname  = groupData.groupName
+
   console.log(groupData);
 
   const username = localStorage.getItem("currentUser") || "";
@@ -25,6 +27,7 @@ const JoinGroup = () => {
     try {
       const response = await axios.post("http://localhost:3000/user/addusers", {
         username,
+        groupname
       });
 
       console.log(response.data);
@@ -61,7 +64,7 @@ const JoinGroup = () => {
         <h5 className=" fw-bolder fs-3 mt-3 text-center join_header">
           Ultimate Microfinance app
         </h5>
-        <h5 className="groupname fw-bold mt-3">{groupData.groupName}</h5>
+        <h5 className="groupname fw-bold mt-3">{groupname}</h5>
         <p className="text-uppercase group_Details">
           {groupData.Amount} {groupData.plan}, {groupData.RequiredUsers}{" "}
           required users, pack : {groupData.Total}{" "}

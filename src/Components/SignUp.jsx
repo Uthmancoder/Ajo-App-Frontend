@@ -6,14 +6,18 @@ import { AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { Tooltip } from "@mui/material";
 // import useFetch from "./Fetch";
-import axios from "axios";
+import axios from "axios"
 
 const SignUp = () => {
+
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
   const [loaddata, setloadData] = useState(true);
   const Navigate = useNavigate();
+  const userImage =
+    "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg";
 
   const toggleShowPassword = (ev) => {
     ev.preventDefault();
@@ -33,6 +37,7 @@ const SignUp = () => {
         email: "",
         password: "",
         confirmPassword: "",
+        image : userImage
       },
       validationSchema: yup.object().shape({
         firstname: yup
@@ -71,28 +76,28 @@ const SignUp = () => {
 
       onSubmit: async (values) => {
         console.log(values);
-        localStorage.setItem("userdetails", JSON.stringify(values))
+        localStorage.setItem("userdetails", JSON.stringify(values));
 
         if (values.password !== values.confirmPassword) {
-          toast.error("Password does not match")
-          return
+          toast.error("Password does not match");
+          return;
         }
 
         try {
           setloadData(!loaddata);
           const response = await axios.post(
-            "https://ultimate-thrift.onrender.com/user/signup",
+            "http://localhost:3000/user/signup",
             values
           );
           console.log(response.data);
-          toast.success("Sign up successful");
+          toast.success(response.data.message);
           setTimeout(() => {
             Navigate("/login");
           }, 6000);
         } catch (error) {
           toast.error(error.data.response.data.message);
           console.error(error);
-        } finally {
+        }finally {
           setloadData(true); // Hide the loader
         }
       },
@@ -103,9 +108,21 @@ const SignUp = () => {
     <div className="signup_div  py-2 w-100 ">
       <form
         onSubmit={handleSubmit}
-        className="form mx-auto  rounded-3 bg-light shadow"
+        className="form   rounded-3  bg-light shadow"
       >
-        <div className="header py-3">Sign Up</div>
+        {/* <div className="header py-3">Sign Up</div> */}
+     
+        <div>
+          <div className="userimage mx-auto">
+            <img
+              style={{ width: "100px", height: "100px" }}
+              className="img-fluid rounded-circle"
+              src={userImage}
+              alt=""
+            />
+          </div>
+        </div>
+        <h2 className="m-4 fw-bolder text-secondary">Sign Up</h2>
         <div className="inputs row">
           <div className="col-12 col-sm-6 col-md-6">
             <label htmlFor="username">First Name</label>
@@ -160,7 +177,6 @@ const SignUp = () => {
               <small className="text-danger">{errors.username}</small>
             ) : null}
           </div>
-
 
           <div className="col-12 col-sm-6 col-md-6">
             <label className="mx-1" htmlFor="email ">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppNav from "./AppNav";
 import Sidenav from "./Sidenav";
 import { FaAngleRight } from "react-icons/fa";
@@ -9,35 +9,52 @@ import axios from "axios";
 import { PaystackButton } from "react-paystack";
 import Loading from "./Loading";
 import { useNavigate } from "react-router-dom";
+import { BiExit } from "react-icons/bi";
 
 const Account = () => {
+  const publicKey = "pk_test_dbcb6b7004be89b6c6f9b41c5c1a2d11ade8023f";
   const [payment, setPayment] = useState(false);
   const [amount, setAmount] = useState("");
-  const [serverResponse, setserverResponse] = useState({});
   const [loaddata, setloadData] = useState(true);
-
-  // kept this here for a purpose
-  // if (payment.response) {
-  //   // Send GET request to update wallet balance
-  //   const txRef = response.data.flutterwaveResponse.data.tx_ref;
-  //   const updateWalletResponse =  axios.get(
-  //     `http://localhost:3000/user/updateWallet?tx_ref=${txRef}`
-  //   );
-
-  //   if (updateWalletResponse.data.success) {
-  //     console.log("Wallet updated successfully");
-  //   } else {
-  //     console.log("Failed to update wallet");
-  //   }
-  // }
-
-  // Memoize the selector using useMemo
   const { fetchedUser } = useSelector((state) => state.AllUsers, []);
 
   const username = fetchedUser?.user?.username || "";
   const name = username.toUpperCase();
   const email = fetchedUser?.user?.email || ""; // Add a conditional check for email
+  const Wallet = fetchedUser?.user?.wallet
   const isLoading = fetchedUser?.user?.loading; // Update the loading property path
+
+  const paystackSuccessAction = () => {};
+  // reference: (new Date()).getTime().toString(),
+
+  const componentProps = {
+    email,
+    amount: amount * 100,
+    metadata: {
+      username: name,
+      email,
+    },
+    publicKey,
+    text: "Add Fund",
+    onSuccess: (response) => {
+      let url = "http://localhost:3000/user/updateWallet";
+      let data = {
+        amount : amount,
+        username : username
+      }
+
+      console.log(response);
+
+      try {
+        const newresponse = axios.post(url, data)
+      console.log(newresponse.data);
+      window.location.reload()
+      } catch (error) {
+        console.log(error.newresponse.data);
+      }
+    },
+    onClose: () => alert("Wait! You need this oil, don't go!!!!"),
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -54,47 +71,23 @@ const Account = () => {
   };
 
   // make payments
-  const paymentReference = new Date().getTime().toString();
+  // const paymentReference = new Date().getTime().toString();
 
-  const paymentDetails = {
-    username: username,
-    email: email,
-    tx_ref: paymentReference,
-    amount: amount,
-  };
-
-  // Inside the makePayment function in Account.js
-  const makePayment = async () => {
-    setloadData(!loaddata);
-    try {
-      const response = await axios.post(
-        "https://ultimate-thrift.onrender.com/user/InitiatePayment",
-        {
-          ...paymentDetails,
-          email: email,
-        }
-      );
-      setserverResponse(response.data);
-      alert("Payment initiation successful");
-
-      // Assuming payment.response indicates success
-      window.location.href = response.data.flutterwaveResponse.data.link;
-    } catch (error) {
-      console.log(error);
-      alert(error.message);
-    } finally {
-      setloadData(true);
-    }
-  };
+  // const paymentDetails = {
+  //   username: username,
+  //   email: email,
+  //   tx_ref: paymentReference,
+  //   amount: amount,
+  // };
 
   return (
     <div>
       <AppNav />
       <div className="row w-100 h-100">
-        <div className="d-none d-sm-block  col-3 ">
+        <div className="d-none d-sm-block  col-3">
           <Sidenav />
         </div>
-        <div className="col-9 account_rel">
+        <div className="col-12 col-sm-9 account_rel pt-16 pl-2">
           <h1 className="fs-2 m-3">
             My <span className="fs-3 text-secondary">Account</span>
           </h1>
@@ -110,7 +103,7 @@ const Account = () => {
                     {" "}
                     Wallet Balance
                   </h5>
-                  <p>₦0.00</p>
+                  <p>{Number(Wallet) > 0 ? `₦ ${Wallet}` : "0.00"}</p>
                 </div>
                 <div
                   className="d-grid mx-4 shadow py-2 text-center balance text-light balancetext rounded-3 px-5"
@@ -131,23 +124,22 @@ const Account = () => {
           </div>
 
           <div className="card  shadow mt-4  ">
-            <div
+            {/* <div
               className="trackPayment m-2 d-flex align-items-center justify-content-around"
               style={{ backgroundColor: "white" }}
             >
-              <p className="fw-bolder text-primary fw-bolder fs-5">
-                Pending payment
-              </p>
-              <p className="fw-bolder text-primary fw-bolder fs-5">
-                Defaulted payments
-              </p>
-              <p className="fw-bolder text-primary fw-bolder fs-5">
-                Fund Wallet
-              </p>
-            </div>
+         
+             
+            </div> */}
 
-            <div className="bg-light d-flex align-items-center justify-content-between py-3 px-5">
-              <div className="text-start">
+            <div
+              className="bg-light d-flex align-items-center justify-content-between py-3  px-5"
+              style={{ overflowX: "screll" }}
+            >
+              <div className="text-start" style={{ maxWidth: "300px" }}>
+                <p className="fw-bolder trackPayment m-2 text-primary fw-bolder fs-5">
+                  Pending payment
+                </p>
                 <h5>₦0.00</h5>
                 <p>Next transfer</p>
                 <p className="mt-3">
@@ -155,7 +147,10 @@ const Account = () => {
                 </p>
               </div>
               <hr className="p-2 line" />
-              <div className="text-start">
+              <div className="text-start" style={{ maxWidth: "300px" }}>
+                <p className="fw-bolder trackPayment m-2 text-primary fw-bolder fs-5">
+                  Defaulted payments
+                </p>
                 <h5>₦0.00</h5>
                 <p>Defaulted Payment</p>
                 <p className="mt-3">
@@ -164,7 +159,13 @@ const Account = () => {
                 </p>
               </div>
               <hr className="p-2 line2" />
-              <div className="text-start" style={{ marginLeft: "-10%" }}>
+              <div
+                className="text-start"
+                style={{ maxWidth: "300px", marginLeft: "-10%" }}
+              >
+                <p className="fw-bolder trackPayment m-2 text-primary fw-bolder fs-5">
+                  Fund Wallet
+                </p>
                 <button onClick={fundWallet} className="btn btn-primary">
                   Fund Wallet
                 </button>
@@ -183,14 +184,14 @@ const Account = () => {
             <h1 className="fs-1 fw-bolder text-light ">
               UPDATE WALLET BALANCE
             </h1>
-            <div className="card p-3 w-50 mx-auto d-flex flex-direction-column align-items-end">
+            <div className="card p-3 col-10 col-sm-9 col-md-8 col-lg-5 mx-auto d-flex flex-direction-column align-items-end">
               <input
                 onChange={(ev) => setAmount(ev.target.value)}
                 className="form-control my-2 mx-2"
                 type="number"
                 placeholder="Enter Amount"
               />
-              <button onClick={makePayment} className="btn btn-primary w-50">
+              {/* <button onClick={makePayment} className="btn btn-primary w-50">
                 {loaddata ? (
                   "Add Fund"
                 ) : (
@@ -198,8 +199,8 @@ const Account = () => {
                     <span className="visually-hidden">Loading...</span>
                   </div>
                 )}
-              </button>
-              {/* <PaystackButton className="btn btn-primary mx-2" {...componentProps} /> */}
+              </button> */}
+              <PaystackButton {...componentProps} />
             </div>
           </div>
         </div>

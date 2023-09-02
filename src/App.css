@@ -27,6 +27,13 @@
   animation-duration: 2s;
   background-image: linear-gradient(to right, #48636d,#3d6876, #285351);
 }
+.sidenav{
+  height: 87vh;
+  overflow-y: scroll;
+}
+.sidenav::-webkit-scrollbar{
+  display: none;
+}
 .all{
   font-size: 20px;
 }
@@ -154,6 +161,9 @@
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow-y: scroll;
 
 }
@@ -167,6 +177,26 @@
   box-shadow: 0 0 15px 15px rgba(225, 225, 225, 0.5);
   width: 40%;
   background-clip: border-box;
+  margin: 5% 10% 0 10% ;
+}
+@media (max-width : 500px) {
+  .form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.75rem;
+    background-color: #fff;
+    color: rgb(97 97 97);
+    box-shadow: 0 0 15px 15px rgba(225, 225, 225, 0.5);
+    width: 80%;
+    background-clip: border-box;
+    margin: auto;
+  }
+}
+.userimage{
+  position: absolute;
+ top: -10%;
+ left: 38%;
 }
 
 .header {
@@ -293,6 +323,9 @@
   margin-left: .25rem;
   color: #1e88e5;
 }
+.save{
+  width: fit-content!important;
+}
 
 .forget {
   text-align: right;
@@ -408,6 +441,9 @@
 .joingroup{
   background: linear-gradient(to bottom, #13c1f1, #4a6871 );
   color: rgb(192, 214, 234)!important;
+}
+.eachgroups{
+  cursor: pointer;
 }
 .withraws{
   position: fixed!important;
@@ -680,6 +716,32 @@ table tr, td{
 }
 .account_rel{
   position: relative;
+  height: 87vh;
+  overflow-y: scroll;
+  padding: 0 0 2% 0;
+}
+.account_rel::-webkit-scrollbar{
+  display: none;
+}
+@media (max-width : 500px) {
+  .account_rel{
+    position: relative;
+    height: 95vh;
+    overflow-y: scroll;
+    padding: 0 0 2% 0;
+  }
+}
+.userProfile{
+  width: 100px;
+  height: 100px;
+  border-radius : 10px;
+  position: relative;
+  cursor: pointer;
+}
+.cam{
+  position: absolute;
+  top: 81%;
+  right: 0;
 }
 .funding{
   width: 100%;

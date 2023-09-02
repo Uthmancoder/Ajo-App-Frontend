@@ -10,17 +10,23 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
+import { BiExit } from "react-icons/bi";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import FetchUserByToken from "./FetchUserByToken";
 import AllUsers from "../Redux/AllUsers";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 import { IoIosNotifications } from "react-icons/io";
 import { BsBookHalf } from "react-icons/bs";
+import Loading from "./Loading";
+
 
 const AppNav = () => {
+
+  const { fetchedUser } = useSelector((state) => state.AllUsers);
+  const isLoading = fetchedUser?.loading; 
+  const userimage = fetchedUser?.user?.image
   const pages = ["Products", "Pricing", "Blog"];
   const smallpages = [
     "Dashboard",
@@ -30,10 +36,27 @@ const AppNav = () => {
     "Settings",
     "Logout",
   ];
-  const settings = ["Profile", "Account", "Dashboard", "Logout"];
+  const settings = [
+    {
+      text: "Profile",
+      link: "/settings",
+    },
+    {
+      text: "Account",
+      link: "/account",
+    },
+    {
+      text: "Dashboard",
+      link: "/dashboard",
+    },
+    {
+      text: "Logout",
+      link: "/",
+    },
+  ];
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const { fetchedUser } = useSelector((state) => state.AllUsers);
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -54,25 +77,35 @@ const AppNav = () => {
     setAnchorElNav(event.currentTarget);
   };
 
-
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    alert("Logging out");
+    localStorage.removeItem("token");
+    navigate("/"); // Navigate to the desired route after logout
+  };
+  if (isLoading) {
+    // Show a loading indicator or message
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
-  ;
-  
+
   return (
     <div>
-      <AppBar className="bg-primary position-sticky top-0">
+      <AppBar className="bg-primary position-sticky top-0 w-full">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
@@ -201,8 +234,9 @@ const AppNav = () => {
                   className="shadow balance rounded-3"
                 >
                   <img
-                    className="dashboard_logo img-fluid rounded-5 w-100"
-                    src={require("../images/User.JPG")}
+                    className="dashboard_logo img-fluid rounded-circle "
+                    style={{width :"50px", height: "50px"}}
+                    src={userimage}
                     alt=""
                   />
                 </p>
@@ -225,7 +259,21 @@ const AppNav = () => {
               >
                 {settings.map((setting) => (
                   <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                    <Link to={setting.link} className="text-decoration-none">
+                      <Typography textAlign="center">
+                        {setting.text}
+                        {setting.link === "/" && (
+                          <Tooltip title="Logout">
+                            <span
+                              onClick={handleLogout}
+                              style={{ cursor: "pointer", marginLeft: "8px" }}
+                            >
+                              <BiExit style={{ fontSize: "20px" }} />
+                            </span>
+                          </Tooltip>
+                        )}
+                      </Typography>
+                    </Link>
                   </MenuItem>
                 ))}
               </Menu>

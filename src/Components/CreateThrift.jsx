@@ -90,7 +90,7 @@ const CreateThrift = () => {
         console.log(ThriftData);
         await axios
           .post(
-            "https://ultimate-thrift.onrender.com/user/CreateThrift",
+            "http://localhost:3000/user/CreateThrift",
             ThriftData,
             {
               headers: {
@@ -225,7 +225,7 @@ const CreateThrift = () => {
                   />
                   {imageFile && (
                     <img
-                      className="img-fluid grplog"
+                      className="grplog"
                       src={imageFile}
                       alt="Image"
                     />

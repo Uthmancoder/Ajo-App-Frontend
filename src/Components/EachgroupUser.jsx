@@ -11,6 +11,7 @@ const EachgroupUser = () => {
   const { fetchedUser } = useSelector((state) => state.GroupUsers);
   const groupname = fetchedUser?.groupName;
   const groupMembers = fetchedUser?.groupMembers;
+  console.log(groupMembers);
   const plan = fetchedUser?.plan;
   const { fetchedLink } = useSelector((state) => state.GetLink);
   console.log(fetchedLink);
@@ -31,6 +32,8 @@ const EachgroupUser = () => {
   const newLink = localStorage.getItem("fetchedLink");
   console.log(grouplink);
   const linkLoading = fetchedLink?.loading;
+
+  const linkTojoinGroup = "http://localhost:3001/jointhrift"
   if (linkLoading) {
     // Show a loading indicator or message
     return (
@@ -63,7 +66,7 @@ const EachgroupUser = () => {
         </thead>
       );
     } else if (plan === "Weekly") {
-      const week = []; // Create an array to hold the day labels
+      const week = []; // Create an array to hold the weeks labels
 
       for (let i = 1; i <= groupMembers.length; i++) {
         week.push(`Week ${i}`); // Add day labels to the array
@@ -72,6 +75,7 @@ const EachgroupUser = () => {
       return (
         <thead>
           <tr className="px-3">
+            <th className="px-2 payment_status">S/N</th>
             <th className="px-2 payment_status">Contributors</th>
             {week?.map((Week, index) => (
               <th className="payment_status" key={index}>
@@ -105,26 +109,45 @@ const EachgroupUser = () => {
   // end of table header rendering
 
   // rendering table data
+  // rendering table data
   const renderTableData = () => {
+    const label = [];
+  
+    for (let i = 1; i <= groupMembers.length; i++) {
+      label.push(i); // Add serial numbers to the array
+    }
+  
     if (!groupMembers) {
-      return (
-        <p>Loading...</p>
-      );
+      return <p>Loading...</p>;
     } else {
       return (
         <tbody>
           {groupMembers.map((user, index) => (
             <tr key={index}>
+              <td className="px-2 payment_status ">{label[index]}</td>{" "}
+              {/* Display the serial number */}
               <td className="px-2 text-start">{user.username}</td>
-              <td className="payment_status">
-                {Array.isArray(user.payment) ? (
-                  user.payment.map((payment, i) => (
-                    payment.paid === true ? "✅" : "✖️"
-                  ))
-                ) : (
-                  user.payment?.paid === true ? "✅" : "✖️"
-                )}
-              </td>
+              {plan === "Daily" && Array.isArray(user.payments) ? (
+                user.payments.map((payment, i) => (
+                  <td className="payment_status" key={i}>
+                    {payment.paid ? "✅" : "✖️"}
+                  </td>
+                ))
+              ) : plan === "Weekly" && Array.isArray(user.payments) ? (
+                // If the plan is weekly, create columns for each week
+                user.payments.map((payment, i) => (
+                  <td className="payment_status" key={i}>
+                    {payment.paid ? "✅" : "✖️"}
+                  </td>
+                ))
+              ) : plan === "Monthly" && Array.isArray(user.payments) ? (
+                // If the plan is monthly, create columns for each month
+                user.payments.map((payment, i) => (
+                  <td className="payment_status" key={i}>
+                    {payment.paid ? "✅" : "✖️"}
+                  </td>
+                ))
+              ) : null}
             </tr>
           ))}
         </tbody>
@@ -132,7 +155,7 @@ const EachgroupUser = () => {
     }
   };
   
-  
+
   // end of table data
 
   return (
@@ -163,7 +186,7 @@ const EachgroupUser = () => {
               </div>
               <div className="d-grid col-12  py-2 col-sm-4 ">
                 <h5 className="text-primary fw-bolder">Group Link</h5>
-                <CopyToClipboard text={newLink} />
+                <CopyToClipboard text={linkTojoinGroup} />
               </div>
             </div>
           </div>

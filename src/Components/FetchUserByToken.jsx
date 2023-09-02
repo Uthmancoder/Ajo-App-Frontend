@@ -2,7 +2,7 @@ import axios from "axios";
 import { fetchingFailed, fetchingSuccessful } from "../Redux/AllUsers";
 
 const FetchUserByToken = async (token, dispatch) => {
-  const url = "https://ultimate-thrift.onrender.com/user/SaveCurrentUser";
+  const url = "http://localhost:3000/user/SaveCurrentUser";
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

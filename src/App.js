@@ -11,6 +11,7 @@ import CreateThrift from "./Components/CreateThrift";
 import EachgroupUser from "./Components/EachgroupUser";
 import Fetch from "./Components/Fetch";
 import JoinGroup from "./Components/JoinGroup";
+import Settings from "./Components/Settings";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/create" element={<CreateThrift/>} />
         <Route path="/pay" element={<Fetch/>} />
         <Route path="/jointhrift" element={<JoinGroup/>}/>
+        <Route path="/settings" element={<Settings/>}/> 
       </Routes>
     </div>
   );
