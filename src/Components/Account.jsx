@@ -18,15 +18,15 @@ const Account = () => {
   const [loaddata, setloadData] = useState(true);
   const { fetchedUser } = useSelector((state) => state.AllUsers, []);
 
+  // getting all the user's data
   const username = fetchedUser?.user?.username || "";
   const name = username.toUpperCase();
   const email = fetchedUser?.user?.email || ""; // Add a conditional check for email
   const Wallet = fetchedUser?.user?.wallet
   const isLoading = fetchedUser?.user?.loading; // Update the loading property path
 
-  const paystackSuccessAction = () => {};
-  // reference: (new Date()).getTime().toString(),
 
+  // data to be sent to paystack 
   const componentProps = {
     email,
     amount: amount * 100,
@@ -56,6 +56,8 @@ const Account = () => {
     onClose: () => alert("Wait! You need this oil, don't go!!!!"),
   };
 
+
+  // chevking loafing state
   if (isLoading) {
     return <Loading />;
   }
@@ -70,15 +72,6 @@ const Account = () => {
     setPayment(!true);
   };
 
-  // make payments
-  // const paymentReference = new Date().getTime().toString();
-
-  // const paymentDetails = {
-  //   username: username,
-  //   email: email,
-  //   tx_ref: paymentReference,
-  //   amount: amount,
-  // };
 
   return (
     <div>
@@ -200,7 +193,7 @@ const Account = () => {
                   </div>
                 )}
               </button> */}
-              <PaystackButton {...componentProps} />
+              <PaystackButton className="btn btn-primary" {...componentProps} />
             </div>
           </div>
         </div>

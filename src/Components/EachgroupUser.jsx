@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import AppNav from "./AppNav";
 import Sidenav from "./Sidenav";
 import GroupUsers from "../Redux/GroupUsers";
+import axios from "axios";
 import { useSelector } from "react-redux";
 import GetLink from "../Redux/GetLink";
 import CopyToClipboard from "./CopyToClipboard";
 import Loading from "./Loading";
+import { AiOutlineClose } from "react-icons/ai";
 
 const EachgroupUser = () => {
-  const { fetchedUser } = useSelector((state) => state.GroupUsers);
+  const { fetchedUser } = useSelector((state) => state.GroupUsers, []);
+
   const groupname = fetchedUser?.groupName;
+
   const groupMembers = fetchedUser?.groupMembers;
+
+  const currentUser = localStorage.getItem("currentUser");
+
+  const groupWallet = fetchedUser?.wallet;
+
   console.log(groupMembers);
+
   const plan = fetchedUser?.plan;
-  const { fetchedLink } = useSelector((state) => state.GetLink);
+
+  const { fetchedLink } = useSelector((state) => state.GetLink, []);
+
   console.log(fetchedLink);
+
+  const [payment, setPayment] = useState(false);
+
+  const [amount, setAmount] = useState("");
+
+  const [loaddata, setloadData] = useState(true);
 
   const isLoading = fetchedUser?.loading; // Add a loading check
 
@@ -29,11 +47,11 @@ const EachgroupUser = () => {
 
   //getting group grouplinks
   const grouplink = fetchedLink?.link;
-  const newLink = localStorage.getItem("fetchedLink");
   console.log(grouplink);
   const linkLoading = fetchedLink?.loading;
 
-  const linkTojoinGroup = "http://localhost:3001/jointhrift"
+  // Declaring the link to joinnthrift here for a purpose
+  const linkTojoinGroup = "http://localhost:3001/jointhrift";
   if (linkLoading) {
     // Show a loading indicator or message
     return (
@@ -43,6 +61,40 @@ const EachgroupUser = () => {
     );
   }
   // end of getting group link
+
+  // Trigger the modal
+  const fundWallet = () => {
+    setPayment(true);
+  };
+
+  // cancel the modal
+  const cancelModal = () => {
+    setPayment(!true);
+  };
+
+  // data for paying thrift
+  const dataToBeSent = {
+    username: currentUser,
+    groupName: groupname,
+    amount: amount,
+  };
+
+  const makePayment = async () => {
+    setloadData(!loaddata);
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/paythrift",
+        dataToBeSent
+      );
+
+      console.log(response.data);
+      alert(response.data.mesage);
+      
+    } catch (err) {
+      console.log(err);
+      alert(err.response.data.message);
+    }
+  };
 
   // rendering of table header
   const renderTableHeader = () => {
@@ -109,14 +161,13 @@ const EachgroupUser = () => {
   // end of table header rendering
 
   // rendering table data
-  // rendering table data
   const renderTableData = () => {
     const label = [];
-  
+
     for (let i = 1; i <= groupMembers.length; i++) {
       label.push(i); // Add serial numbers to the array
     }
-  
+
     if (!groupMembers) {
       return <p>Loading...</p>;
     } else {
@@ -127,35 +178,33 @@ const EachgroupUser = () => {
               <td className="px-2 payment_status ">{label[index]}</td>{" "}
               {/* Display the serial number */}
               <td className="px-2 text-start">{user.username}</td>
-              {plan === "Daily" && Array.isArray(user.payments) ? (
-                user.payments.map((payment, i) => (
-                  <td className="payment_status" key={i}>
-                    {payment.paid ? "✅" : "✖️"}
-                  </td>
-                ))
-              ) : plan === "Weekly" && Array.isArray(user.payments) ? (
-                // If the plan is weekly, create columns for each week
-                user.payments.map((payment, i) => (
-                  <td className="payment_status" key={i}>
-                    {payment.paid ? "✅" : "✖️"}
-                  </td>
-                ))
-              ) : plan === "Monthly" && Array.isArray(user.payments) ? (
-                // If the plan is monthly, create columns for each month
-                user.payments.map((payment, i) => (
-                  <td className="payment_status" key={i}>
-                    {payment.paid ? "✅" : "✖️"}
-                  </td>
-                ))
-              ) : null}
+              {plan === "Daily" && Array.isArray(user.payments)
+                ? user.payments.map((payment, i) => (
+                    <td className="payment_status" key={i}>
+                      {payment.paid ? "✅" : "✖️"}
+                    </td>
+                  ))
+                : plan === "Weekly" && Array.isArray(user.payments)
+                ? // If the plan is weekly, create columns for each week
+                  user.payments.map((payment, i) => (
+                    <td className="payment_status" key={i}>
+                      {payment.paid ? "✅" : "✖️"}
+                    </td>
+                  ))
+                : plan === "Monthly" && Array.isArray(user.payments)
+                ? // If the plan is monthly, create columns for each month
+                  user.payments.map((payment, i) => (
+                    <td className="payment_status" key={i}>
+                      {payment.paid ? "✅" : "✖️"}
+                    </td>
+                  ))
+                : null}
             </tr>
           ))}
         </tbody>
       );
     }
   };
-  
-
   // end of table data
 
   return (
@@ -166,6 +215,19 @@ const EachgroupUser = () => {
           <Sidenav />
         </div>
         <div className="col-9">
+          <div className="d-flex m-4  align-items-center justify-content-between">
+            <button
+              onClick={fundWallet}
+              className="btn  btn-light contribute text-secondary shadow rounded-5 "
+            >
+              Pay Thrift
+            </button>
+            <p className="py-2 px-3 contribute text-secondary shadow rounded-5  bal">
+              {Number(groupWallet) > 0
+                ? `Balance : ₦ ${groupWallet}`
+                : "Balance : ₦ 0.00"}
+            </p>
+          </div>
           <h1 className="fs-1 text-center text-primary fw-bolder mt-2">
             {groupname?.toUpperCase()}
           </h1>
@@ -173,6 +235,37 @@ const EachgroupUser = () => {
             {renderTableHeader()}
             {renderTableData()}
           </table>
+
+          <div className={payment ? "funding" : "funding hidden"}>
+            <div
+              onClick={cancelModal}
+              title="cancel"
+              className="bg-white  rounded-circle closebtn"
+            >
+              <AiOutlineClose className="text-dark fw-bolder" size={20} />
+            </div>
+            <h1 className="fs-1 fw-bolder text-light ">Pay Thrift</h1>
+            <div className="card p-3 col-10 col-sm-9 col-md-8 col-lg-5 mx-auto d-flex flex-direction-column align-items-end">
+              <input
+                onChange={(ev) => setAmount(ev.target.value)}
+                className="form-control my-2 mx-2"
+                type="number"
+                placeholder="Enter Amount"
+              />
+              <button
+                onClick={makePayment}
+                className="btn btn-primary w-fitcontent"
+              >
+                {loaddata ? (
+                  "Add Fund"
+                ) : (
+                  <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                )}
+              </button>
+            </div>
+          </div>
 
           <div className=" shadow  rounded-2 withraws ">
             <div className="row w-100  py-2">

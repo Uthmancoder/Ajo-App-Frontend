@@ -10,7 +10,7 @@ const LandingPage = () => {
       <LandingPageNav />
       <div className="landing  ">
         <div className="px-5 row container">
-          <div className="text-light mt-5 col-12 col-sm-6 col-md-6">
+          <div className="text-light mt-5 col-12 co l-sm-6 col-md-6">
             <p className="fw-bolder all text-light">
               ALL-IN-ONE-THRIFT STORE{" "}
             </p>

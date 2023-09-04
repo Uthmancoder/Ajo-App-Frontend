@@ -9,7 +9,7 @@ const CopyToClipboard = ({ text }) => {
     inputRef.current.select();
     document.execCommand("copy");
     setIsCopied(true);
-    alert("Link copied to clipboard")
+    alert("Link copied to clipboard");
 
     // Show the verification message for 2 seconds
     setTimeout(() => {
@@ -18,10 +18,8 @@ const CopyToClipboard = ({ text }) => {
   };
 
   return (
-    <div className="d-flex align-items-center  justify-content-between mx-3 link  border pt-3 " >
-      <p
-        className={`text-primary grouplink ${isCopied ? "highlight" : ""}`}
-      >
+    <div className="d-flex align-items-center  justify-content-between mx-3 link  border pt-3 ">
+      <p className={`text-primary grouplink ${isCopied ? "highlight" : ""}`}>
         {text}
       </p>
       <p title="Copy Link" className=" mx-2 pb-1" onClick={handleCopy}>

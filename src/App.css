@@ -738,6 +738,7 @@ table tr, td{
   position: relative;
   cursor: pointer;
 }
+
 .cam{
   position: absolute;
   top: 81%;
@@ -759,6 +760,9 @@ table tr, td{
 }
 .funding.hidden {
   display: none;
+}
+.bal{
+width: fit-content;
 }
 .closebtn{
   position: absolute;
