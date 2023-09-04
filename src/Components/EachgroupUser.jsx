@@ -35,6 +35,8 @@ const EachgroupUser = () => {
 
   const [loaddata, setloadData] = useState(true);
 
+  const [currentWithdrawalIndex, setCurrentWithdrawalIndex] = useState(0);
+
   const isLoading = fetchedUser?.loading; // Add a loading check
 
   if (isLoading) {
@@ -197,6 +199,15 @@ const EachgroupUser = () => {
     }
   };
 
+  const getNextWithdrawer = () => {
+    // Increment the currentWithdrawalIndex, and if it exceeds the length of groupMembers, reset it to 0
+    const nextIndex =
+      currentWithdrawalIndex === groupMembers.length -1
+        ? 0
+        : currentWithdrawalIndex + 1;
+    return groupMembers[nextIndex].username;
+  };
+
   return (
     <div>
       <AppNav />
@@ -234,8 +245,8 @@ const EachgroupUser = () => {
             >
               <AiOutlineClose className="text-dark fw-bolder" size={20} />
             </div>
-            <h1 className="fs-1 fw-bolder text-light ">Pay Thrift</h1>
             <div className="card p-3 col-10 col-sm-9 col-md-8 col-lg-5 mx-auto d-flex flex-direction-column align-items-end">
+              <h1 className="fs-1 fw-bolder text-light ">Pay Thrift</h1>
               <input
                 onChange={(ev) => setAmount(ev.target.value)}
                 className="form-control my-2 mx-2"
@@ -258,7 +269,7 @@ const EachgroupUser = () => {
             <div className="row w-100  py-2">
               <div className="d-grid col-12 col-lg-4 text-center ">
                 <h5 className="text-primary pt-1 fw-bolder">Next Withdrawer</h5>
-                <p>Uthman</p>
+                <p>{getNextWithdrawer().toUpperCase()}</p>
               </div>
               <div className="d-grid col-12  py-2 col-sm-4 border-div ">
                 <h5 className="text-primary fw-bolder">Total Withdraws</h5>
