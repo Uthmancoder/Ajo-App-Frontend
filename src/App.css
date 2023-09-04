@@ -28,7 +28,7 @@
   background-image: linear-gradient(to right, #48636d,#3d6876, #285351);
 }
 .sidenav{
-  height: 87vh;
+  height: 87.8vh;
   overflow-y: scroll;
 }
 .sidenav::-webkit-scrollbar{

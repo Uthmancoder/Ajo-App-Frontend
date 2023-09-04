@@ -8,25 +8,26 @@ import GetLink from "../Redux/GetLink";
 import CopyToClipboard from "./CopyToClipboard";
 import Loading from "./Loading";
 import { AiOutlineClose } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 const EachgroupUser = () => {
   const { fetchedUser } = useSelector((state) => state.GroupUsers, []);
 
   const groupname = fetchedUser?.groupName;
 
-  const groupMembers = fetchedUser?.groupMembers;
+  const groupMembers = fetchedUser?.groupMembers || [];
 
   const currentUser = localStorage.getItem("currentUser");
 
   const groupWallet = fetchedUser?.wallet;
 
+  const amountPerThrift = fetchedUser?.amount;
+
   console.log(groupMembers);
 
   const plan = fetchedUser?.plan;
 
-  const { fetchedLink } = useSelector((state) => state.GetLink, []);
-
-  console.log(fetchedLink);
+  const navigate = useNavigate();
 
   const [payment, setPayment] = useState(false);
 
@@ -45,22 +46,8 @@ const EachgroupUser = () => {
     );
   }
 
-  //getting group grouplinks
-  const grouplink = fetchedLink?.link;
-  console.log(grouplink);
-  const linkLoading = fetchedLink?.loading;
-
   // Declaring the link to joinnthrift here for a purpose
   const linkTojoinGroup = "http://localhost:3001/jointhrift";
-  if (linkLoading) {
-    // Show a loading indicator or message
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
-  }
-  // end of getting group link
 
   // Trigger the modal
   const fundWallet = () => {
@@ -70,30 +57,6 @@ const EachgroupUser = () => {
   // cancel the modal
   const cancelModal = () => {
     setPayment(!true);
-  };
-
-  // data for paying thrift
-  const dataToBeSent = {
-    username: currentUser,
-    groupName: groupname,
-    amount: amount,
-  };
-
-  const makePayment = async () => {
-    setloadData(!loaddata);
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/paythrift",
-        dataToBeSent
-      );
-
-      console.log(response.data);
-      alert(response.data.mesage);
-      
-    } catch (err) {
-      console.log(err);
-      alert(err.response.data.message);
-    }
   };
 
   // rendering of table header
@@ -163,7 +126,6 @@ const EachgroupUser = () => {
   // rendering table data
   const renderTableData = () => {
     const label = [];
-
     for (let i = 1; i <= groupMembers.length; i++) {
       label.push(i); // Add serial numbers to the array
     }
@@ -205,7 +167,35 @@ const EachgroupUser = () => {
       );
     }
   };
+
   // end of table data
+
+  // data for paying thrift
+  const dataToBeSent = {
+    username: currentUser,
+    groupName: groupname,
+    amount: amount,
+    amountPerThrift: amountPerThrift,
+  };
+
+  const makePayment = async () => {
+    setloadData(!loaddata);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/user/paythrift",
+        dataToBeSent
+      );
+
+      console.log(response.data.message);
+      alert(response.data.message);
+      navigate("/groups");
+    } catch (err) {
+      console.log(err);
+      alert(err.response.data.message);
+    } finally {
+      setloadData(loaddata);
+    }
+  };
 
   return (
     <div>
@@ -252,10 +242,7 @@ const EachgroupUser = () => {
                 type="number"
                 placeholder="Enter Amount"
               />
-              <button
-                onClick={makePayment}
-                className="btn btn-primary w-fitcontent"
-              >
+              <button onClick={makePayment} className="btn btn-primary w-25">
                 {loaddata ? (
                   "Add Fund"
                 ) : (

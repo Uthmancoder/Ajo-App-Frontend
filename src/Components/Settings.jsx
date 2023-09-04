@@ -27,6 +27,7 @@ const Settings = () => {
   const [Email, setEmail] = useState(email || "");
   const [oldPass, setOldPass] = useState("");
   const [Newpass, setNewPass] = useState("");
+  const [loaddata, setloadData] = useState(true);
 
   const uploadImg = (ev) => {
     const file = ev.target.files[0];
@@ -66,6 +67,7 @@ const Settings = () => {
   };
 
   const saveChanges = async () => {
+    setloadData(!loaddata)
     try {
       const url = "http://localhost:3000/user/editProfile";
       const response = await axios.post(url, updatingData);
@@ -76,6 +78,8 @@ const Settings = () => {
     } catch (error) {
       console.log(error);
       alert(error);
+    }finally{
+      setloadData(true)
     }
   };
 
@@ -166,9 +170,15 @@ const Settings = () => {
                 </div>
                 <button
                   onClick={saveChanges}
-                  className="btn btn-primary save m-3"
+                  className="btn btn-primary save m-3 w-25"
                 >
-                  Save Changes
+                   {loaddata ? (
+                  "Save Changes"
+                ) : (
+                  <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                )}
                 </button>
 
                 <p className="my-3">Change Password</p>
