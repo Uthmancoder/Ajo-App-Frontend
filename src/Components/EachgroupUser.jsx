@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppNav from "./AppNav";
 import Sidenav from "./Sidenav";
 import GroupUsers from "../Redux/GroupUsers";
@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import GetLink from "../Redux/GetLink";
 import CopyToClipboard from "./CopyToClipboard";
 import Loading from "./Loading";
+import { Tooltip } from "@mui/material";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
@@ -35,10 +36,35 @@ const EachgroupUser = () => {
 
   const [loaddata, setloadData] = useState(true);
 
-  const [currentWithdrawalIndex, setCurrentWithdrawalIndex] = useState(0);
+  const [currentWithdrawalIndex, setCurrentWithdrawalIndex] = useState(-1);
+
+  const [totalWithdraws, setTotalWithdraws] = useState(0);
+
+  const [paymentCompleted, setpaymentCompleted] = useState(false);
+
+  
 
   const isLoading = fetchedUser?.loading; // Add a loading check
 
+
+  // Define the function to check all payments completed
+  const checkAllPaymentsCompleted = () => {
+    return groupMembers.every((user) =>
+      user.payments.every((payment) => payment.paid)
+    );
+  };
+
+
+  // Use useEffect to update the paymentCompleted state when needed
+  useEffect(() => {
+    const allPaymentsCompleted = checkAllPaymentsCompleted();
+    setpaymentCompleted(allPaymentsCompleted);
+  }, [groupMembers]); // Update when groupMembers change
+
+  console.log(paymentCompleted);
+
+
+  // loading state
   if (isLoading) {
     // Show a loading indicator or message
     return (
@@ -73,7 +99,8 @@ const EachgroupUser = () => {
       return (
         <thead>
           <tr className="px-3">
-            <th className=" border payment_status">Contributors</th>
+            <th className="px-2 payment_status">S/N</th>
+            <th className="  payment_status">Contributors</th>
             {days?.map((day, index) => (
               <th className=" payment_status" key={index}>
                 {day}
@@ -141,23 +168,23 @@ const EachgroupUser = () => {
             <tr key={index}>
               <td className="px-2 payment_status ">{label[index]}</td>{" "}
               {/* Display the serial number */}
-              <td className="px-2 text-start">{user.username}</td>
-              {plan === "Daily" && Array.isArray(user.payments)
-                ? user.payments.map((payment, i) => (
+              <td className="px-2 text-start">{user?.username}</td>
+              {plan === "Daily" && Array.isArray(user?.payments)
+                ? user?.payments.map((payment, i) => (
                     <td className="payment_status" key={i}>
                       {payment.paid ? "✅" : "✖️"}
                     </td>
                   ))
-                : plan === "Weekly" && Array.isArray(user.payments)
+                : plan === "Weekly" && Array.isArray(user?.payments)
                 ? // If the plan is weekly, create columns for each week
-                  user.payments.map((payment, i) => (
+                  user?.payments.map((payment, i) => (
                     <td className="payment_status" key={i}>
                       {payment.paid ? "✅" : "✖️"}
                     </td>
                   ))
-                : plan === "Monthly" && Array.isArray(user.payments)
+                : plan === "Monthly" && Array.isArray(user?.payments)
                 ? // If the plan is monthly, create columns for each month
-                  user.payments.map((payment, i) => (
+                  user?.payments.map((payment, i) => (
                     <td className="payment_status" key={i}>
                       {payment.paid ? "✅" : "✖️"}
                     </td>
@@ -180,6 +207,7 @@ const EachgroupUser = () => {
     amountPerThrift: amountPerThrift,
   };
 
+  // Making payments to groupwallet
   const makePayment = async () => {
     setloadData(!loaddata);
     try {
@@ -199,13 +227,58 @@ const EachgroupUser = () => {
     }
   };
 
+  // getting the next withdrawer
   const getNextWithdrawer = () => {
+    if (currentWithdrawalIndex === -1) {
+      // Start with the first user
+      return groupMembers[0]?.username;
+    }
+
     // Increment the currentWithdrawalIndex, and if it exceeds the length of groupMembers, reset it to 0
     const nextIndex =
-      currentWithdrawalIndex === groupMembers.length -1
+      currentWithdrawalIndex === groupMembers.length - 1
         ? 0
         : currentWithdrawalIndex + 1;
-    return groupMembers[nextIndex].username;
+    return groupMembers[nextIndex]?.username;
+  };
+
+  const withdraw = () => {
+    // Increment totalWithdraws
+    setTotalWithdraws(totalWithdraws + 1);
+    console.log("currentWithdrawalIndex:", currentWithdrawalIndex);
+
+    // Get the username of the current withdrawer
+    const currentWithdrawer = getNextWithdrawer()
+
+    console.log(currentWithdrawer)
+
+    // Update the WithdrawingData object with the current username
+    const updatedWithdrawingData = {
+      Withdrawer: currentWithdrawer, // Add the current withdrawer username
+      username: currentUser,
+      groupName: groupname,
+      amount: groupWallet,
+    };
+
+    // Make your API call with updatedWithdrawingData
+    // You can replace this part with your actual API call
+    axios
+      .post("http://localhost:3000/user/withdraw", updatedWithdrawingData)
+      .then((response) => {
+        console.log(response.data);
+        alert(response.data.message);
+      })
+      .catch((error) => {
+        console.error(error);
+        alert(error.response.data.message);
+      });
+
+    // Move to the next user
+    setCurrentWithdrawalIndex((prevIndex) => {
+      const nextIndex =
+        prevIndex === groupMembers.length - 1 ? 0 : prevIndex + 1;
+      return nextIndex;
+    });
   };
 
   return (
@@ -217,17 +290,36 @@ const EachgroupUser = () => {
         </div>
         <div className="col-9">
           <div className="d-flex m-4  align-items-center justify-content-between">
-            <button
-              onClick={fundWallet}
-              className="btn  btn-light contribute text-secondary shadow rounded-5 "
-            >
-              Pay Thrift
-            </button>
-            <p className="py-2 px-3 contribute text-secondary shadow rounded-5  bal">
-              {Number(groupWallet) > 0
-                ? `Balance : ₦ ${groupWallet}`
-                : "Balance : ₦ 0.00"}
-            </p>
+            {!paymentCompleted ? (
+              <Tooltip title="Pay Thrift">
+                <button
+                  onClick={fundWallet}
+                  className="btn  btn-light contribute text-secondary shadow rounded-5 "
+                >
+                  Pay Thrift
+                </button>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Withdraw Funds">
+                <button
+                  onClick={withdraw}
+                  className="btn  btn-light contribute text-secondary shadow rounded-5 "
+                >
+                  Withdraw
+                </button>
+              </Tooltip>
+            )}
+
+            <Tooltip title="Wallet Balance">
+              <p
+                style={{ cursor: "pointer" }}
+                className="py-2 px-3 contribute  text-secondary shadow rounded-5  bal"
+              >
+                {Number(groupWallet) > 0
+                  ? `Balance : ₦ ${groupWallet}`
+                  : "Balance : ₦ 0.00"}
+              </p>
+            </Tooltip>
           </div>
           <h1 className="fs-1 text-center text-primary fw-bolder mt-2">
             {groupname?.toUpperCase()}
@@ -245,8 +337,8 @@ const EachgroupUser = () => {
             >
               <AiOutlineClose className="text-dark fw-bolder" size={20} />
             </div>
+            <h1 className="fs-1 fw-bolder text-light ">Pay Thrift</h1>
             <div className="card p-3 col-10 col-sm-9 col-md-8 col-lg-5 mx-auto d-flex flex-direction-column align-items-end">
-              <h1 className="fs-1 fw-bolder text-light ">Pay Thrift</h1>
               <input
                 onChange={(ev) => setAmount(ev.target.value)}
                 className="form-control my-2 mx-2"
@@ -269,11 +361,13 @@ const EachgroupUser = () => {
             <div className="row w-100  py-2">
               <div className="d-grid col-12 col-lg-4 text-center ">
                 <h5 className="text-primary pt-1 fw-bolder">Next Withdrawer</h5>
-                <p>{getNextWithdrawer().toUpperCase()}</p>
+                <p>{getNextWithdrawer()?.toUpperCase()}</p>
               </div>
               <div className="d-grid col-12  py-2 col-sm-4 border-div ">
-                <h5 className="text-primary fw-bolder">Total Withdraws</h5>
-                <p>5</p>
+                <h5 className="text-primary text-center fw-bolder">
+                  Total Withdraws
+                </h5>
+                <p className="text-center">{totalWithdraws}</p>
               </div>
               <div className="d-grid col-12  py-2 col-sm-4 ">
                 <h5 className="text-primary fw-bolder">Group Link</h5>
@@ -288,3 +382,6 @@ const EachgroupUser = () => {
 };
 
 export default EachgroupUser;
+
+
+
