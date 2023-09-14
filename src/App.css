@@ -23,8 +23,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  transition: all linear ease-in-out;
-  animation-duration: 2s;
+  transition: all .5s ease-in-out;
+  animation-duration: 1s;
   background-image: linear-gradient(to right, #48636d,#3d6876, #285351);
 }
 .sidenav{
@@ -40,6 +40,11 @@
 .every{
   font-size: 40px;
 }
+.login-button{
+  margin-left: 10%!important;
+}
+
+
 
 .side2{
   width: 60%;
@@ -59,6 +64,7 @@
   .homelinks{
     display: none;
   }
+
 }
 .login{
   padding: 6px 35px;
@@ -88,6 +94,11 @@
   }
   .every{
     font-size: 40px;
+  }
+  .landing{
+    width: 100%;
+    height: 98.5vh;
+     background-image: linear-gradient(to right, #48636d,#3d6876, #285351);
   }
 }
 /* Example media queries for different screen sizes */
@@ -502,6 +513,20 @@
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.082);
 }
 
+.table-container {
+  overflow-x: auto; /* Add horizontal scrollbar for overflow */
+  max-width: 100%; /* Set maximum width for the container */
+}
+
+@media (max-width: 768px) {
+  .table-container {
+    max-width: none; /* Remove max-width on small screens */
+    width: 100%; /* Allow table to take full width on small screens */
+    margin-left: 20px; /* Optionally, remove margin for full width */
+
+  }
+}
+
 .heading {
   font-size: 2em;
   color: #2e2e2e;
@@ -611,11 +636,25 @@
 .tot{
   font-size: 12px;
 }
+.googleplay{
+  width: 75%;
+}
 /* styles.css or your CSS file */
 .table-bordered {
   border-collapse: collapse;
   width: 100%;
 }
+.nextwithdraw{
+  margin: auto;
+}
+.tableData{
+  min-width: 100%;
+  overflow-x: scroll;
+}
+.tableData::-webkit-scrollbar{
+  display: none;
+}
+
 
 .table-bordered th,
 .table-bordered td {
@@ -646,6 +685,9 @@
 .contribution_status{
   position: relative;
 
+}
+.requiredUsers{
+  width: 217px!important;
 }
 .name{
   border-bottom: #1e88e5;
@@ -775,6 +817,93 @@ width: fit-content;
   justify-content: center;
 }
 
+@media (max-width : 600px) {
+  .med{
+    width: 100%;
+    margin: 40px 0 0 10px; 
+  }
+  .create{
+    margin-left: -100px;
+  }
+  .googleplay{
+    width: 100%;
+  }
+  .hrr{
+    display: none;
+  }
+  .smallsc{
+    width: 100%;
+  }
+  .bal{
+    margin: 20px;
+  }
+  .smallsc3{
+   margin-left: 5px!important;
+  }
+  .nextwithdraw{
+    margin: auto;
+  }
+  .border-div{
+    border-left: none;
+    border-right: none;
+  }
+  .withraws{
+    position: fixed!important;
+    bottom: 2%;
+    width: 90%;
+    padding:0  10px;
+  
+  }
+  .Loader{
+    width: 100%;
+    height: 88vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index : 1;
+  }
+  .acc_details{
+   position: absolute!important;
+   bottom: 10%;
+  }
+  .create-div{
+    display: grid!important;
+  }
+  .form_main {
+    margin-left: 2%;
+  }
+
+  .form_main::before {
+    position: absolute;
+    content: "";
+    width: 50%;
+    height: 100vh;
+    background-color: rgb(13, 110, 253);
+    transform: rotate(45deg);
+    left: -20px;
+    bottom: 0;
+    z-index: 1;
+    border-radius: 30px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.082);
+  }
+  .amount{
+    color: black!important;
+  }
+  .inputContainer{
+    width: 100%;
+  }
+  .inputField{
+    width: 100%;
+  }
+  .icon{
+    width: 108px;
+    margin-left: 3%;
+  }
+  .addfund{
+    width: fit-content!important;
+  }
+}
 
 /* join thrift styles */
 

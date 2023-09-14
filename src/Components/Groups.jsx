@@ -20,6 +20,9 @@ const Groups = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(false);
+  const [groupCount, setGroupCount] = useState(
+    Number(localStorage.getItem("groupCount")) || 0
+  );
   const Navigate = useNavigate();
 
   // Getting the current signed user
@@ -52,6 +55,18 @@ const Groups = () => {
     }
   }, [isLoadingUser, token]);
 
+  // Calculate the user's group count
+  useEffect(() => {
+    if (!loading && data && data.length > 0) {
+      const userGroupCount = data.filter((thriftGroup) =>
+        thriftGroup.verifiedMembers.some(
+          (member) => member.username === currentUserUsername
+        )
+      ).length;
+      setGroupCount(userGroupCount);
+      localStorage.setItem("usersConnection", userGroupCount);
+    }
+  }, [data, currentUserUsername, loading]);
   // ...
 
   if (isLoadingUser) {
@@ -79,6 +94,12 @@ const Groups = () => {
       localStorage.setItem("groupdata", serializedData);
       localStorage.setItem("currentUser", currentUserUsername);
 
+      // Save the length of the groupMembers array to localStorage
+      localStorage.setItem(
+        "AllMembers",
+        response.data.groupMembers.length
+      );
+
       Navigate("/contribution");
     } catch (error) {
       console.error("Error fetching group members:", error);
@@ -94,10 +115,10 @@ const Groups = () => {
     <div>
       <AppNav />
       <div className="row w-100 h-100">
-        <div className="d-none d-sm-block  col-12 col-sm-3 col-md-3">
+        <div className="d-none d-sm-block  col-3">
           <Sidenav />
         </div>
-        <div className="col-12 col-sm-9 mx-auto ">
+        <div className="col-12 col-sm-9  med account_rel">
           <h1>Groups</h1>
 
           {showLoader ? <Loading /> : null}
@@ -141,7 +162,6 @@ const Groups = () => {
                   </div>
 
                   <div>
-                    
                     {thriftGroup.verifiedMembers.map((member, index) => (
                       <span key={index}>
                         {member.username === currentUserUsername

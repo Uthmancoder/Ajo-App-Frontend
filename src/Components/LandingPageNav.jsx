@@ -18,13 +18,13 @@ const LandingPageNav = () => {
     },
     {
       id: 3,
-      text: "Contact Us",
-      URL: "/contact",
+      text: "Products",
+      URL: "/https://uthmancoder-hexashop.netlify.app",
     },
     {
       id: 4,
-      text: "Blog",
-      URL: "/blog",
+      text: "Portfolio",
+      URL: "/https://uthmancoder-portfolio.netlify.app",
     },
   ];
 
@@ -38,10 +38,10 @@ const LandingPageNav = () => {
         <div>
           <div className="d-flex align-items-center justify-content-center">
             <AiFillPayCircle size={40} />
-            <h1 className="fs-2 pt-2 fw-bolder homelogo">
-              <span className="text-danger">X</span>
-              <span className="text-dark">tra</span>
-              <span className="text-light">mile</span>
+            <h1 className="fs-2 pt-2 fw-bolder ">
+              <span className="text-danger fw-bolder">Ul</span>
+              <span className="text-alert alert-secondary fw-bolder">tim</span>
+              <span className="text-light fw-bolder">ate</span>
             </h1>
           </div>
         </div>
@@ -67,63 +67,75 @@ const LandingPageNav = () => {
         </div>
       </div>
       {/* small screen sidebar */}
-     {menu ?  <div className="sidebar">
-        <div>
-          <div className="d-flex align-items-center m-3">
-            <AiFillPayCircle size={40} />
-            <h1 className="fs-2 pt-2 fw-bolder homelogo">
-              <span className="text-danger">X</span>
-              <span className="text-dark">tra</span>
-              <span className="text-light ">mile</span>
-            </h1>
+      {menu ? (
+        <div className="sidebar">
+          <div>
+            <div className="d-flex align-items-center m-3">
+              <AiFillPayCircle size={40} />
+              <h1 className="fs-2 pt-2 fw-bolder ">
+                <span className="text-danger fw-bolder">Ul</span>
+                <span className="text-alert alert-secondary fw-bolder">
+                  tim
+                </span>
+                <span className="text-light fw-bolder">ate</span>
+              </h1>
+            </div>
           </div>
-        </div>
 
-        <div className="">
-          <div className="d-grid fixed">
-            {pages.map((page) => (
-              <Link
-                className="p-4 text-start px-3 border-bottom  mediascr text-decoration-none text-dark fw-semibold"
-                key={page.id}
-                to={page.URL}
-              >
-                {page.text}
+          <div className="side1">
+            <div className="d-grid fixed">
+              {pages.map((page) => (
+                <Link
+                  className="p-5 text-start px-3 border-bottom  mediascr text-decoration-none text-dark fw-semibold"
+                  key={page.id}
+                  to={page.URL}
+                >
+                  {page.text}
+                </Link>
+              ))}
+              <Link to="/login"  className=" text-decoration-none   mt-4 login-button">
+                <button className="btn btn-secondary w-75 mt-4 ">  
+                  Log In
+                </button>
               </Link>
-            ))}
-            <Link className=" text-decoration-none  ">
-              <button className="btn btn-success  w-75 mt-4 mx-3">Get Started</button>
-            </Link>
+            </div>
           </div>
         </div>
-      </div> :  <div className="side2">
-        <div>
-          <div className="d-flex align-items-center m-3">
-            <AiFillPayCircle size={40} />
-            <h1 className="fs-2 pt-2 fw-bolder homelogo">
-              <span className="text-danger">X</span>
-              <span className="text-dark">tra</span>
-              <span className="text-success ">mile</span>
-            </h1>
+      ) : (
+        <div className="side2">
+          <div>
+            <div className="d-flex align-items-center m-3">
+              <AiFillPayCircle size={40} />
+              <h1 className="fs-2 pt-2 fw-bolder ">
+                <span className="text-danger fw-bolder">Ul</span>
+                <span className="text-alert alert-secondary fw-bolder">
+                  tim
+                </span>
+                <span className="text-light fw-bolder">ate</span>
+              </h1>
+            </div>
           </div>
-        </div>
 
-        <div className="">
-          <div className="d-grid fixed">
-            {pages.map((page) => (
-              <Link
-                className="p-4 text-start px-3 border-bottom  mediascr text-decoration-none text-dark fw-semibold"
-                key={page.id}
-                to={page.URL}
-              >
-                {page.text}
+          <div className="">
+            <div className="d-grid fixed">
+              {pages.map((page) => (
+                <Link
+                  className="p-4 text-decoration-none text-light fw-semibold"
+                  key={page.id}
+                  to={page.URL}
+                >
+                  {page.text}
+                </Link>
+              ))}
+              <Link className=" text-decoration-none  ">
+                <button className="btn btn-secondary  w-75 mt-4 mx-3">
+                  Get Started
+                </button>
               </Link>
-            ))}
-            <Link className=" text-decoration-none  ">
-              <button className="btn btn-success  w-75 mt-4 mx-3">Get Started</button>
-            </Link>
+            </div>
           </div>
         </div>
-      </div>}
+      )}
     </div>
   );
 };

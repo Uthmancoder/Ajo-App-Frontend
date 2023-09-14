@@ -11,7 +11,7 @@ const SignUser = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/user/signup")
+      .get("https://ultimate-thrift.onrender.com/user/signup")
       .then((res) => res.data)
       .then((data) => {
         setcurrentdata(data);

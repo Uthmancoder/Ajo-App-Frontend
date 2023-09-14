@@ -36,16 +36,45 @@ const EachgroupUser = () => {
 
   const [loaddata, setloadData] = useState(true);
 
-  const [currentWithdrawalIndex, setCurrentWithdrawalIndex] = useState(-1);
+  const [transactionCount, setTransactionCount] = useState(0);
 
-  const [totalWithdraws, setTotalWithdraws] = useState(0);
+  // Initializing the states with values from localStorage, if available
+  const [currentWithdrawalIndex, setCurrentWithdrawalIndex] = useState(() => {
+    // Check if there's a value for 'currentWithdrawer' in localStorage
+    const storedCurrentWithdrawer = localStorage.getItem("currentWithdrawer");
+
+    // If there's a value in localStorage, find its index in groupMembers
+    if (storedCurrentWithdrawer !== null) {
+      const currentIndex = groupMembers.findIndex(
+        (user) => user.username === storedCurrentWithdrawer
+      );
+
+      // If the stored currentWithdrawer exists in groupMembers, set the currentWithdrawalIndex to its index
+      if (currentIndex !== -1) {
+        return currentIndex;
+      }
+    }
+
+    // Default: Start with the first user
+    return 0;
+  });
+
+  // Initializing the totalWithdraws state with the value from localStorage, if available
+  const [totalWithdraws, setTotalWithdraws] = useState(() => {
+    const storedTotalWithdraws = localStorage.getItem("totalWithdraws");
+
+    // If there's a value for 'totalWithdraws' in localStorage, parse it as an integer
+    if (storedTotalWithdraws !== null) {
+      return parseInt(storedTotalWithdraws);
+    }
+
+    // Default: Start with 0
+    return 0;
+  });
 
   const [paymentCompleted, setpaymentCompleted] = useState(false);
 
-  
-
   const isLoading = fetchedUser?.loading; // Add a loading check
-
 
   // Define the function to check all payments completed
   const checkAllPaymentsCompleted = () => {
@@ -54,7 +83,6 @@ const EachgroupUser = () => {
     );
   };
 
-
   // Use useEffect to update the paymentCompleted state when needed
   useEffect(() => {
     const allPaymentsCompleted = checkAllPaymentsCompleted();
@@ -62,7 +90,6 @@ const EachgroupUser = () => {
   }, [groupMembers]); // Update when groupMembers change
 
   console.log(paymentCompleted);
-
 
   // loading state
   if (isLoading) {
@@ -75,7 +102,7 @@ const EachgroupUser = () => {
   }
 
   // Declaring the link to joinnthrift here for a purpose
-  const linkTojoinGroup = "http://localhost:3001/jointhrift";
+  const linkTojoinGroup = "http://localhost:3001//jointhrift";
 
   // Trigger the modal
   const fundWallet = () => {
@@ -172,21 +199,21 @@ const EachgroupUser = () => {
               {plan === "Daily" && Array.isArray(user?.payments)
                 ? user?.payments.map((payment, i) => (
                     <td className="payment_status" key={i}>
-                      {payment.paid ? "✅" : "✖️"}
+                      {payment.paid ? "✅" : ""}
                     </td>
                   ))
                 : plan === "Weekly" && Array.isArray(user?.payments)
                 ? // If the plan is weekly, create columns for each week
                   user?.payments.map((payment, i) => (
                     <td className="payment_status" key={i}>
-                      {payment.paid ? "✅" : "✖️"}
+                      {payment.paid ? "✅" : ""}
                     </td>
                   ))
                 : plan === "Monthly" && Array.isArray(user?.payments)
                 ? // If the plan is monthly, create columns for each month
                   user?.payments.map((payment, i) => (
                     <td className="payment_status" key={i}>
-                      {payment.paid ? "✅" : "✖️"}
+                      {payment.paid ? "✅" : ""}
                     </td>
                   ))
                 : null}
@@ -212,11 +239,13 @@ const EachgroupUser = () => {
     setloadData(!loaddata);
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/paythrift",
+        "https://ultimate-thrift.onrender.com/user/paythrift",
         dataToBeSent
       );
 
       console.log(response.data.message);
+      setTransactionCount((prevCount) => prevCount + 1);
+      localStorage.setItem("totalTransactions", transactionCount)
       alert(response.data.message);
       navigate("/groups");
     } catch (err) {
@@ -248,9 +277,9 @@ const EachgroupUser = () => {
     console.log("currentWithdrawalIndex:", currentWithdrawalIndex);
 
     // Get the username of the current withdrawer
-    const currentWithdrawer = getNextWithdrawer()
+    const currentWithdrawer = getNextWithdrawer();
 
-    console.log(currentWithdrawer)
+    console.log(currentWithdrawer);
 
     // Update the WithdrawingData object with the current username
     const updatedWithdrawingData = {
@@ -263,10 +292,14 @@ const EachgroupUser = () => {
     // Make your API call with updatedWithdrawingData
     // You can replace this part with your actual API call
     axios
-      .post("http://localhost:3000/user/withdraw", updatedWithdrawingData)
+      .post("https://ultimate-thrift.onrender.com/user/withdraw", updatedWithdrawingData)
       .then((response) => {
         console.log(response.data);
         alert(response.data.message);
+
+        localStorage.setItem("currentWithdarwer", currentWithdrawer);
+        localStorage.setItem("totalWithdraws", totalWithdraws);
+        navigate("/groups");
       })
       .catch((error) => {
         console.error(error);
@@ -288,8 +321,8 @@ const EachgroupUser = () => {
         <div className="col-3 d-none  d-md-block">
           <Sidenav />
         </div>
-        <div className="col-9">
-          <div className="d-flex m-4  align-items-center justify-content-between">
+        <div className="col-12 col-sm-9 med">
+          <div className="d-flex m-4 w-100 align-items-center justify-content-between px-2">
             {!paymentCompleted ? (
               <Tooltip title="Pay Thrift">
                 <button
@@ -324,10 +357,12 @@ const EachgroupUser = () => {
           <h1 className="fs-1 text-center text-primary fw-bolder mt-2">
             {groupname?.toUpperCase()}
           </h1>
-          <table className="border rounded-3 w-100 p-3 text-center">
-            {renderTableHeader()}
-            {renderTableData()}
-          </table>
+          <div className="tableData">
+            <table className="border rounded-3 w-100 p-3 text-center">
+              {renderTableHeader()}
+              {renderTableData()}
+            </table>
+          </div>
 
           <div className={payment ? "funding" : "funding hidden"}>
             <div
@@ -345,7 +380,7 @@ const EachgroupUser = () => {
                 type="number"
                 placeholder="Enter Amount"
               />
-              <button onClick={makePayment} className="btn btn-primary w-25">
+              <button onClick={makePayment} className="btn btn-primary addfund">
                 {loaddata ? (
                   "Add Fund"
                 ) : (
@@ -358,18 +393,27 @@ const EachgroupUser = () => {
           </div>
 
           <div className=" shadow  rounded-2 withraws ">
-            <div className="row w-100  py-2">
-              <div className="d-grid col-12 col-lg-4 text-center ">
+            <div className=" d-flex flex-wrap align-items-center justify-content-between text-center w-100  py-2">
+              <div
+                className="d-grid  text-center  nextwithdraw"
+                style={{ maxWidth: "300px" }}
+              >
                 <h5 className="text-primary pt-1 fw-bolder">Next Withdrawer</h5>
                 <p>{getNextWithdrawer()?.toUpperCase()}</p>
               </div>
-              <div className="d-grid col-12  py-2 col-sm-4 border-div ">
+              <div
+                className="d-grid   py-2  border-div nextwithdraw "
+                style={{ minWidth: "300px" }}
+              >
                 <h5 className="text-primary text-center fw-bolder">
                   Total Withdraws
                 </h5>
                 <p className="text-center">{totalWithdraws}</p>
               </div>
-              <div className="d-grid col-12  py-2 col-sm-4 ">
+              <div
+                className="d-grid nextwithdraw   "
+                style={{ maxWidth: "300px" }}
+              >
                 <h5 className="text-primary fw-bolder">Group Link</h5>
                 <CopyToClipboard text={linkTojoinGroup} />
               </div>
@@ -382,6 +426,3 @@ const EachgroupUser = () => {
 };
 
 export default EachgroupUser;
-
-
-

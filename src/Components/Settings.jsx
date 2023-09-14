@@ -69,7 +69,7 @@ const Settings = () => {
   const saveChanges = async () => {
     setloadData(!loaddata)
     try {
-      const url = "http://localhost:3000/user/editProfile";
+      const url = "https://ultimate-thrift.onrender.com/user/editProfile";
       const response = await axios.post(url, updatingData);
       console.log(response.data);
       if (response.status === 200) {
@@ -85,7 +85,7 @@ const Settings = () => {
 
   const changePassword = async () => {
     try {
-      const url = "http://localhost:3000/user/changePassword";
+      const url = "https://ultimate-thrift.onrender.com/user/changePassword";
       const response = await axios.post(url, updatePassword);
       alert(response.data.message)
     } catch (error) {
@@ -170,7 +170,8 @@ const Settings = () => {
                 </div>
                 <button
                   onClick={saveChanges}
-                  className="btn btn-primary save m-3 w-25"
+                  className="btn btn-primary save m-3 "
+                  style={{width : "fit-content"}}
                 >
                    {loaddata ? (
                   "Save Changes"

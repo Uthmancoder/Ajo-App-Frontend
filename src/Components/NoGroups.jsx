@@ -19,8 +19,8 @@ const NoGroups = () => {
               There are no groups available currently kindly create a group or
               join an existing group
             </p>
-            <div className="d-flex ">
-              <Link to="/create" className="w-50 mx-2 p-2">
+            <div className="row  create-div">
+              <Link to="/create" className="col-8 col-sm-6 mx-auto p-2 create_thrift">
                 <button
                   className={`btn ${
                     activeButton === "create"
@@ -32,13 +32,13 @@ const NoGroups = () => {
                   Create a Thrift
                 </button>
               </Link>
-              <Link to="/groups" className="w-50 mx-2 p-2">
+              <Link to="/groups" className="col-8 col-sm-6 mx-auto p-2">
                 <button
                   className={`btn ${
                     activeButton === "join"
                       ? "btn-primary"
                       : "btn-outline-primary"
-                  } w-100 mx-2 p-3`}
+                  } w-100 mx-2 p-3 create_thrift`}
                   onClick={() => handleButtonClick("join")}
                 >
                   Join an existing group

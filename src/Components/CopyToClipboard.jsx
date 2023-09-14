@@ -18,7 +18,7 @@ const CopyToClipboard = ({ text }) => {
   };
 
   return (
-    <div className="d-flex align-items-center  justify-content-between mx-3 link  border pt-3 ">
+    <div className="d-flex align-items-center  justify-content-between  link  border pt-3 ">
       <p className={`text-primary grouplink ${isCopied ? "highlight" : ""}`}>
         {text}
       </p>

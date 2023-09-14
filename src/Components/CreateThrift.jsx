@@ -71,7 +71,9 @@ const CreateThrift = () => {
       imageFile === ""
     ) {
       alert("imput field cannot be empty");
-    } else {
+    } else if(Number(users).value > 8){
+      alert("Maximum of 8 users van be accepted in a group, please try reducing your users")
+    }else {
       // data to be sent to the server
       const ThriftData = {
         groupName: groupName,
@@ -90,7 +92,7 @@ const CreateThrift = () => {
         console.log(ThriftData);
         await axios
           .post(
-            "http://localhost:3000/user/CreateThrift",
+            "https://ultimate-thrift.onrender.com/user/CreateThrift",
             ThriftData,
             {
               headers: {
@@ -99,8 +101,8 @@ const CreateThrift = () => {
             }
           )
           .then((res) => {
-            dispatch(fetchingSuccessful(res.data.link));
-            localStorage.setItem("fetchedLink", JSON.stringify(res.data.link));
+            dispatch(fetchingSuccessful(res.data));
+            localStorage.setItem("fetchedLink", JSON.stringify(res.data.message));
 
             toast.success("Thrift group created successfully");
             if (res.status === 200) {
@@ -127,15 +129,15 @@ const CreateThrift = () => {
       {/* imported the app nav */}
       <AppNav />
       <div className="row w-100">
-        <div className="col-3">
+        <div className="col-3 d-none d-sm-block">
           {/* imported the sidenav */}
           <Sidenav />
         </div>
-        <div className="col-9">
-          <form action="" className="form_main w-100 my-5">
+        <div className="col-12 col-sm-9 mx-auto">
+          <form action="" className="form_main shadow w-100 my-5">
             <p className="heading">Create a thrift</p>
             <div className="row w-100">
-              <div className="inputContainer col-12  w-50 col-sm-6 d-grid">
+              <div className="inputContainer col-12   col-sm-6 d-grid">
                 <label htmlFor="Thriftname" className="text-dark fw-bolder ">
                   Enter a group name
                 </label>
@@ -171,7 +173,7 @@ const CreateThrift = () => {
                 </select>
               </div>
               <div className="inputContainer col-12 col-sm-6 d-grid ">
-                <label htmlFor="Thriftname" className="fw-bolder text-light">
+                <label htmlFor="Thriftname" className="fw-bolder  amount">
                   Amount to be paid
                 </label>
                 <input
@@ -183,34 +185,36 @@ const CreateThrift = () => {
                 />
               </div>
 
-              <div className="inputContainer col-12 col-sm-6 d-grid ">
+              <div className="inputContainer col-12 col-sm-6 d-grid  ">
                 <label htmlFor="Thriftname" className="text-dark fw-bolder ">
                   Required Users
                 </label>
                 <input
                   type="number"
+                  min="0"
+                  max="8"
                   onChange={(e) => setusers(e.target.value)}
-                  className="inputField form-control p-3 w-100"
-                  id="amount"
+                  className="inputField form-control requiredUsers p-3 "
+                  
                   placeholder="Amount of users needed in group"
                 />
               </div>
 
-              <div className="inputContainer col-12  w-50 col-sm-6 d-grid">
+              <div className="inputContainer col-12   col-sm-6 d-grid">
                 <label htmlFor="Thriftname" className="text-dark fw-bolder ">
                   Interest if defaulted
                 </label>
                 <input
                   type="text"
                   onChange={(e) => setInterest(e.target.value)}
-                  className="inputField form-control p-3"
+                  className="inputField form-control p-3 w-100"
                   id="plan"
                   placeholder="Interest"
                 />
               </div>
               <div
                 style={{ paddingLeft: "11%" }}
-                className="col-12  col-sm-6  w-50 d-grid"
+                className="col-12  col-sm-6   d-grid"
               >
                 <label htmlFor="icon" class=" fw-bolder mx-3">
                   Select group logo

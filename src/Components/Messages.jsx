@@ -40,10 +40,10 @@ const Messages = () => {
     <div>
       <AppNav />
       <div className="row w-100 h-100">
-        <div className="col-12 col-sm-3 co-md-3">
+        <div className=" col-3 d-none d-md-block">
           <Sidenav />
         </div>
-        <div className="col-9">
+        <div className="col-12 col-sm-9 col-md-9 med account_rel">
           <h1>Messages</h1>
           <div className="p-2 bg-light rounded-2" style={{ position: "relative" }}>
             <h6 className=""> Welcome Message </h6>

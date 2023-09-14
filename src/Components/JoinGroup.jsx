@@ -25,7 +25,7 @@ const JoinGroup = () => {
   const handleJoin = async () => {
     setloadData(!loaddata);
     try {
-      const response = await axios.post("http://localhost:3000/user/addusers", {
+      const response = await axios.post("https://ultimate-thrift.onrender.com/user/addusers", {
         username,
         groupname
       });

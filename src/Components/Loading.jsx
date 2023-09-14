@@ -1,15 +1,15 @@
-import React from 'react'
+import React from "react";
 
 const Loading = () => {
   return (
     <div>
-        <div className='Loader'>
+      <div className="Loader">
         <div class="spinner-border" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>
+          <span class="visually-hidden">Loading...</span>
         </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Loading
+export default Loading;

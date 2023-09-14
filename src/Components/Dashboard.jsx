@@ -12,31 +12,38 @@ const Dashboard = () => {
   const balance = fetchedUser?.user?.wallet;
   const username = fetchedUser?.user?.username;
   const isLoading = fetchedUser?.loading; // Add a loading check
-  
 
-    // After successful signup and login
-    useEffect(() => {
-      const joinGroupIntent = sessionStorage.getItem("joinGroupIntent") || "";
-      if (joinGroupIntent) {
-        // User had an intention to join a group
-        try {
-          const response = axios.post(
-            "https://ultimate-thrift.onrender.com/user/addusertogroup",
-            { username }
-          );
-          console.log(response.data);
-          // Clear the stored intent
-          sessionStorage.removeItem("joinGroupIntent");
-          // You can proceed with some action like displaying a success message or updating state
-        } catch (error) {
-          console.log(error);
-          // Handle errors if needed
-        }
+  // getting user's connection from the localstorage
+  const connection = localStorage.getItem("usersConnection") || 0
+
+  // getting total transactions
+  const TotalTransactions = localStorage.getItem("totalTransactions") || 0
+
+  // getting the  user's total deposits 
+  const totalDeposit =  Number(localStorage.getItem("GetUsersDeposit")) || 0
+
+  // After successful signup and login
+  useEffect(() => {
+    const joinGroupIntent = sessionStorage.getItem("joinGroupIntent") || "";
+    if (joinGroupIntent) {
+      // User had an intention to join a group
+      try {
+        const response = axios.post(
+          "https://ultimate-thrift.onrender.com/user/addusertogroup",
+          { username }
+        );
+        console.log(response.data);
+        // Clear the stored intent
+        sessionStorage.removeItem("joinGroupIntent");
+        // You can proceed with some action like displaying a success message or updating state
+      } catch (error) {
+        console.log(error);
+        // Handle errors if needed
       }
-    }, [username]);
-  
+    }
+  }, [username]);
 
-
+  const totalWithdraws = localStorage.getItem("totalWithdraws") || 0;
 
   if (isLoading) {
     // Show a loading indicator or message
@@ -51,10 +58,10 @@ const Dashboard = () => {
     <div>
       <AppNav />
       <div className="w-100  row bg-light">
-        <div className="col-12 col-sm-3 co-md-3 d-none d-sm-none d-md-block d-lg-block ">
+        <div className="col-3 d-none d-sm-block">
           <Sidenav />
         </div>
-        <div className="col-12 col-sm-9 col-md-9  ">
+        <div className="col-12 col-sm-9  med ">
           <h1 className="fw-bolder my-2 mx-3">
             Dashboard <span className="text-secondary fs-3">Control Panel</span>
           </h1>
@@ -69,34 +76,46 @@ const Dashboard = () => {
                 <h4>Account Balance</h4>
               </div>
             </Link>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6 my-2">
+            <Link
+              to="/contribution"
+              className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
+            >
               <div className="card p-3 bbb text-light">
-                <h4>0</h4>
+                <h4>{totalWithdraws}</h4>
                 <h4>Total Withdrawal</h4>
               </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6 my-2">
+            </Link>
+            <Link
+              to="/groups"
+              className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
+            >
               <div className="card p-3 bg-primary text-light">
-                <h4>0</h4>
+                <h4>{connection}</h4>
                 <h4>Connections</h4>
               </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6 my-2">
+            </Link>
+            <Link
+              to="/contribution"
+              className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
+            >
               <div className="card p-3 bg-primary text-light">
-                <h4>0</h4>
+                <h4>{TotalTransactions}</h4>
                 <h4>Total Transactions</h4>
               </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6 my-2">
+            </Link>
+            <Link
+              to="/account"
+              className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
+            >
               <div className="card p-3 bbb text-light">
-                <h4>0</h4>
+                <h4>{totalDeposit}</h4>
                 <h4>Total Deposits</h4>
               </div>
-            </div>
+            </Link>
             <div className="col-12 col-sm-12 col-md-6 col-lg-6 my-2">
               <div className=" p-3  text-light">
                 <img
-                  className="img-fluid w-75"
+                  className="img-fluid  googleplay"
                   src={require("../images/get.png")}
                   alt=""
                 />

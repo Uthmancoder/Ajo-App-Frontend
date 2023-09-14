@@ -12,6 +12,7 @@ import EachgroupUser from "./Components/EachgroupUser";
 import Fetch from "./Components/Fetch";
 import JoinGroup from "./Components/JoinGroup";
 import Settings from "./Components/Settings";
+import About from "./Components/About";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/pay" element={<Fetch/>} />
         <Route path="/jointhrift" element={<JoinGroup/>}/>
         <Route path="/settings" element={<Settings/>}/> 
+        <Route path="/about" element={<About/>}/> 
       </Routes>
     </div>
   );

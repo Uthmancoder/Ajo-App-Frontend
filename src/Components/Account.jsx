@@ -16,17 +16,24 @@ const Account = () => {
   const [payment, setPayment] = useState(false);
   const [amount, setAmount] = useState("");
   const [loaddata, setloadData] = useState(true);
+
+  // trying to get the user's total deposits
+  const [GetUsersDeposit, setGetUsersDeposit] = useState(
+    Number(localStorage.getItem("GetUsersDeposit")) || 0
+  );
+
+  const AllMembers = localStorage.getItem("AllMembers") || 0;
+
   const { fetchedUser } = useSelector((state) => state.AllUsers, []);
 
   // getting all the user's data
   const username = fetchedUser?.user?.username || "";
   const name = username.toUpperCase();
   const email = fetchedUser?.user?.email || ""; // Add a conditional check for email
-  const Wallet = fetchedUser?.user?.wallet
+  const Wallet = fetchedUser?.user?.wallet;
   const isLoading = fetchedUser?.user?.loading; // Update the loading property path
 
-
-  // data to be sent to paystack 
+  // data to be sent to paystack
   const componentProps = {
     email,
     amount: amount * 100,
@@ -37,25 +44,52 @@ const Account = () => {
     publicKey,
     text: "Add Fund",
     onSuccess: (response) => {
-      let url = "http://localhost:3000/user/updateWallet";
+      let url = "https://ultimate-thrift.onrender.com/user/updateWallet";
       let data = {
-        amount : amount,
-        username : username
-      }
-
+        amount: amount,
+        username: username,
+      };
+  
       console.log(response);
-
-      try {
-        const newresponse = axios.post(url, data)
-      console.log(newresponse.data);
-      window.location.reload()
-      } catch (error) {
-        console.log(error.newresponse.data);
-      }
+  
+      // Wrap the asynchronous operation in a Promise
+      const asyncOperation = new Promise(async (resolve, reject) => {
+        try {
+          const newResponse = await axios.post(url, data);
+          console.log(newResponse.data);
+          setGetUsersDeposit((prevDeposit) => prevDeposit + 1);
+          localStorage.setItem("GetUsersDeposit", GetUsersDeposit + 1);
+  
+          // Get the existing messages array from local storage or initialize it if it doesn't exist
+          let messages =
+            JSON.parse(localStorage.getItem("transactionMessages")) || [];
+  
+          // Add the new message to the array
+          messages.push(newResponse.data.message);
+          // Save the updated messages array to local storage
+          localStorage.setItem("transactionMessages", JSON.stringify(messages));
+  
+          // Resolve the Promise after successful completion
+          resolve();
+        } catch (error) {
+          console.log(error.newResponse.data);
+          // Reject the Promise if there's an error
+          reject(error);
+        }
+      });
+  
+      asyncOperation
+        .then(() => {
+          // Reload the page after the asynchronous operation is complete
+          window.location.reload();
+        })
+        .catch((error) => {
+          // Handle the error as needed
+        });
     },
     onClose: () => alert("Wait! You need this oil, don't go!!!!"),
   };
-
+  
 
   // chevking loafing state
   if (isLoading) {
@@ -72,7 +106,6 @@ const Account = () => {
     setPayment(!true);
   };
 
-
   return (
     <div>
       <AppNav />
@@ -80,7 +113,7 @@ const Account = () => {
         <div className="d-none d-sm-block  col-3">
           <Sidenav />
         </div>
-        <div className="col-12 col-sm-9 account_rel pt-16 pl-2">
+        <div className="col-12 col-sm-9 account_rel pt-16 med">
           <h1 className="fs-2 m-3">
             My <span className="fs-3 text-secondary">Account</span>
           </h1>
@@ -103,33 +136,22 @@ const Account = () => {
                   style={{ minHeight: "70px", minWidth: "250px" }}
                 >
                   <h5 className="fw-bolder text-light">Group Members </h5>
-                  <p>0</p>
+                  <p>{AllMembers}</p>
                 </div>
                 <div
                   className="d-grid shadow p-2 text-center text-light rounded-3 "
                   style={{ minHeight: "70px", minWidth: "250px" }}
                 >
                   <h5 className="fw-bolder text-light">Successful Payments </h5>
-                  <p>0</p>
+                  <p>{GetUsersDeposit}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="card  shadow mt-4  ">
-            {/* <div
-              className="trackPayment m-2 d-flex align-items-center justify-content-around"
-              style={{ backgroundColor: "white" }}
-            >
-         
-             
-            </div> */}
-
-            <div
-              className="bg-light d-flex align-items-center justify-content-between py-3  px-5"
-              style={{ overflowX: "screll" }}
-            >
-              <div className="text-start" style={{ maxWidth: "300px" }}>
+          <div className="card  shadow mt-4 acc_details ">
+            <div className="bg-light d-flex flex-wrap align-items-center justify-content-between py-3  px-5">
+              <div className="text-start smallsc" style={{ maxWidth: "300px" }}>
                 <p className="fw-bolder trackPayment m-2 text-primary fw-bolder fs-5">
                   Pending payment
                 </p>
@@ -140,7 +162,7 @@ const Account = () => {
                 </p>
               </div>
               <hr className="p-2 line" />
-              <div className="text-start" style={{ maxWidth: "300px" }}>
+              <div className="text-start smallsc" style={{ maxWidth: "300px" }}>
                 <p className="fw-bolder trackPayment m-2 text-primary fw-bolder fs-5">
                   Defaulted payments
                 </p>
@@ -153,8 +175,12 @@ const Account = () => {
               </div>
               <hr className="p-2 line2" />
               <div
-                className="text-start"
-                style={{ maxWidth: "300px", marginLeft: "-10%" }}
+                className=" smallsc smallsc3"
+                style={{
+                  maxWidth: "300px",
+                  marginLeft: "-10%",
+                  textAlign: "start",
+                }}
               >
                 <p className="fw-bolder trackPayment m-2 text-primary fw-bolder fs-5">
                   Fund Wallet
@@ -184,16 +210,7 @@ const Account = () => {
                 type="number"
                 placeholder="Enter Amount"
               />
-              {/* <button onClick={makePayment} className="btn btn-primary w-50">
-                {loaddata ? (
-                  "Add Fund"
-                ) : (
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                )}
-              </button> */}
-              <PaystackButton className="btn btn-primary" {...componentProps} />
+              <PaystackButton className="btn btn-primary addfund" {...componentProps} />
             </div>
           </div>
         </div>

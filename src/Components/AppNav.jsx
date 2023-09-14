@@ -20,21 +20,47 @@ import { useSelector, useDispatch } from "react-redux";
 import { IoIosNotifications } from "react-icons/io";
 import { BsBookHalf } from "react-icons/bs";
 import Loading from "./Loading";
-
+import Sidenav from "./Sidenav"
 
 const AppNav = () => {
-
   const { fetchedUser } = useSelector((state) => state.AllUsers);
-  const isLoading = fetchedUser?.loading; 
-  const userimage = fetchedUser?.user?.image
-  const pages = ["Products", "Pricing", "Blog"];
+  const isLoading = fetchedUser?.loading;
+  const userimage = fetchedUser?.user?.image;
+  const pages = [
+    {
+      text: "About",
+      link: "/about",
+    },
+    {
+      text: "Products",
+      link: "https://uthmancoder-hexashop.netlify.app",
+    },
+    {
+      text: "Portfolio",
+      link: "https://uthmancoder-portfolio.netlify.app",
+    },
+  ];
   const smallpages = [
-    "Dashboard",
-    "Groups",
-    "Account",
-    "Messages",
-    "Settings",
-    "Logout",
+    {
+      text: "Dashboard",
+      link: "/dashboard",
+    },
+    {
+      text: "Groups",
+      link: "/groups",
+    },
+    {
+      text: "Account",
+      link: "/account",
+    },
+    {
+      text: "Messages",
+      link: "/messages",
+    },
+    {
+      text: "Settings",
+      link: "/settings",
+    },
   ];
   const settings = [
     {
@@ -56,7 +82,6 @@ const AppNav = () => {
   ];
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -163,12 +188,13 @@ const AppNav = () => {
               >
                 {smallpages.map((page) => (
                   <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography
-                      textAlign="center"
-                      component="a"
-                      href={`/${page.toLowerCase()}`}
-                    >
-                      {page}
+                    <Typography textAlign="center">
+                      <Link
+                        style={{ textDecoration: "none", color: "black" }}
+                        to={`${page.link}`}
+                      >
+                        {page.text}
+                      </Link>
                     </Typography>
                   </MenuItem>
                 ))}
@@ -200,24 +226,26 @@ const AppNav = () => {
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  {page}
-                </Button>
+                <Link to={`${page.link}`}>
+                  <Button
+                    key={page}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    {page.text}
+                  </Button>
+                </Link>
               ))}
             </Box>
             <Tooltip title="Account">
-              <p className="mt-2">
+              <Link to="/account" className="mt-2">
                 <BsBookHalf style={{ fontSize: "17px" }} />
-              </p>
+              </Link>
             </Tooltip>
             <Tooltip title="Notification">
-              <p className="mx-3 mt-2">
+              <Link to="/messages" className="mx-3 mt-2">
                 <IoIosNotifications style={{ fontSize: "20px" }} />
-              </p>
+              </Link>
             </Tooltip>
             <Box
               sx={{
@@ -235,7 +263,7 @@ const AppNav = () => {
                 >
                   <img
                     className="dashboard_logo img-fluid rounded-circle "
-                    style={{width :"50px", height: "50px"}}
+                    style={{ width: "50px", height: "50px" }}
                     src={userimage}
                     alt=""
                   />
