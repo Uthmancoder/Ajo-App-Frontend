@@ -24,8 +24,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const fetchedUser = useSelector((state) => state.AllUsers);
 
-
-
   const signin = async (ev) => {
     ev.preventDefault();
 
@@ -54,7 +52,7 @@ const Login = () => {
           setTimeout(() => {
             navigate("/dashboard");
           }, 2000);
-        }else {
+        } else {
           toast(response?.data?.message || "Server error");
           dispatch(PostingFailed("Server error"));
         }
@@ -77,6 +75,30 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  const forgetPassword = async (ev) => {
+    ev.preventDefault();
+    if (!username || !email) {
+      toast.error(
+        "if you've forgotten your password input your username and email then click on the forgotPassword for your password reset "
+      );
+    } else {
+      try {
+        const url = "http://localhost:3000/user/forgotPassword";
+        const data = {
+          email,
+          username,
+        };
+        const response = await axios.post(url, data);
+        console.log(response.data);
+        const Otp = response.data.generatedNum;
+        localStorage.setItem("Otp", Otp);
+        navigate("/forgotPassword")
+      } catch (error) {
+        console.log(error);
+        alert("error.data.message")
+      }
+    }
+  };
   return (
     <div className="signup_div bg-dark py-3">
       <form
@@ -138,9 +160,9 @@ const Login = () => {
 
           {/* end of signin button */}
 
-          <a className="forget" href="#">
+          <button onClick={forgetPassword} className="forget text-primary">
             Forget password?
-          </a>
+          </button>
           <p className="signup-link">
             Don't have an account? <Link to="/signup">Sign up</Link>
           </p>

@@ -285,6 +285,18 @@
   height: 35px;
   width: 35px;
 }
+.logo{
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+.inputs_div{
+  width: 75%;
+  padding-left: 10%;
+}
 
 .checkbox input {
   width: 100%;
@@ -339,8 +351,12 @@
 }
 
 .forget {
+  border: none;
+  background: none;
+  outline: none;
   text-align: right;
   font-weight: 600;
+  text-decoration: underline;
 }
 .password_div{
   display: flex;
@@ -389,6 +405,10 @@
     width: 100%;
     
   }
+  .inputs_div{
+    width: 100%!important;
+    padding-left: 0;
+  }
   
 }
 .profilebg{
@@ -423,6 +443,26 @@
   border-left: 1px solid rgb(206, 200, 200)!important;
   border-right: 1px solid rgb(211, 200, 200)!important;
 }
+.nonFound{
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+/* custom.css */
+.goback {
+  background-color: rgb(84, 91, 232)!important;
+  border-color: skyblue!important;
+  color: white; /* You can change the text color if needed */
+}
+
+.goback{
+  position: absolute;
+  top: 5%;
+  right: 5%;
+}
 .joinGroup{
   background-image: linear-gradient(to right, #132f39,#212c30, #1e2b2a);
   background-size: cover ;
@@ -432,6 +472,17 @@
   display: flex;
   align-items: center ;
   justify-content: center;
+}
+.passwordinputs{
+  width: 50px;
+  border: none;
+  outline: none;
+  height: 50px;
+  border-radius: 10px;
+  padding-left: 13px;
+}
+.verify_div {
+  width: fit-content;
 }
 .joinGroup_card{
   background-image: linear-gradient(to right, #344b53,#3d6876, #285351);
