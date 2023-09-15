@@ -19,6 +19,7 @@ const Login = () => {
   const [username, setusername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loaddata, setloadData] = useState(true);
+  const [loading, setloading] = useState(false);
   const [remember, setRemember] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -83,19 +84,22 @@ const Login = () => {
       );
     } else {
       try {
-        const url = "http://localhost:3000/user/forgotPassword";
+        setloading(!loading);
+        const url = "https://ultimate-thrift.onrender.com/user/forgotPassword";
         const data = {
           email,
           username,
         };
         const response = await axios.post(url, data);
         console.log(response.data);
-        const Otp = response.data.generatedNum;
-        localStorage.setItem("Otp", Otp);
-        navigate("/forgotPassword")
+        const userData = response.data.data;
+        localStorage.setItem("userData", JSON.stringify(userData));
+        setTimeout(() => {
+          navigate("/forgotPassword");
+        }, 3000);
       } catch (error) {
         console.log(error);
-        alert("error.data.message")
+        alert("error.data.message");
       }
     }
   };
@@ -167,6 +171,13 @@ const Login = () => {
             Don't have an account? <Link to="/signup">Sign up</Link>
           </p>
         </div>
+        {loading ? (
+          <div className="loading">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : null}
         <ToastContainer />
       </form>
     </div>

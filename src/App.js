@@ -15,6 +15,7 @@ import Settings from "./Components/Settings";
 import About from "./Components/About";
 import ForgotPassword from "./Components/ForgotPassword";
 import NonFound from "./Components/NonFound";
+import ResetPassword from "./Components/ResetPassword";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/jointhrift" element={<JoinGroup/>}/>
         <Route path="/settings" element={<Settings/>}/> 
         <Route path="/about" element={<About/>}/> 
+        <Route path="/resetPassword" element={<ResetPassword/>}/> 
         <Route path="/forgotpassword" element={<ForgotPassword/>}/> 
         <Route path="*"  element={<NonFound/>}/> 
       </Routes>

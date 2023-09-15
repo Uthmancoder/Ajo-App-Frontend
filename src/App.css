@@ -487,6 +487,12 @@
 .joinGroup_card{
   background-image: linear-gradient(to right, #344b53,#3d6876, #285351);
 }
+.subt{
+  background-color: #344b53!important;
+  color: rgb(223, 220, 220);
+  font-size: 12px;
+  font-weight: 500;
+}
 .groupname{
   color: #13c1f1;
 }
@@ -513,6 +519,17 @@
   width: 73%;
   padding:0  10px;
 
+}
+.inp-div{
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.toggle{
+  position: absolute;
+  right: 3%;
+  top: 23%;
 }
 .join_logo{
   width : 50px;
@@ -672,6 +689,23 @@
   margin-top: -10px!important;
   margin-left: 10px;
   letter-spacing: 1px;
+}
+
+.loading{
+  width: 100%;
+  height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8),rgba(0, 0, 0, 0.8));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index : 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.spinner-border {
+  color: white;
+  z-index: 999;
 }
 
 .create{
