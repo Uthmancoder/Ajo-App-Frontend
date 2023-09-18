@@ -71,9 +71,10 @@ const CreateThrift = () => {
       imageFile === ""
     ) {
       alert("imput field cannot be empty");
-    } else if(Number(users).value > 8){
-      alert("Maximum of 8 users van be accepted in a group, please try reducing your users")
-    }else {
+    } else if (Number(users) > 8) {
+      alert("Maximum of 8 users can be accepted in a group, please try reducing your users");
+    }
+    else {
       // data to be sent to the server
       const ThriftData = {
         groupName: groupName,
