@@ -244,10 +244,14 @@ const EachgroupUser = () => {
       );
 
       console.log(response.data.message);
-      setTransactionCount((prevCount) => prevCount + 1);
-      localStorage.setItem("totalTransactions", transactionCount)
-      alert(response.data.message);
-      navigate("/groups");
+      if(response.data.status === "true"){
+        setTransactionCount((prevCount) => prevCount + 1);
+        localStorage.setItem("totalTransactions", transactionCount)
+        alert(response.data.message);
+        navigate("/groups");
+      }else{
+        alert(response.data.message);
+      }
     } catch (err) {
       console.log(err);
       alert(err.response.data.message);
