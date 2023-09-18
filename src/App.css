@@ -510,6 +510,11 @@
   background: linear-gradient(to bottom, #13c1f1, #4a6871 );
   color: rgb(192, 214, 234)!important;
 }
+
+.forgot_form{
+  background-image: linear-gradient(to right, #1e363f,#0f2830, #0a2927);
+}
+
 .eachgroups{
   cursor: pointer;
 }

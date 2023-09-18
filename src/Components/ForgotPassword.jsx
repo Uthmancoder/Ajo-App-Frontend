@@ -51,13 +51,13 @@ const ForgotPassword = () => {
         alt=""
       />
       <div className="row container">
-        <h1 className="text-secondary d-flex align-items-center justify-content-center text-center col-12 gap-6 col-sm-12 col-md-6 ">
+        <h1 className="text-secondary d-flex align-items-center justify-content-center text-start col-12 gap-8 col-sm-12 col-md-6 px-2 ">
           Forgotten password ??, No issues you can actually reset your password
-          wthout ease
+          without stress
         </h1>
         <form
           action=""
-          className="col-12 col-sm-12  col-md-6  mx-auto mt-5 shadow  rounded-3  border p-5 w-fit-content h-fit-content"
+          className="col-12 col-sm-12 forgot_form col-md-6  mx-auto mt-5 shadow  rounded-3  border p-5 w-fit-content h-fit-content"
         >
           <h2 className="text-secondary text-center">
             Enter the 4 digit OTP sent to your email address

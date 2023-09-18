@@ -102,7 +102,7 @@ const EachgroupUser = () => {
   }
 
   // Declaring the link to joinnthrift here for a purpose
-  const linkTojoinGroup = "http://localhost:3001//jointhrift";
+  const linkTojoinGroup = "https://uthman-thrift-app.onrender.com/jointhrift";
 
   // Trigger the modal
   const fundWallet = () => {
