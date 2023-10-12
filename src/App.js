@@ -21,22 +21,23 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<LandingPage />}/>
-        <Route path="/login" element={<Login/>} />
-        <Route path="/signup" element={<SignUp/>} />
-        <Route path="/dashboard" element={<Dashboard/>}/>
-        <Route path="/groups" element={<Groups/>}/>
-        <Route path="/contribution" element={<EachgroupUser/>}/>
-        <Route path="/account" element={<Account/>} />
-        <Route path="/messages" element={<Messages/>}/> 
-        <Route path="/create" element={<CreateThrift/>} />
-        <Route path="/pay" element={<Fetch/>} />
-        <Route path="/jointhrift" element={<JoinGroup/>}/>
-        <Route path="/settings" element={<Settings/>}/> 
-        <Route path="/about" element={<About/>}/> 
-        <Route path="/resetPassword" element={<ResetPassword/>}/> 
-        <Route path="/forgotpassword" element={<ForgotPassword/>}/> 
-        <Route path="*"  element={<NonFound/>}/> 
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/groups" element={<Groups />}>
+          <Route path=":id" element={<EachgroupUser />} />
+        </Route>
+        <Route path="/account" element={<Account />} />
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/create" element={<CreateThrift />} />
+        <Route path="/pay" element={<Fetch />} />
+        <Route path="/jointhrift" element={<JoinGroup />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/resetPassword" element={<ResetPassword />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="*" element={<NonFound />} />
       </Routes>
     </div>
   );

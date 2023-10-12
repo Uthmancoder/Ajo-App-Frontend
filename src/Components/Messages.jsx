@@ -58,7 +58,7 @@ const Messages = () => {
             <p style={{ position: "absolute", right: "4%", bottom: "-10px" }}>{createddate}</p>
           </div>
         </div>
-      </div>
+      </div>  
     </div>
   );
 };
