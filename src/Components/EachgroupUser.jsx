@@ -24,6 +24,8 @@ const EachgroupUser = () => {
 
   const amountPerThrift = fetchedUser?.amount;
 
+  const groupId = fetchedUser?.groupId;
+
   console.log(groupMembers);
 
   const plan = fetchedUser?.plan;
@@ -102,7 +104,8 @@ const EachgroupUser = () => {
   }
 
   // Declaring the link to joinnthrift here for a purpose
-  const linkTojoinGroup = "https://uthman-thrift-app.onrender.com/jointhrift";
+  const linkTojoinGroup = `http://localhost:3001/jointhrift/${groupId}`;
+
 
   // Trigger the modal
   const fundWallet = () => {

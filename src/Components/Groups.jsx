@@ -75,7 +75,7 @@ const Groups = () => {
 
   // Fetching all the group members from the server
   const handleGroupMembers = async (groupName) => {
-    const url = "https://ultimate-thrift.onrender.com/user/getmembers";
+    const url = "http://localhost:3000/user/getmembers";
     try {
       setShowLoader(true); // Show the loader before making the API call
       const response = await axios.post(
@@ -179,7 +179,7 @@ const Groups = () => {
             <NoGroups />
           )}
           {data && data.length > 0 ? (
-            <Link to="/create" className="text-primary create fw-bold">
+            <Link to="/createThrift" className="text-primary create fw-bold">
               Create A Thrift{" "}
               <AiOutlineArrowRight
                 style={{ fontWeight: "500", fontSize: "17px" }}

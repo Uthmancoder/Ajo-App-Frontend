@@ -4,12 +4,14 @@ import Sidenav from "./Sidenav";
 import { FaCamera } from "react-icons/fa";
 import { Tooltip } from "@mui/material";
 import AllUsers from "../Redux/AllUsers";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import Loading from "./Loading";
 
 
 const Settings = () => {
+  const navigate = useNavigate();
   const [selectedImage, setselectedImage] = useState(null);
   const { fetchedUser } = useSelector((state) => state.AllUsers);
   console.log(fetchedUser);
@@ -78,8 +80,10 @@ const Settings = () => {
     } catch (error) {
       console.log(error);
       alert(error);
-    }finally{
+    } finally {
       setloadData(true)
+      // Reload the page by navigating to the current location
+      navigate(window.location.settings);
     }
   };
 
@@ -171,15 +175,15 @@ const Settings = () => {
                 <button
                   onClick={saveChanges}
                   className="btn btn-primary save m-3 "
-                  style={{width : "fit-content"}}
+                  style={{ width: "fit-content" }}
                 >
-                   {loaddata ? (
-                  "Save Changes"
-                ) : (
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                )}
+                  {loaddata ? (
+                    "Save Changes"
+                  ) : (
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  )}
                 </button>
 
                 <p className="my-3">Change Password</p>

@@ -90,7 +90,6 @@ const Account = () => {
     onClose: () => alert("Wait! You need this oil, don't go!!!!"),
   };
   
-
   // chevking loafing state
   if (isLoading) {
     return <Loading />;

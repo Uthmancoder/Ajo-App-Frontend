@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { AiOutlineCopyright } from "react-icons/ai";
+import { FiCopy } from "react-icons/fi";
 
 const CopyToClipboard = ({ text }) => {
   const inputRef = useRef(null);
@@ -22,8 +22,8 @@ const CopyToClipboard = ({ text }) => {
       <p className={`text-primary grouplink ${isCopied ? "highlight" : ""}`}>
         {text}
       </p>
-      <p title="Copy Link" className=" mx-2 pb-1" onClick={handleCopy}>
-        <AiOutlineCopyright />
+      <p title="Copy Link" className=" mx-2  rounded-circle border copy_btn bg-secondary text-light" onClick={handleCopy}>
+        <FiCopy />
       </p>
       {/* Hidden input to facilitate copying */}
       <input

@@ -1,6 +1,6 @@
 .navv{
   z-index: 999;
-  display: flex ;
+  display: flex ; 
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
@@ -347,7 +347,7 @@
   color: #1e88e5;
 }
 .save{
-  width: fit-content!important;
+  width: 200px!important;
 }
 
 .forget {
@@ -377,8 +377,13 @@
   right: 10px;
   bottom: 17px;
 }
+.copy_btn{
+  width: 30px;
+  height: 30px;
+}
 .dashboard_logo{
-  width: 18%;
+  width: 50px;
+  height: 50px;
 }
 .balance{
   cursor: pointer;
@@ -432,6 +437,10 @@
     width: 100vw;
     height: 93.4vh;
     padding-top: 20%;
+  }
+  .dashboard_logo{
+    width: 40px;
+    height: 40px;
   }
 }
 .link{
@@ -717,7 +726,7 @@
 .create{
    position: absolute;
    bottom: 5%;
-   left: 60%;
+   left: 40%;
    cursor: pointer;
    text-decoration: none;
 }
@@ -914,8 +923,12 @@ width: fit-content;
     margin: 40px 0 0 10px; 
   }
   .create{
-    margin-left: -100px;
-  }
+    position: absolute;
+    bottom: 5%;
+    left: 40%;
+    cursor: pointer;
+    text-decoration: none;
+ }
   .googleplay{
     width: 100%;
   }
