@@ -168,7 +168,7 @@ const Login = () => {
             Forget password?
           </button>
           <p className="signup-link">
-            Don't have an account? <Link to="/signup">Sign up</Link>
+            Don't have an account? <Link to="/signup" className="fw-bold mx-2">Sign up</Link>
           </p>
         </div>
         {loading ? (

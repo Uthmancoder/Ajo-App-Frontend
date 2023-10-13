@@ -4,12 +4,14 @@ import Sidenav from "./Sidenav";
 import { FaCamera } from "react-icons/fa";
 import { Tooltip } from "@mui/material";
 import AllUsers from "../Redux/AllUsers";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import Loading from "./Loading";
 
 
 const Settings = () => {
+  const navigate = useNavigate();
   const [selectedImage, setselectedImage] = useState(null);
   const { fetchedUser } = useSelector((state) => state.AllUsers);
   console.log(fetchedUser);
@@ -32,6 +34,8 @@ const Settings = () => {
   const uploadImg = (ev) => {
     const file = ev.target.files[0];
     const reader = new FileReader();
+
+
 
     reader.onload = (e) => {
       const dataURL = e.target.result;
@@ -65,7 +69,12 @@ const Settings = () => {
     newPassword: Newpass,
     email: email,
   };
+  
+  // Get the existing messages array from local storage or initialize it if it doesn't exist
+  let messages =
+    JSON.parse(localStorage.getItem("transactionMessages")) || [];
 
+  // saving the user details update 
   const saveChanges = async () => {
     setloadData(!loaddata)
     try {
@@ -74,20 +83,28 @@ const Settings = () => {
       console.log(response.data);
       if (response.status === 200) {
         alert(response.data.message);
+        messages.push(response.data.message);
+        localStorage.setItem("transactionMessages", JSON.stringify(messages));
       }
     } catch (error) {
       console.log(error);
       alert(error);
-    }finally{
+    } finally {
       setloadData(true)
+      // Reload the page by navigating to the current location
+      navigate(window.location.settings);
     }
   };
 
+  // saving the password update
   const changePassword = async () => {
+
     try {
       const url = "https://ultimate-thrift.onrender.com/user/changePassword";
       const response = await axios.post(url, updatePassword);
       alert(response.data.message)
+      messages.push(response.data.message);
+        localStorage.setItem("transactionMessages", JSON.stringify(messages));
     } catch (error) {
       console.log(error.data.message);
       alert(error.data.message)
@@ -171,15 +188,15 @@ const Settings = () => {
                 <button
                   onClick={saveChanges}
                   className="btn btn-primary save m-3 "
-                  style={{width : "fit-content"}}
+                  style={{ width: "fit-content" }}
                 >
-                   {loaddata ? (
-                  "Save Changes"
-                ) : (
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                )}
+                  {loaddata ? (
+                    "Save Changes"
+                  ) : (
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  )}
                 </button>
 
                 <p className="my-3">Change Password</p>

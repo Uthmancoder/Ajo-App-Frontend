@@ -1,6 +1,6 @@
 .navv{
   z-index: 999;
-  display: flex ;
+  display: flex ; 
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
@@ -337,8 +337,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
+};
 .signup-link a, .forget {
   line-height: 1.5;
   font-weight: 700;
@@ -347,7 +346,7 @@
   color: #1e88e5;
 }
 .save{
-  width: fit-content!important;
+  width: 200px!important;
 }
 
 .forget {
@@ -358,9 +357,26 @@
   font-weight: 600;
   text-decoration: underline;
 }
+.animated-image {
+  animation: bounceAnimation 3s infinite;
+}
+
+@keyframes bounceAnimation {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px); /* Adjust the pixel value for the desired bounce height */
+  }
+}
+
 .password_div{
   display: flex;
   position: relative;
+}
+.slideIn{
+  transition: 1s;
+  height: 60vh;
 }
 .input_type{
   border: none;
@@ -377,8 +393,13 @@
   right: 10px;
   bottom: 17px;
 }
+.copy_btn{
+  width: 30px;
+  height: 30px;
+}
 .dashboard_logo{
-  width: 18%;
+  width: 50px;
+  height: 50px;
 }
 .balance{
   cursor: pointer;
@@ -432,6 +453,10 @@
     width: 100vw;
     height: 93.4vh;
     padding-top: 20%;
+  }
+  .dashboard_logo{
+    width: 40px;
+    height: 40px;
   }
 }
 .link{
@@ -717,7 +742,7 @@
 .create{
    position: absolute;
    bottom: 5%;
-   left: 60%;
+   left: 40%;
    cursor: pointer;
    text-decoration: none;
 }
@@ -914,8 +939,12 @@ width: fit-content;
     margin: 40px 0 0 10px; 
   }
   .create{
-    margin-left: -100px;
-  }
+    position: absolute;
+    bottom: 5%;
+    left: 40%;
+    cursor: pointer;
+    text-decoration: none;
+ }
   .googleplay{
     width: 100%;
   }

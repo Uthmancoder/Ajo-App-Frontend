@@ -189,7 +189,7 @@ const Groups = () => {
             <NoGroups />
           )}
           {data && data.length > 0 ? (
-            <Link to="/create" className="text-primary create fw-bold">
+            <Link to="/createThrift" className="text-primary create fw-bold">
               Create A Thrift{" "}
               <AiOutlineArrowRight
                 style={{ fontWeight: "500", fontSize: "17px" }}

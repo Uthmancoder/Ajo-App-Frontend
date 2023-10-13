@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../images/Microfinance.png";
 import GroupUsers from "../Redux/GroupUsers";
 import { useSelector } from "react-redux";
@@ -9,25 +9,38 @@ import { useNavigate } from "react-router-dom";
 
 const JoinGroup = () => {
   const [loaddata, setloadData] = useState(true);
-
-  const groupData = JSON.parse(localStorage.getItem("groupdata")) || [];
-
-  const groupname  = groupData.groupName
-
-  console.log(groupData);
-
-  const username = localStorage.getItem("currentUser") || "";
-
-  console.log(username);
+  const [groupData, setGroupData] = useState(null); // Initialize groupData as null
 
   const navigate = useNavigate();
+
+   // Get the group ID from the URL
+   const InviteLink = window.location.href;
+   const parts = InviteLink.split('/');
+   const groupId = parts[parts.length - 1]; // Assuming the group ID is the last part of the URL
+
+   useEffect(() => {
+     const getGroupData = async () => {
+       try {
+         // Send a GET request to your server using the groupId as a URL parameter
+         const response = await axios.get(`http://localhost:3000/user/getDetails/${groupId}`);
+         // Handle the response from the server, which should contain the group data
+         console.log('Group Data:', response.data);
+         setGroupData(response.data);
+       } catch (error) {
+         console.error('Error fetching group data:', error);
+       }
+     }
+     getGroupData();
+   }, [groupId]);
+  console.log("logged Data :", groupData);
+  const username = localStorage.getItem("currentUser") || "";
 
   const handleJoin = async () => {
     setloadData(!loaddata);
     try {
       const response = await axios.post("https://ultimate-thrift.onrender.com/user/addusers", {
         username,
-        groupname
+        groupname: groupData.groupDetails.groupName, // Access groupData properties directly
       });
 
       console.log(response.data);
@@ -41,33 +54,38 @@ const JoinGroup = () => {
     } catch (error) {
       console.log(error);
       if (error.response) {
-        const errorMessage = error.response.data.message; // Access the error message from the server response
+        const errorMessage = error.response.data.message;
         toast.error(errorMessage);
         setTimeout(() => {
           navigate("/groups");
         }, 3000);
         if (error.response.status === 404) {
           sessionStorage.setItem("joinGroupIntent", groupData.groupName);
-          // Redirect to signup page
           navigate("/signup");
         }
       }
     } finally {
-      setloadData(true); // Hide the loader
+      setloadData(true);
     }
   };
+
+  // Check if groupData is still null and show Loading component
+  if (groupData === null) { 
+    return <Loading />;
+  }
+
 
   return (
     <div className="joinGroup  ">
       <div className="card col-10 col-sm-8 col-md-6 col-lg-4 mx-auto p-3 joinGroup_card shadow">
-        <img src={groupData.groupIcon} className="join_logo" alt="" />
+        <img src={groupData.groupDetails.groupIcon} className="join_logo" alt="" />
         <h5 className=" fw-bolder fs-3 mt-3 text-center join_header">
           Ultimate Microfinance app
         </h5>
-        <h5 className="groupname fw-bold mt-3">{groupname}</h5>
+        <h5 className="groupname fw-bold mt-3">{groupData.groupDetails.groupName}</h5>
         <p className="text-uppercase group_Details">
-          {groupData.Amount} {groupData.plan}, {groupData.RequiredUsers}{" "}
-          required users, pack : {groupData.Total}{" "}
+          {groupData.groupDetails.Amount} {groupData.groupDetails.plan}, {groupData.RequiredUsers}{" "}
+          required users, pack : {groupData.groupDetails.Total}{" "}
         </p>
         <button
           onClick={handleJoin}

@@ -10,6 +10,24 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const EachgroupUser = () => {
+  const { fetchedUser } = useSelector((state) => state.GroupUsers, []);
+
+  const groupname = fetchedUser?.groupName;
+
+  const groupMembers = fetchedUser?.groupMembers || [];
+
+  const currentUser = localStorage.getItem("currentUser");
+
+  const groupWallet = fetchedUser?.wallet;
+
+  const amountPerThrift = fetchedUser?.amount;
+
+  const groupId = fetchedUser?.groupId;
+
+  console.log(groupMembers);
+
+  const plan = fetchedUser?.plan;
+
   const navigate = useNavigate();
 
   // Use useEffect to update the paymentCompleted state when needed
@@ -22,7 +40,6 @@ const EachgroupUser = () => {
   const [amount, setAmount] = useState("");
   const [loaddata, setLoadData] = useState(true);
   const [transactionCount, setTransactionCount] = useState(0);
-
   const params = useParams();
   const groupId = params.id;
 
@@ -99,7 +116,8 @@ const EachgroupUser = () => {
   }
 
   // Declaring the link to joinnthrift here for a purpose
-  const linkTojoinGroup = "https://uthman-thrift-app.onrender.com/jointhrift";
+  const linkTojoinGroup = `https://ultimate-thrift.onrender.com/jointhrift/${groupId}`;
+
 
   // Trigger the modal
   const fundWallet = () => {
@@ -242,6 +260,9 @@ const EachgroupUser = () => {
         setTransactionCount((prevCount) => prevCount + 1);
         localStorage.setItem("totalTransactions", transactionCount + 1);
         alert(response.data.message);
+        // save the message to local storage
+        messages.push(response.data.message);
+        localStorage.setItem("transactionMessages", JSON.stringify(messages));
         navigate("/groups");
       } else {
         alert(response.data.message);
@@ -268,6 +289,8 @@ const EachgroupUser = () => {
         : currentWithdrawalIndex + 1;
     return groupMembers[nextIndex]?.username;
   };
+
+  
 
   const withdraw = () => {
     // Increment totalWithdraws

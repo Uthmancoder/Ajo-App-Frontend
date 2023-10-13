@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { BiExit } from "react-icons/bi";
 
 const Account = () => {
+  // paystack initialization
   const publicKey = "pk_test_dbcb6b7004be89b6c6f9b41c5c1a2d11ade8023f";
   const [payment, setPayment] = useState(false);
   const [amount, setAmount] = useState("");
@@ -90,7 +91,6 @@ const Account = () => {
     onClose: () => alert("Wait! You need this oil, don't go!!!!"),
   };
   
-
   // chevking loafing state
   if (isLoading) {
     return <Loading />;

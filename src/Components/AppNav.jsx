@@ -146,6 +146,7 @@ const AppNav = () => {
                 letterSpacing: ".3rem",
                 color: "inherit",
                 textDecoration: "none",
+                width: { md: "25%" }
               }}
             >
               <div className="d-flex align-items-center ">
@@ -186,18 +187,7 @@ const AppNav = () => {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                {smallpages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">
-                      <Link
-                        style={{ textDecoration: "none", color: "black" }}
-                        to={`${page.link}`}
-                      >
-                        {page.text}
-                      </Link>
-                    </Typography>
-                  </MenuItem>
-                ))}
+                <Sidenav className="slideIn" />
               </Menu>
             </Box>
             {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
@@ -237,14 +227,14 @@ const AppNav = () => {
                 </Link>
               ))}
             </Box>
-            <Tooltip title="Account">
-              <Link to="/account" className="mt-2">
-                <BsBookHalf style={{ fontSize: "17px" }} />
+            <Tooltip title="Account" >
+              <Link to="/account" className=" text-light ">
+                <BsBookHalf style={{ fontSize: "17px", color: "white"}} />
               </Link>
             </Tooltip>
             <Tooltip title="Notification">
-              <Link to="/messages" className="mx-3 mt-2">
-                <IoIosNotifications style={{ fontSize: "20px" }} />
+              <Link to="/messages" className="mx-3  text-light">
+                <IoIosNotifications style={{ fontSize: "20px", color : "white" }} />
               </Link>
             </Tooltip>
             <Box
@@ -263,7 +253,7 @@ const AppNav = () => {
                 >
                   <img
                     className="dashboard_logo img-fluid rounded-circle "
-                    style={{ width: "50px", height: "50px" }}
+                    // style={{ width: "50px", height: "50px" }}
                     src={userimage}
                     alt=""
                   />

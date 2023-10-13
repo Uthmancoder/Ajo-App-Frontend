@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { fetchedLink } from "../Redux/GetLink";
 import GroupLink from "./GroupLink";
+import { Interests } from "@mui/icons-material";
 
 const CreateThrift = () => {
   // import useNavigate
@@ -17,6 +18,10 @@ const CreateThrift = () => {
   const dispatch = useDispatch();
 
   const { fetchedUser } = useSelector((state) => state.AllUsers);
+
+  // Get the existing messages array from local storage or initialize it if it doesn't exist
+  let messages =
+    JSON.parse(localStorage.getItem("transactionMessages")) || [];
 
   // Addeed a state variable to track the successful creation of the thrift group
   const [thriftGroupCreated, setThriftGroupCreated] = useState(false);
@@ -53,6 +58,8 @@ const CreateThrift = () => {
     setPlan(event.target.value);
   };
 
+
+
   // Creating thrifts
   const handleSubmit = async (ev) => {
     ev.preventDefault();
@@ -62,8 +69,9 @@ const CreateThrift = () => {
     //  getting the token from localstorage
     const token = localStorage.getItem("token");
     console.log(token);
-
-    if (
+    if (Number(users) > 8) {
+      alert("Maximum of 8 users can be accepted in a group, please try reducing your users");
+    } else if (
       groupName === "" ||
       Amount === "" ||
       interest === "" ||
@@ -71,8 +79,6 @@ const CreateThrift = () => {
       imageFile === ""
     ) {
       alert("imput field cannot be empty");
-    } else if (Number(users) > 8) {
-      alert("Maximum of 8 users can be accepted in a group, please try reducing your users");
     }
     else {
       // data to be sent to the server
@@ -103,8 +109,8 @@ const CreateThrift = () => {
           )
           .then((res) => {
             dispatch(fetchingSuccessful(res.data));
-            localStorage.setItem("fetchedLink", JSON.stringify(res.data.message));
-
+            messages.push(res.data.message);
+            localStorage.setItem("transactionMessages", JSON.stringify(messages));
             toast.success("Thrift group created successfully");
             if (res.status === 200) {
               setThriftGroupCreated(true);
@@ -179,11 +185,24 @@ const CreateThrift = () => {
                 </label>
                 <input
                   type="text"
-                  onChange={(e) => setAmount(e.target.value)}
+                  value={Amount} // Set the input value to the 'user' state
+                  onChange={(e) => {
+                    // Remove non-numeric characters
+                    const numericValue = e.target.value.replace(/\D/g, '');
+
+                    // Ensure the value is greater than 1
+                    if (parseInt(numericValue, 10) < 1) {
+                      setAmount('1'); // Set 'user' to '1' if the value is less than 1
+                    } else {
+                      setAmount(numericValue); // Update 'user' with the cleaned numeric value
+                    }
+                  }}
                   className="inputField form-control p-3 w-100"
                   id="amount"
                   placeholder="Amount"
                 />
+
+
               </div>
 
               <div className="inputContainer col-12 col-sm-6 d-grid  ">
@@ -191,12 +210,25 @@ const CreateThrift = () => {
                   Required Users
                 </label>
                 <input
-                  type="number"
-                  min="0"
-                  max="8"
-                  onChange={(e) => setusers(e.target.value)}
+                  value={users}
+                  type="text"
+                  maxLength={1}
+                  onChange={(e) => {
+                    // Remove non-numeric characters
+                    const numericValue = e.target.value.replace(/\D/g, '');
+
+                    // Ensure the value is greater than 1
+                    if (parseInt(numericValue, 10) < 1) {
+                      setusers('1'); // Set 'user' to '1' if the value is less than 1
+                    } else {
+                      setusers(numericValue); // Update 'user' with the cleaned numeric value
+                    }
+                  }}
                   className="inputField form-control requiredUsers p-3 "
-                  
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/\D/, ""); // Allow only digits (remove non-numeric characters)
+                  }}
+                  style={{ WebkitAppearance: "none" }}
                   placeholder="Amount of users needed in group"
                 />
               </div>
@@ -207,9 +239,20 @@ const CreateThrift = () => {
                 </label>
                 <input
                   type="text"
-                  onChange={(e) => setInterest(e.target.value)}
+                  value={interest} // Set the input value to the 'user' state
+                  onChange={(e) => {
+                    // Remove non-numeric characters
+                    const numericValue = e.target.value.replace(/\D/g, '');
+
+                    // Ensure the value is greater than 1
+                    if (parseInt(numericValue, 10) < 1) {
+                      setInterest('1'); // Set 'user' to '1' if the value is less than 1
+                    } else {
+                      setInterest(numericValue); // Update 'user' with the cleaned numeric value
+                    }
+                  }}
                   className="inputField form-control p-3 w-100"
-                  id="plan"
+                  id="interest"
                   placeholder="Interest"
                 />
               </div>
