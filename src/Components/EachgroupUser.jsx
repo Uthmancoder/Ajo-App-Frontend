@@ -41,7 +41,7 @@ const EachgroupUser = () => {
   const [loaddata, setLoadData] = useState(true);
   const [transactionCount, setTransactionCount] = useState(0);
   const params = useParams();
-  const groupId = params.id;
+  // const groupId = params.id;
 
   const { isFetching, fetchedGroups, fetchedError } = useSelector(
     (state) => state.AllGroups
@@ -90,12 +90,12 @@ const EachgroupUser = () => {
     return <Loading />;
   }
 
-  const groupname = selectedGroup?.groupName;
-  const groupMembers = selectedGroup?.groupMembers || [];
-  const currentUser = localStorage.getItem("currentUser");
-  const groupWallet = selectedGroup?.wallet;
-  const amountPerThrift = selectedGroup?.amount;
-  const plan = selectedGroup?.plan;
+  // const groupname = selectedGroup?.groupName;
+  // const groupMembers = selectedGroup?.groupMembers || [];
+  // const currentUser = localStorage.getItem("currentUser");
+  // const groupWallet = selectedGroup?.wallet;
+  // const amountPerThrift = selectedGroup?.amount;
+  const selectedGroupPlan = selectedGroup?.plan;
 
 
 
@@ -246,6 +246,9 @@ const EachgroupUser = () => {
     amountPerThrift: amountPerThrift,
   };
 
+  // getting the messages array from local storage
+  const messages = JSON.parse(localStorage.getItem("transactionMessages")) || [];
+
   // Making payments to group wallet
   const makePayment = async () => {
     setLoadData(false);
@@ -314,7 +317,8 @@ const EachgroupUser = () => {
       .then((response) => {
         console.log(response.data);
         alert(response.data.message);
-
+        messages.push(response.data.message);
+        localStorage.setItem("transactionMessages", JSON.stringify(messages));
         localStorage.setItem("currentWithdrawer", currentWithdrawer);
         localStorage.setItem("totalWithdraws", totalWithdraws);
         navigate("/groups");
