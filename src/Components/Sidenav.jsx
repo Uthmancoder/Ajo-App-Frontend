@@ -7,7 +7,7 @@ import { FiSettings } from "react-icons/fi";
 import { BiExit } from "react-icons/bi";
 import Tooltip from "@mui/material/Tooltip";
 
-const Sidenav = () => {
+const Sidenav = (props) => {
   const Navigate = useNavigate();
   const LogUserOut = () => {
     alert("logging out");
@@ -16,7 +16,7 @@ const Sidenav = () => {
   };
   return (
     <div>
-      <div className="bg-dark px-3 user_dashboard sidenav">
+      <div className={`bg-dark px-3 user_dashboard sidenav ${props.className}`}>
         <Link to="/dashboard">
           <button className="text-light btn btn-dark w-100 rounded-5 p-3 shadow">
             <BiSolidDashboard style={{ fontSize: "23px" }} /> Dashboard

@@ -94,7 +94,7 @@ const EachgroupUser = () => {
   console.log(paymentCompleted);
 
   // loading state
-  if (isLoading) {
+  if (isLoading){
     // Show a loading indicator or message
     return (
       <div>
@@ -104,7 +104,7 @@ const EachgroupUser = () => {
   }
 
   // Declaring the link to joinnthrift here for a purpose
-  const linkTojoinGroup = `http://localhost:3001/jointhrift/${groupId}`;
+  const linkTojoinGroup = `https://ultimate-thrift.onrender.com/jointhrift/${groupId}`;
 
 
   // Trigger the modal
@@ -229,6 +229,10 @@ const EachgroupUser = () => {
 
   // end of table data
 
+   // Get the existing messages array from local storage or initialize it if it doesn't exist
+   let messages =
+   JSON.parse(localStorage.getItem("transactionMessages")) || [];
+
   // data for paying thrift
   const dataToBeSent = {
     username: currentUser,
@@ -236,6 +240,7 @@ const EachgroupUser = () => {
     amount: amount,
     amountPerThrift: amountPerThrift,
   };
+
 
   // Making payments to groupwallet
   const makePayment = async () => {
@@ -251,6 +256,9 @@ const EachgroupUser = () => {
         setTransactionCount((prevCount) => prevCount + 1);
         localStorage.setItem("totalTransactions", transactionCount)
         alert(response.data.message);
+        // save the message to local storage
+        messages.push(response.data.message);
+        localStorage.setItem("transactionMessages", JSON.stringify(messages));
         navigate("/groups");
       }else{
         alert(response.data.message);
@@ -278,6 +286,8 @@ const EachgroupUser = () => {
     return groupMembers[nextIndex]?.username;
   };
 
+  
+
   const withdraw = () => {
     // Increment totalWithdraws
     setTotalWithdraws(totalWithdraws + 1);
@@ -303,7 +313,8 @@ const EachgroupUser = () => {
       .then((response) => {
         console.log(response.data);
         alert(response.data.message);
-
+        messages.push(response.data.message);
+        localStorage.setItem("transactionMessages", JSON.stringify(messages));
         localStorage.setItem("currentWithdarwer", currentWithdrawer);
         localStorage.setItem("totalWithdraws", totalWithdraws);
         navigate("/groups");

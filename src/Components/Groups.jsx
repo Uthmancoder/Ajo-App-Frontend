@@ -75,7 +75,7 @@ const Groups = () => {
 
   // Fetching all the group members from the server
   const handleGroupMembers = async (groupName) => {
-    const url = "http://localhost:3000/user/getmembers";
+    const url = "https://ultimate-thrift.onrender.com/user/getmembers";
     try {
       setShowLoader(true); // Show the loader before making the API call
       const response = await axios.post(

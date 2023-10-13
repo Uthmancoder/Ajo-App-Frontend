@@ -35,6 +35,8 @@ const Settings = () => {
     const file = ev.target.files[0];
     const reader = new FileReader();
 
+
+
     reader.onload = (e) => {
       const dataURL = e.target.result;
       setselectedImage(dataURL);
@@ -67,7 +69,12 @@ const Settings = () => {
     newPassword: Newpass,
     email: email,
   };
+  
+  // Get the existing messages array from local storage or initialize it if it doesn't exist
+  let messages =
+    JSON.parse(localStorage.getItem("transactionMessages")) || [];
 
+  // saving the user details update 
   const saveChanges = async () => {
     setloadData(!loaddata)
     try {
@@ -76,6 +83,8 @@ const Settings = () => {
       console.log(response.data);
       if (response.status === 200) {
         alert(response.data.message);
+        messages.push(response.data.message);
+        localStorage.setItem("transactionMessages", JSON.stringify(messages));
       }
     } catch (error) {
       console.log(error);
@@ -87,11 +96,15 @@ const Settings = () => {
     }
   };
 
+  // saving the password update
   const changePassword = async () => {
+
     try {
       const url = "https://ultimate-thrift.onrender.com/user/changePassword";
       const response = await axios.post(url, updatePassword);
       alert(response.data.message)
+      messages.push(response.data.message);
+        localStorage.setItem("transactionMessages", JSON.stringify(messages));
     } catch (error) {
       console.log(error.data.message);
       alert(error.data.message)

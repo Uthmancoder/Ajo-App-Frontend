@@ -27,7 +27,7 @@ const LandingPage = () => {
             </Link>
           </div>
           <div className="col-12 col-sm-6 col-md-6">
-            <img className="img-fluid" src={laptop} alt="laptop" />
+            <img className="img-fluid animated-image" src={laptop} alt="laptop" />
           </div>
         </div>
       </div>

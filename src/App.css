@@ -337,8 +337,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
+};
 .signup-link a, .forget {
   line-height: 1.5;
   font-weight: 700;
@@ -358,9 +357,26 @@
   font-weight: 600;
   text-decoration: underline;
 }
+.animated-image {
+  animation: bounceAnimation 3s infinite;
+}
+
+@keyframes bounceAnimation {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px); /* Adjust the pixel value for the desired bounce height */
+  }
+}
+
 .password_div{
   display: flex;
   position: relative;
+}
+.slideIn{
+  transition: 1s;
+  height: 60vh;
 }
 .input_type{
   border: none;

@@ -252,7 +252,7 @@ const SignUp = () => {
               )}
             </button>
             <p className="signup-link mt-2">
-              Alredy have an account? <Link to="/login">Log In</Link>
+              Alredy have an account? <Link to="/login" className="fw-bold mx-2">Log In</Link>
             </p>
           </div>
         </div>

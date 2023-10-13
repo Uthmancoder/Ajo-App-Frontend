@@ -26,7 +26,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/groups" element={<Groups />}/> 
-        <Route path="/createrift" element={<CreateThrift />} />
+        <Route path="/createThrift" element={<CreateThrift />} />
         <Route path="/contribution" element={<EachgroupUser />} />
         <Route path="/account" element={<Account />} />
         <Route path="/messages" element={<Messages />} />
