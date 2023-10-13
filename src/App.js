@@ -25,13 +25,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/groups" element={<Groups />}/> 
-        <Route path="/createThrift" element={<CreateThrift />} />
-        <Route path="/contribution" element={<EachgroupUser />} />
+        <Route path="/groups" element={<Groups />}>
+          <Route path=":id" element={<EachgroupUser />} />
+        </Route>
         <Route path="/account" element={<Account />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/create" element={<CreateThrift />} />
         <Route path="/pay" element={<Fetch />} />
-        <Route path="/jointhrift/:id" element={<JoinGroup />} />
+        <Route path="/jointhrift" element={<JoinGroup />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/about" element={<About />} />
         <Route path="/resetPassword" element={<ResetPassword />} />

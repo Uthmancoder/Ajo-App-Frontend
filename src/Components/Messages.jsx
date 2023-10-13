@@ -69,7 +69,7 @@ const Messages = () => {
             <p className="text-secondary p-2 bg-light rounded-2 my-3">Ultimate Microfinance Bank provides suggestions for connecting with friends.  Connect and contribute with people you know  and display profile pictures of potential friends the user might recognize based on their email contacts or other connections</p>
           )}
         </div>
-      </div>
+      </div>  
     </div>
   );
 };

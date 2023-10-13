@@ -14,7 +14,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AllUsers from "../Redux/AllUsers";
-
+import AllGroupsSlice from "../Redux/AllGroups"; 
+import { fetchGroups, fetchGroupsSuccess, fetchGroupsFailure } from "../Redux/AllGroups";
 const Groups = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
@@ -30,10 +31,15 @@ const Groups = () => {
   const currentUserUsername = fetchedUser?.user?.username;
   const isLoadingUser = fetchedUser?.loading;
 
+  
+
   const token = localStorage.getItem("token");
 
   // Fetching all the existing thrifts from the server
   useEffect(() => {
+    // Dispatch the fetchGroups action to initiate fetching
+    dispatch(fetchGroups());
+  
     if (!isLoadingUser && token) {
       axios
         .get("https://ultimate-thrift.onrender.com/user/ExistingThrift", {
@@ -43,17 +49,20 @@ const Groups = () => {
         })
         .then((res) => {
           setData(res.data.existingThrifts);
+          dispatch(fetchGroupsSuccess(res.data.existingThrifts));
           setLoading(false);
           console.log("Data received:", res.data.existingThrifts);
         })
         .catch((error) => {
           setLoading(false);
           console.error("Error fetching thrift groups:", error);
+          dispatch(fetchGroupsFailure(error));
         });
     } else if (!isLoadingUser) {
       alert("Error fetching thrift groups");
     }
   }, [isLoadingUser, token]);
+  
 
   // Calculate the user's group count
   useEffect(() => {
@@ -110,6 +119,7 @@ const Groups = () => {
       setShowLoader(false);
     }
   };
+  
 
   return (
     <div>
@@ -126,12 +136,12 @@ const Groups = () => {
           {loading ? (
             <Loading />
           ) : data && data.length > 0 ? (
-            data.map((thriftGroup) => (
+            data.map((thriftGroup) => ( 
               <div
-                onClick={() => handleGroupMembers(thriftGroup.groupName)}
+              onClick={() => handleGroupMembers(thriftGroup.groupName)}
                 key={thriftGroup._id}
                 title="Contribuctions"
-                className="card w-100 mx-auto   rounded-3 my-3 py-1  px-3 shadow eachgroups clickable"
+                className="card w-100 mx-auto  text-decoration-none  rounded-3 my-3 py-1  px-3 shadow eachgroups clickable"
               >
                 <div className="d-flex align-items-center justify-content-between">
                   <div className="d-flex align-items-center">

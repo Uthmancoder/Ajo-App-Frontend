@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import AppNav from "./AppNav";
 import Sidenav from "./Sidenav";
-import GroupUsers from "../Redux/GroupUsers";
-import axios from "axios";
 import { useSelector } from "react-redux";
-import GetLink from "../Redux/GetLink";
 import CopyToClipboard from "./CopyToClipboard";
 import Loading from "./Loading";
 import { Tooltip } from "@mui/material";
 import { AiOutlineClose } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const EachgroupUser = () => {
   const { fetchedUser } = useSelector((state) => state.GroupUsers, []);
@@ -32,14 +30,23 @@ const EachgroupUser = () => {
 
   const navigate = useNavigate();
 
+  // Use useEffect to update the paymentCompleted state when needed
+  useEffect(() => {
+    const allPaymentsCompleted = checkAllPaymentsCompleted();
+    setPaymentCompleted(allPaymentsCompleted);
+  }, [groupMembers]); // Update when groupMembers change
+
   const [payment, setPayment] = useState(false);
-
   const [amount, setAmount] = useState("");
-
-  const [loaddata, setloadData] = useState(true);
-
+  const [loaddata, setLoadData] = useState(true);
   const [transactionCount, setTransactionCount] = useState(0);
+  const params = useParams();
+  const groupId = params.id;
 
+  const { isFetching, fetchedGroups, fetchedError } = useSelector(
+    (state) => state.AllGroups
+  );
+  
   // Initializing the states with values from localStorage, if available
   const [currentWithdrawalIndex, setCurrentWithdrawalIndex] = useState(() => {
     // Check if there's a value for 'currentWithdrawer' in localStorage
@@ -61,22 +68,37 @@ const EachgroupUser = () => {
     return 0;
   });
 
-  // Initializing the totalWithdraws state with the value from localStorage, if available
-  const [totalWithdraws, setTotalWithdraws] = useState(() => {
-    const storedTotalWithdraws = localStorage.getItem("totalWithdraws");
+    // Initializing the totalWithdraws state with the value from localStorage, if available
+    const [totalWithdraws, setTotalWithdraws] = useState(() => {
+      const storedTotalWithdraws = localStorage.getItem("totalWithdraws");
+  
+      // If there's a value for 'totalWithdraws' in localStorage, parse it as an integer
+      if (storedTotalWithdraws !== null) {
+        return parseInt(storedTotalWithdraws);
+      }
+  
+      // Default: Start with 0
+      return 0;
+    });
+  
+    // checking if all the payments are conpleted
+    const [paymentCompleted, setPaymentCompleted] = useState(false);
+  // Find the group with the matching ID
+  const selectedGroup = fetchedGroups.find((group) => group.id === groupId);
 
-    // If there's a value for 'totalWithdraws' in localStorage, parse it as an integer
-    if (storedTotalWithdraws !== null) {
-      return parseInt(storedTotalWithdraws);
-    }
+  if (!selectedGroup) {
+    return <Loading />;
+  }
 
-    // Default: Start with 0
-    return 0;
-  });
+  const groupname = selectedGroup?.groupName;
+  const groupMembers = selectedGroup?.groupMembers || [];
+  const currentUser = localStorage.getItem("currentUser");
+  const groupWallet = selectedGroup?.wallet;
+  const amountPerThrift = selectedGroup?.amount;
+  const plan = selectedGroup?.plan;
 
-  const [paymentCompleted, setpaymentCompleted] = useState(false);
 
-  const isLoading = fetchedUser?.loading; // Add a loading check
+
 
   // Define the function to check all payments completed
   const checkAllPaymentsCompleted = () => {
@@ -85,22 +107,12 @@ const EachgroupUser = () => {
     );
   };
 
-  // Use useEffect to update the paymentCompleted state when needed
-  useEffect(() => {
-    const allPaymentsCompleted = checkAllPaymentsCompleted();
-    setpaymentCompleted(allPaymentsCompleted);
-  }, [groupMembers]); // Update when groupMembers change
-
-  console.log(paymentCompleted);
+  
 
   // loading state
-  if (isLoading){
+  if (isFetching) {
     // Show a loading indicator or message
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
+    return <Loading />;
   }
 
   // Declaring the link to joinnthrift here for a purpose
@@ -114,7 +126,7 @@ const EachgroupUser = () => {
 
   // cancel the modal
   const cancelModal = () => {
-    setPayment(!true);
+    setPayment(false);
   };
 
   // rendering of table header
@@ -180,7 +192,6 @@ const EachgroupUser = () => {
       );
     }
   };
-  // end of table header rendering
 
   // rendering table data
   const renderTableData = () => {
@@ -227,12 +238,6 @@ const EachgroupUser = () => {
     }
   };
 
-  // end of table data
-
-   // Get the existing messages array from local storage or initialize it if it doesn't exist
-   let messages =
-   JSON.parse(localStorage.getItem("transactionMessages")) || [];
-
   // data for paying thrift
   const dataToBeSent = {
     username: currentUser,
@@ -241,10 +246,9 @@ const EachgroupUser = () => {
     amountPerThrift: amountPerThrift,
   };
 
-
-  // Making payments to groupwallet
+  // Making payments to group wallet
   const makePayment = async () => {
-    setloadData(!loaddata);
+    setLoadData(false);
     try {
       const response = await axios.post(
         "https://ultimate-thrift.onrender.com/user/paythrift",
@@ -252,22 +256,22 @@ const EachgroupUser = () => {
       );
 
       console.log(response.data.message);
-      if(response.data.status === "true"){
+      if (response.data.status === "true") {
         setTransactionCount((prevCount) => prevCount + 1);
-        localStorage.setItem("totalTransactions", transactionCount)
+        localStorage.setItem("totalTransactions", transactionCount + 1);
         alert(response.data.message);
         // save the message to local storage
         messages.push(response.data.message);
         localStorage.setItem("transactionMessages", JSON.stringify(messages));
         navigate("/groups");
-      }else{
+      } else {
         alert(response.data.message);
       }
     } catch (err) {
       console.log(err);
       alert(err.response.data.message);
     } finally {
-      setloadData(loaddata);
+      setLoadData(true);
     }
   };
 
@@ -291,12 +295,9 @@ const EachgroupUser = () => {
   const withdraw = () => {
     // Increment totalWithdraws
     setTotalWithdraws(totalWithdraws + 1);
-    console.log("currentWithdrawalIndex:", currentWithdrawalIndex);
 
     // Get the username of the current withdrawer
     const currentWithdrawer = getNextWithdrawer();
-
-    console.log(currentWithdrawer);
 
     // Update the WithdrawingData object with the current username
     const updatedWithdrawingData = {
@@ -313,9 +314,8 @@ const EachgroupUser = () => {
       .then((response) => {
         console.log(response.data);
         alert(response.data.message);
-        messages.push(response.data.message);
-        localStorage.setItem("transactionMessages", JSON.stringify(messages));
-        localStorage.setItem("currentWithdarwer", currentWithdrawer);
+
+        localStorage.setItem("currentWithdrawer", currentWithdrawer);
         localStorage.setItem("totalWithdraws", totalWithdraws);
         navigate("/groups");
       })
