@@ -28,6 +28,7 @@ const EachgroupUser = () => {
 
   const plan = fetchedUser?.plan;
 
+
   const navigate = useNavigate();
 
   // Use useEffect to update the paymentCompleted state when needed
@@ -40,12 +41,12 @@ const EachgroupUser = () => {
   const [amount, setAmount] = useState("");
   const [loaddata, setLoadData] = useState(true);
   const [transactionCount, setTransactionCount] = useState(0);
-  const params = useParams();
-  // const groupId = params.id;
 
-  const { isFetching, fetchedGroups, fetchedError } = useSelector(
-    (state) => state.AllGroups
-  );
+ 
+
+  // const { isFetching, fetchedGroups, fetchedError } = useSelector(
+  //   (state) => state.AllGroups
+  // );
   
   // Initializing the states with values from localStorage, if available
   const [currentWithdrawalIndex, setCurrentWithdrawalIndex] = useState(() => {
@@ -83,22 +84,6 @@ const EachgroupUser = () => {
   
     // checking if all the payments are conpleted
     const [paymentCompleted, setPaymentCompleted] = useState(false);
-  // Find the group with the matching ID
-  const selectedGroup = fetchedGroups.find((group) => group.id === groupId);
-
-  if (!selectedGroup) {
-    return <Loading />;
-  }
-
-  // const groupname = selectedGroup?.groupName;
-  // const groupMembers = selectedGroup?.groupMembers || [];
-  // const currentUser = localStorage.getItem("currentUser");
-  // const groupWallet = selectedGroup?.wallet;
-  // const amountPerThrift = selectedGroup?.amount;
-  const selectedGroupPlan = selectedGroup?.plan;
-
-
-
 
   // Define the function to check all payments completed
   const checkAllPaymentsCompleted = () => {
@@ -109,11 +94,16 @@ const EachgroupUser = () => {
 
   
 
-  // loading state
-  if (isFetching) {
-    // Show a loading indicator or message
-    return <Loading />;
-  }
+  // // loading state
+
+  // if (isLoading){
+  //   return <Loading />;
+  // }
+
+  // if (isFetching) {
+  //   // Show a loading indicator or message
+  //   return <Loading />;
+  // }
 
   // Declaring the link to joinnthrift here for a purpose
   const linkTojoinGroup = `https://ultimate-thrift.onrender.com/jointhrift/${groupId}`;
@@ -238,6 +228,13 @@ const EachgroupUser = () => {
     }
   };
 
+  // end of table data
+
+   // Get the existing messages array from local storage or initialize it if it doesn't exist
+   let messages =
+   JSON.parse(localStorage.getItem("transactionMessages")) || [];
+
+
   // data for paying thrift
   const dataToBeSent = {
     username: currentUser,
@@ -246,8 +243,9 @@ const EachgroupUser = () => {
     amountPerThrift: amountPerThrift,
   };
 
-  // getting the messages array from local storage
-  const messages = JSON.parse(localStorage.getItem("transactionMessages")) || [];
+
+
+  // Making payments to groupwallet
 
   // Making payments to group wallet
   const makePayment = async () => {
@@ -317,8 +315,12 @@ const EachgroupUser = () => {
       .then((response) => {
         console.log(response.data);
         alert(response.data.message);
+
         messages.push(response.data.message);
         localStorage.setItem("transactionMessages", JSON.stringify(messages));
+        localStorage.setItem("currentWithdarwer", currentWithdrawer);
+
+
         localStorage.setItem("currentWithdrawer", currentWithdrawer);
         localStorage.setItem("totalWithdraws", totalWithdraws);
         navigate("/groups");

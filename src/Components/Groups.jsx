@@ -96,7 +96,7 @@ const Groups = () => {
           },
         }
       );
-      console.log("Group Members :", response.data);
+      console.log("Group Details :", response.data);
       dispatch(fetchingMembersSuccessful(response.data));
       // Serialize the data before saving to localStorage
       const serializedData = JSON.stringify(response.data);

@@ -16,7 +16,7 @@ const JoinGroup = () => {
    // Get the group ID from the URL
    const InviteLink = window.location.href;
    const parts = InviteLink.split('/');
-   const groupId = parts[parts.length - 1]; // Assuming the group ID is the last part of the URL
+   const groupId = parts[parts.length - 1]; // knowing that  the group ID is the last part of the URL
 
    useEffect(() => {
      const getGroupData = async () => {
