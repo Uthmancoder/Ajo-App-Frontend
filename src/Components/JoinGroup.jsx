@@ -71,7 +71,9 @@ const JoinGroup = () => {
 
   // Check if groupData is still null and show Loading component
   if (groupData === null) { 
-    return <Loading />;
+    return (
+      <img className="img-fluid joinThriftloader" src="https://www.rankbyfocus.com/wp-content/uploads/2021/12/loading-screen-featured-image.jpg" alt="loader" />
+    )
   }
 
 

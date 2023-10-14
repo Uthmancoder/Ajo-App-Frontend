@@ -69,7 +69,7 @@ const Settings = () => {
     newPassword: Newpass,
     email: email,
   };
-  
+
   // Get the existing messages array from local storage or initialize it if it doesn't exist
   let messages =
     JSON.parse(localStorage.getItem("transactionMessages")) || [];
@@ -84,6 +84,10 @@ const Settings = () => {
       if (response.status === 200) {
         alert(response.data.message);
         messages.push(response.data.message);
+        navigate("/dashboard");
+        setTimeout(() => {
+          navigate("/settings")
+        }, 500)
         localStorage.setItem("transactionMessages", JSON.stringify(messages));
       }
     } catch (error) {
@@ -104,7 +108,11 @@ const Settings = () => {
       const response = await axios.post(url, updatePassword);
       alert(response.data.message)
       messages.push(response.data.message);
-        localStorage.setItem("transactionMessages", JSON.stringify(messages));
+      localStorage.setItem("transactionMessages", JSON.stringify(messages));
+      navigate("/dashboard");
+      setTimeout(() => {
+        navigate("/settings")
+      }, 500)
     } catch (error) {
       console.log(error.data.message);
       alert(error.data.message)
@@ -234,4 +242,3 @@ const Settings = () => {
 };
 
 export default Settings;
- 

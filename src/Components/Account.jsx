@@ -18,6 +18,8 @@ const Account = () => {
   const [amount, setAmount] = useState("");
   const [loaddata, setloadData] = useState(true);
 
+  const navigate = useNavigate();
+
   // trying to get the user's total deposits
   const [GetUsersDeposit, setGetUsersDeposit] = useState(
     Number(localStorage.getItem("GetUsersDeposit")) || 0
@@ -45,53 +47,54 @@ const Account = () => {
     publicKey,
     text: "Add Fund",
     onSuccess: (response) => {
-      let url = "https://ultimate-thrift.onrender.com/user/updateWallet";
-      let data = {
+      const url = "https://ultimate-thrift.onrender.com/user/updateWallet";
+      const data = {
         amount: amount,
         username: username,
       };
-  
+
       console.log(response);
-  
-      // Wrap the asynchronous operation in a Promise
-      const asyncOperation = new Promise(async (resolve, reject) => {
-        try {
-          const newResponse = await axios.post(url, data);
-          console.log(newResponse.data);
+
+      // Create a Promise to wrap the Axios call
+      const paymentPromise = new Promise((resolve, reject) => {
+        axios.post(url, data)
+          .then((newResponse) => {
+            console.log("payment Data: ", newResponse.data);
+            resolve(newResponse);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+
+      paymentPromise
+        .then((newResponse) => {
+          // Update the component's state with the new wallet balance and deposit count
+          setAmount("");  // Reset the input field
+          navigate("/dashboard");
+          setTimeout(() => {
+            navigate("/account");
+          }, 500);
           setGetUsersDeposit((prevDeposit) => prevDeposit + 1);
-          localStorage.setItem("GetUsersDeposit", GetUsersDeposit + 1);
-  
+
           // Get the existing messages array from local storage or initialize it if it doesn't exist
-          let messages =
-            JSON.parse(localStorage.getItem("transactionMessages")) || [];
-  
+          let messages = JSON.parse(localStorage.getItem("transactionMessages")) || [];
+
           // Add the new message to the array
           messages.push(newResponse.data.message);
+
           // Save the updated messages array to local storage
           localStorage.setItem("transactionMessages", JSON.stringify(messages));
-  
-          // Resolve the Promise after successful completion
-          resolve();
-        } catch (error) {
-          console.log(error.newResponse.data);
-          // Reject the Promise if there's an error
-          reject(error);
-        }
-      });
-  
-      asyncOperation
-        .then(() => {
-          // Reload the page after the asynchronous operation is complete
-          window.location.reload();
         })
         .catch((error) => {
-          // Handle the error as needed
+          console.error(error);
+          alert("An error occurred while trying to update your wallet balance");
         });
     },
     onClose: () => alert("Wait! You need this oil, don't go!!!!"),
   };
-  
-  // chevking loafing state
+
+  // checking loading state
   if (isLoading) {
     return <Loading />;
   }

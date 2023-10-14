@@ -106,7 +106,7 @@ const EachgroupUser = () => {
   // }
 
   // Declaring the link to joinnthrift here for a purpose
-  const linkTojoinGroup = `https://ultimate-thrift.onrender.com/jointhrift/${groupId}`;
+  const linkTojoinGroup = `https://ultimate-thrift-app.onrender.com/jointhrift/${groupId}`;
 
 
   // Trigger the modal
@@ -142,7 +142,7 @@ const EachgroupUser = () => {
         </thead>
       );
     } else if (plan === "Weekly") {
-      const week = []; // Create an array to hold the weeks labels
+      const week = [];  // Create an array to hold the weeks labels
 
       for (let i = 1; i <= groupMembers.length; i++) {
         week.push(`Week ${i}`); // Add day labels to the array
@@ -243,9 +243,6 @@ const EachgroupUser = () => {
     amountPerThrift: amountPerThrift,
   };
 
-
-
-  // Making payments to groupwallet
 
   // Making payments to group wallet
   const makePayment = async () => {
