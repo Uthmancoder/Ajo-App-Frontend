@@ -252,8 +252,8 @@ const AppNav = () => {
                   className="shadow balance rounded-3"
                 >
                   <img
-                    className="dashboard_logo img-fluid rounded-circle "
-                    // style={{ width: "50px", height: "50px" }}
+                    className="dashboard_logo img-fluid rounded-circle"
+                    style={{ width: "50px", height: "50px" }}
                     src={userimage}
                     alt=""
                   />
