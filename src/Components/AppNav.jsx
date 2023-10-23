@@ -253,7 +253,7 @@ const AppNav = () => {
                 >
                   <img
                     className="dashboard_logo img-fluid rounded-circle"
-                    style={{ width: "50px", height: "50px" }}
+                    style={{ width : "50px", height : "50px" }}
                     src={userimage}
                     alt=""
                   />
