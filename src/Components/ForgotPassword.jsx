@@ -13,10 +13,12 @@ const ForgotPassword = () => {
 
   const [loading, setloading] = useState(false)
 
+  // Focusing on the first input immeiately you're landing on the page
   useEffect(() => {
-    inputRef.current[0].focus();
+    inputRef.current[0].focus(); 
   }, []);
 
+  // Handling OTP input
   const handleInputChange = (index, value) => {
     // Updating the OTP array with the entered value
     const UpdatedOtp = [...OTP];
@@ -35,7 +37,7 @@ const ForgotPassword = () => {
     const FullOtp = OTP.join("");
     if (Number(FullOtp) !== Number(otp)) {
       alert(
-        "Invalid activation number, the code you entered is not correct check your email for the correct code"
+         "Invalid activation number, the code you entered is not correct check your email for the correct code"
       );
     } else {
      setTimeout(() => {
@@ -63,7 +65,7 @@ const ForgotPassword = () => {
             Enter the 4 digit OTP sent to your email address
           </h2>
           <div className="mx-auto inputs_div">
-            {/* <input type="tel" name="" id="" /> */}
+           
             {OTP.map((digit, index) => (
               <input
                 key={index}
