@@ -18,13 +18,13 @@ const CopyToClipboard = ({ text }) => {
   };
 
   return (
-    <div className="d-flex align-items-center  justify-content-between  link  border pt-3 ">
+    <div className="d-grid  align-items-center  justify-content-between  link  ">
       <p className={`text-primary grouplink ${isCopied ? "highlight" : ""}`}>
         {text}
       </p>
-      <p title="Copy Link" className=" mx-2  rounded-circle border copy_btn bg-secondary text-light" onClick={handleCopy}>
-        <FiCopy />
-      </p>
+      <button title="Copy Link" className="btn btn-primary copy_btn align-right" onClick={handleCopy}>
+        Copy Link
+      </button>
       {/* Hidden input to facilitate copying */}
       <input
         type="text"

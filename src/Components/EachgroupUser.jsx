@@ -7,7 +7,24 @@ import Loading from "./Loading";
 import { Tooltip } from "@mui/material";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 import axios from "axios";
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const EachgroupUser = () => {
   const { fetchedUser } = useSelector((state) => state.GroupUsers, []);
@@ -42,12 +59,12 @@ const EachgroupUser = () => {
   const [loaddata, setLoadData] = useState(true);
   const [transactionCount, setTransactionCount] = useState(0);
 
- 
+
 
   // const { isFetching, fetchedGroups, fetchedError } = useSelector(
   //   (state) => state.AllGroups
   // );
-  
+
   // Initializing the states with values from localStorage, if available
   const [currentWithdrawalIndex, setCurrentWithdrawalIndex] = useState(() => {
     // Check if there's a value for 'currentWithdrawer' in localStorage
@@ -69,21 +86,21 @@ const EachgroupUser = () => {
     return 0;
   });
 
-    // Initializing the totalWithdraws state with the value from localStorage, if available
-    const [totalWithdraws, setTotalWithdraws] = useState(() => {
-      const storedTotalWithdraws = localStorage.getItem("totalWithdraws");
-  
-      // If there's a value for 'totalWithdraws' in localStorage, parse it as an integer
-      if (storedTotalWithdraws !== null) {
-        return parseInt(storedTotalWithdraws);
-      }
-  
-      // Default: Start with 0
-      return 0;
-    });
-  
-    // checking if all the payments are conpleted
-    const [paymentCompleted, setPaymentCompleted] = useState(false);
+  // Initializing the totalWithdraws state with the value from localStorage, if available
+  const [totalWithdraws, setTotalWithdraws] = useState(() => {
+    const storedTotalWithdraws = localStorage.getItem("totalWithdraws");
+
+    // If there's a value for 'totalWithdraws' in localStorage, parse it as an integer
+    if (storedTotalWithdraws !== null) {
+      return parseInt(storedTotalWithdraws);
+    }
+
+    // Default: Start with 0
+    return 0;
+  });
+
+  // checking if all the payments are conpleted
+  const [paymentCompleted, setPaymentCompleted] = useState(false);
 
   // Define the function to check all payments completed
   const checkAllPaymentsCompleted = () => {
@@ -92,7 +109,9 @@ const EachgroupUser = () => {
     );
   };
 
-  
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   // // loading state
 
@@ -202,25 +221,25 @@ const EachgroupUser = () => {
               <td className="px-2 text-start">{user?.username}</td>
               {plan === "Daily" && Array.isArray(user?.payments)
                 ? user?.payments.map((payment, i) => (
-                    <td className="payment_status" key={i}>
-                      {payment.paid ? "✅" : ""}
-                    </td>
-                  ))
+                  <td className="payment_status" key={i}>
+                    {payment.paid ? "✅" : ""}
+                  </td>
+                ))
                 : plan === "Weekly" && Array.isArray(user?.payments)
-                ? // If the plan is weekly, create columns for each week
+                  ? // If the plan is weekly, create columns for each week
                   user?.payments.map((payment, i) => (
                     <td className="payment_status" key={i}>
                       {payment.paid ? "✅" : ""}
                     </td>
                   ))
-                : plan === "Monthly" && Array.isArray(user?.payments)
-                ? // If the plan is monthly, create columns for each month
-                  user?.payments.map((payment, i) => (
-                    <td className="payment_status" key={i}>
-                      {payment.paid ? "✅" : ""}
-                    </td>
-                  ))
-                : null}
+                  : plan === "Monthly" && Array.isArray(user?.payments)
+                    ? // If the plan is monthly, create columns for each month
+                    user?.payments.map((payment, i) => (
+                      <td className="payment_status" key={i}>
+                        {payment.paid ? "✅" : ""}
+                      </td>
+                    ))
+                    : null}
             </tr>
           ))}
         </tbody>
@@ -230,9 +249,9 @@ const EachgroupUser = () => {
 
   // end of table data
 
-   // Get the existing messages array from local storage or initialize it if it doesn't exist
-   let messages =
-   JSON.parse(localStorage.getItem("transactionMessages")) || [];
+  // Get the existing messages array from local storage or initialize it if it doesn't exist
+  let messages =
+    JSON.parse(localStorage.getItem("transactionMessages")) || [];
 
 
   // data for paying thrift
@@ -249,7 +268,7 @@ const EachgroupUser = () => {
     setLoadData(false);
     try {
       const response = await axios.post(
-        "https://ultimate-thrift.onrender.com/user/paythrift",
+        "http://localhost:3000/user/paythrift",
         dataToBeSent
       );
 
@@ -288,7 +307,7 @@ const EachgroupUser = () => {
     return groupMembers[nextIndex]?.username;
   };
 
-  
+
 
   const withdraw = () => {
     // Increment totalWithdraws
@@ -435,8 +454,24 @@ const EachgroupUser = () => {
                 className="d-grid nextwithdraw   "
                 style={{ maxWidth: "300px" }}
               >
-                <h5 className="text-primary fw-bolder">Group Link</h5>
-                <CopyToClipboard text={linkTojoinGroup} />
+                <h5 className="text-primary fw-bolder">Invite More Users</h5>
+               
+                <Button onClick={handleOpen}>Get Invite Link</Button>
+                <Modal
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={style} style={{border :"2px solid #0D6EFD", borderRadius : "10px"}}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                      Invite Link
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                       <CopyToClipboard text={linkTojoinGroup} />
+                    </Typography>
+                  </Box>
+                </Modal>
               </div>
             </div>
           </div>

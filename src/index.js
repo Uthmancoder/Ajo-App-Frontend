@@ -9,11 +9,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { Store } from "./Redux/ReduxStore";
 
+
 ReactDOM.render(
   <Provider store={Store}>
     <React.StrictMode>
-      <BrowserRouter>
-        <App />
+      <BrowserRouter> 
+          <App />
       </BrowserRouter>
     </React.StrictMode>
   </Provider>,
