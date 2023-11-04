@@ -21,6 +21,7 @@ import { IoIosNotifications } from "react-icons/io";
 import { BsBookHalf } from "react-icons/bs";
 import Loading from "./Loading";
 import Sidenav from "./Sidenav"
+import { Badge } from "@mui/material";
 
 const AppNav = () => {
   const { fetchedUser } = useSelector((state) => state.AllUsers);
@@ -229,13 +230,16 @@ const AppNav = () => {
             </Box>
             <Tooltip title="Account" >
               <Link to="/account" className=" text-light ">
-                <BsBookHalf style={{ fontSize: "17px", color: "white"}} />
+                <BsBookHalf style={{ fontSize: "17px", color: "white" }} />
               </Link>
             </Tooltip>
             <Tooltip title="Notification">
               <Link to="/messages" className="mx-3  text-light">
-                <IoIosNotifications style={{ fontSize: "20px", color : "white" }} />
+                <Badge color="secondary" variant="dot">
+                  <IoIosNotifications style={{ fontSize: "20px", color: "white" }} />
+                </Badge>
               </Link>
+
             </Tooltip>
             <Box
               sx={{
@@ -253,7 +257,7 @@ const AppNav = () => {
                 >
                   <img
                     className="dashboard_logo img-fluid rounded-circle"
-                    style={{ width : "50px", height : "50px" }}
+                    style={{ width: "50px", height: "50px" }}
                     src={userimage}
                     alt=""
                   />
