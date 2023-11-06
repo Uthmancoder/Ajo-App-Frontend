@@ -22,23 +22,23 @@ const Sidenav = (props) => {
             <BiSolidDashboard style={{ fontSize: "23px" }} /> Dashboard
           </button>
         </Link>
-        <Link to="/groups">
+        <Link to="groups">
           <button className="text-light btn btn-dark w-100 rounded-5 mt-4 p-3 shadow">
             <MdGroups style={{ fontSize: "25px" }} /> Groups
           </button>
         </Link>
-        <Link to="/account">
+        <Link to="account">
           <button className="text-light btn btn-dark w-100 rounded-5 mt-4 p-3 shadow">
             <MdAccountBalance style={{ fontSize: "20px" }} /> Account
           </button>
         </Link>
-        <Link to="/messages">
+        <Link to="messages">
           <button className="text-light btn btn-dark w-100 rounded-5 mt-4 p-3 shadow">
-            <TiMessages style={{ fontSize: "23px" }} /> Messages
+            <TiMessages style={{ fontSize: "23px" }} /> Notifications
           </button>
         </Link>
 
-        <Link to="/settings">
+        <Link to="settings">
           <button className="text-light btn btn-dark w-100 rounded-5 mt-4 p-3 shadow">
             <FiSettings style={{ fontSize: "20px" }} /> Settings
           </button>

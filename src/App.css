@@ -5,6 +5,14 @@
   justify-content: space-between;
   flex-wrap: nowrap;
 }
+/* .AppBar{
+  width: 100%;
+  height: fit-content;
+  padding: auto;
+  position: sticky;
+  top: 0;
+  margin-bottom: 50px;
+} */
 .homelogo{
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
@@ -21,6 +29,7 @@
   height: 100vh;
   background-color: #fff;
   position: fixed;
+  z-index: 999;
   top: 0;
   left: 0;
   transition: all .5s ease-in-out;
@@ -44,6 +53,10 @@
   margin-left: 10%!important;
 }
 
+.layout{
+  width: 100vh;
+  overflow-y: hidden;
+}
 
 
 .side2{
@@ -63,6 +76,11 @@
   }
   .homelinks{
     display: none;
+  }
+  .landing{
+    width: 100%;
+    height: 100vh;
+     background-image: linear-gradient(to right, #48636d,#3d6876, #285351);
   }
 
 }
@@ -131,6 +149,11 @@
     font-size: 50px;
     width: 100%;
   }
+  .med{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+  }
   .landing{
     width: 100%;
     height: 100%;
@@ -143,6 +166,11 @@
     color: rgb(223, 220, 220);
     background-color: rgba(34, 23, 23, 0.4);
     background: none;
+  }
+  .landing{
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, #48636d,#3d6876, #285351);
   }
 }
 .navv{
@@ -161,6 +189,10 @@
   }
   .every{
     font-size: 40px;
+  }
+  .layout{
+    height: 100%;
+    overflow-y: auto;
   }
 }
 
@@ -429,11 +461,11 @@
 @media (max-width : 700px) {
   .signup_div{
     width: 100%;
-    height: 100vh;
+    height: 120vh;
     padding-top: 20%;
   }
   .form{
-    width: 100%;
+    width: 95%;
     
   }
   .inputs_div{
@@ -774,13 +806,43 @@
 .nextwithdraw{
   margin: auto;
 }
-.tableData{
+/* .tableData{
   min-width: 100%;
   overflow-x: scroll;
-}
-.tableData::-webkit-scrollbar{
+} */
+/* .tableData::-webkit-scrollbar{
   display: none;
+} */
+
+/* EachgroupUser.css */
+.tableData {
+  overflow-x: auto; /* Add horizontal scroll if needed */
+  max-width: 100%; /* Ensure the table doesn't exceed the container's width */
+  padding: 10px; /* Add padding for spacing */
+  margin-bottom: 20px; /* Add margin to separate from other content */
 }
+
+/* Responsive table styles to prevent overflow */
+.tableData table {
+  width: 100%;
+  white-space: nowrap; /* Prevent text wrapping */
+  /*table-layout: fixed; /* Fix column widths */
+}
+
+/* Optional: Add a responsive scrollbar */
+.tableData::-webkit-scrollbar {
+  width: 12px;
+}
+
+.tableData::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+}
+
+.tableData::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
 
 
 .table-bordered th,
@@ -898,9 +960,40 @@ table tr, td{
 @media (max-width : 500px) {
   .account_rel{
     position: relative;
-    height: 95vh;
+    height: 90vh;
     overflow-y: scroll;
     padding: 0 0 2% 0;
+  }
+  .invite{
+    width: 80%!important;
+  }
+  .history{
+    width: 100%;
+    overflow-x: scroll;
+  }
+  .history::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  .history::-webkit-scrollbar-thumb {
+    background-color: #8d0e0e;
+    border-radius: 6px;
+  }
+  
+  .history::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+  .form_main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    padding: 30px 30px 30px 30px;
+    box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.062);
+    position: relative;
+    overflow: hidden;
   }
 }
 .userProfile{
@@ -947,10 +1040,13 @@ width: fit-content;
   justify-content: center;
 }
 
+
+
+
 @media (max-width : 600px) {
   .med{
     width: 100%;
-    margin: 40px 0 0 10px; 
+    margin: 30px 0 0 10px; 
   }
   .create{
     position: absolute;
@@ -999,7 +1095,8 @@ width: fit-content;
   }
   .acc_details{
    position: absolute!important;
-   bottom: 10%;
+   bottom: -40px;
+   box-shadow: 0, 0, 10px, 1px gray;
   }
   .create-div{
     display: grid!important;

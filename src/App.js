@@ -16,6 +16,7 @@ import About from "./Components/About";
 import ForgotPassword from "./Components/ForgotPassword";
 import NonFound from "./Components/NonFound";
 import ResetPassword from "./Components/ResetPassword";
+import Layout from "./Container/Layout";
 
 function App() {
   return (
@@ -24,19 +25,20 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/groups" element={<Groups />} />
-        <Route path="/contribution" element={<EachgroupUser />} />
-
-        <Route path="/account" element={<Account />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/create" element={<CreateThrift />} />
-        <Route path="/pay" element={<Fetch />} />
-        <Route path="/jointhrift/:id" element={<JoinGroup />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/dashboard" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="groups" element={<Groups />} />
+          <Route path="groups/contribution" element={<EachgroupUser />} />
+          <Route path="account" element={<Account />} />
+          <Route path="messages" element={<Messages />} />
+          <Route path="createThrift" element={<CreateThrift />} />
+          <Route path="pay" element={<Fetch />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/about" element={<About />} />
+        <Route path="jointhrift/:id" element={<JoinGroup />} />
         <Route path="*" element={<NonFound />} />
       </Routes>
     </div>

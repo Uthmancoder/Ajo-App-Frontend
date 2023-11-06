@@ -56,19 +56,14 @@ const Dashboard = () => {
 
   return (
     <div>
-      <AppNav />
-      <div className="w-100  row bg-light">
-        <div className="col-3 d-none d-sm-block">
-          <Sidenav />
-        </div>
-        <div className="col-12 col-sm-9  med ">
+        <div className="med">
           <h1 className="fw-bolder my-2 mx-3">
             Dashboard <span className="text-secondary fs-3">Control Panel</span>
           </h1>
 
           <div className="row container ">
             <Link
-              to="/account"
+              to="account"
               className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
             >
               <div className="card p-3 bbb text-light ">
@@ -77,7 +72,7 @@ const Dashboard = () => {
               </div>
             </Link>
             <Link
-              to="/contribution"
+              to="/dashboard/account"
               className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
             >
               <div className="card p-3 bbb text-light">
@@ -86,7 +81,7 @@ const Dashboard = () => {
               </div>
             </Link>
             <Link
-              to="/groups"
+              to="groups"
               className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
             >
               <div className="card p-3 bg-primary text-light">
@@ -95,7 +90,7 @@ const Dashboard = () => {
               </div>
             </Link>
             <Link
-              to="/contribution"
+              to="/dashboard/groups"
               className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
             >
               <div className="card p-3 bg-primary text-light">
@@ -104,7 +99,7 @@ const Dashboard = () => {
               </div>
             </Link>
             <Link
-              to="/account"
+              to="account"
               className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
             >
               <div className="card p-3 bbb text-light">
@@ -124,7 +119,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

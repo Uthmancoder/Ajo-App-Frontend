@@ -6,6 +6,7 @@ import AllGroups from "./AllGroups";
 import AllUsers from "./AllUsers";
 import signedUser from "./SignedUser";
 import AllMessages from "./messages"
+import UnreadMessages from "./UnreadMessages";
 import { addMessage } from "./messages";
 export const Store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ export const Store = configureStore({
     GroupUsers,
     GetLink,
     AllGroups,
-    AllMessages
+    AllMessages,
+    UnreadMessages
   }
 })
 // Retrieve the user token from local storage
@@ -25,7 +27,6 @@ if (userToken) {
   FetchUserByToken(userToken, Store.dispatch);
   // Dispatch a new message
   Store.dispatch(addMessage());
-
 }
 
 

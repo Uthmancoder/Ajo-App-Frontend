@@ -15,18 +15,35 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import FetchUserByToken from "./FetchUserByToken";
 import AllUsers from "../Redux/AllUsers";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { IoIosNotifications } from "react-icons/io";
 import { BsBookHalf } from "react-icons/bs";
 import Loading from "./Loading";
 import Sidenav from "./Sidenav"
 import { Badge } from "@mui/material";
+import { resetUnreadMessages } from '../Redux/UnreadMessages'
 
 const AppNav = () => {
   const { fetchedUser } = useSelector((state) => state.AllUsers);
+  const { unreadMessages } = useSelector((state) => state.UnreadMessages);
+  console.log("Unread Messages :", unreadMessages)
   const isLoading = fetchedUser?.loading;
   const userimage = fetchedUser?.user?.image;
+  const { currentPath } = useLocation();
+  const location = useLocation();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    handleCloseNavMenu();
+
+    // Check if the current route is the message route
+    if (location.pathname === "/dashboard/messages") {
+      // When you navigate to the messages page, reset the unread message count
+      dispatch(resetUnreadMessages());
+    }
+  }, [location]);
+
   const pages = [
     {
       text: "About",
@@ -48,29 +65,29 @@ const AppNav = () => {
     },
     {
       text: "Groups",
-      link: "/groups",
+      link: "/dashboard/groups",
     },
     {
       text: "Account",
-      link: "/account",
+      link: "/dashboard/account",
     },
     {
       text: "Messages",
-      link: "/messages",
+      link: "/dashboard/messages",
     },
     {
       text: "Settings",
-      link: "/settings",
+      link: "/dashboard/settings",
     },
   ];
   const settings = [
     {
       text: "Profile",
-      link: "/settings",
+      link: "/dashboard/settings",
     },
     {
       text: "Account",
-      link: "/account",
+      link: "/dashboard/account",
     },
     {
       text: "Dashboard",
@@ -96,6 +113,10 @@ const AppNav = () => {
       FetchUserByToken(userToken, dispatch);
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    handleCloseNavMenu()
+  }, [currentPath])
 
   // ...
   // navigation menu
@@ -229,18 +250,22 @@ const AppNav = () => {
               ))}
             </Box>
             <Tooltip title="Account" >
-              <Link to="/account" className=" text-light ">
+              <Link to="/dashboard/account" className=" text-light ">
                 <BsBookHalf style={{ fontSize: "17px", color: "white" }} />
               </Link>
             </Tooltip>
             <Tooltip title="Notification">
-              <Link to="/messages" className="mx-3  text-light">
-                <Badge color="secondary" variant="dot">
+              <Link to="/dashboard/messages" className="mx-3 text-light">
+                {unreadMessages > 0 ? (
+                  <Badge color="secondary" badgeContent={unreadMessages} variant="dot">
+                    <IoIosNotifications style={{ fontSize: "20px", color: "white" }} />
+                  </Badge>
+                ) : (
                   <IoIosNotifications style={{ fontSize: "20px", color: "white" }} />
-                </Badge>
+                )}
               </Link>
-
             </Tooltip>
+
             <Box
               sx={{
                 mt: 1,

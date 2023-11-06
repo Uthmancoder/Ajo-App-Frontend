@@ -9,9 +9,12 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { useDispatch } from "react-redux";
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import axios from "axios";
+import { addMessage } from "../Redux/messages";
+import {incrementUnreadMessages}  from '../Redux/UnreadMessages'
 
 
 const style = {
@@ -27,7 +30,8 @@ const style = {
 };
 
 const EachgroupUser = () => {
-  const { fetchedUser } = useSelector((state) => state.GroupUsers, []);
+  const { isFetching, fetchedUser } = useSelector((state) => state.GroupUsers, []);
+  console.log("FetchedUser Array:", fetchedUser);
 
   const groupname = fetchedUser?.groupName;
 
@@ -40,6 +44,8 @@ const EachgroupUser = () => {
   const amountPerThrift = fetchedUser?.amount;
 
   const groupId = fetchedUser?.groupId;
+
+  const dispatch = useDispatch();
 
   console.log(groupMembers);
 
@@ -125,7 +131,7 @@ const EachgroupUser = () => {
   // }
 
   // Declaring the link to joinnthrift here for a purpose
-  const linkTojoinGroup = `https://ultimate-thrift-app.onrender.com/jointhrift/${groupId}`;
+  const linkTojoinGroup = `http://localhost:3001/jointhrift/${groupId}`;
 
 
   // Trigger the modal
@@ -249,10 +255,6 @@ const EachgroupUser = () => {
 
   // end of table data
 
-  // Get the existing messages array from local storage or initialize it if it doesn't exist
-  let messages =
-    JSON.parse(localStorage.getItem("transactionMessages")) || [];
-
 
   // data for paying thrift
   const dataToBeSent = {
@@ -277,10 +279,14 @@ const EachgroupUser = () => {
         setTransactionCount((prevCount) => prevCount + 1);
         localStorage.setItem("totalTransactions", transactionCount + 1);
         alert(response.data.message);
-        // save the message to local storage
-        messages.push(response.data.message);
-        localStorage.setItem("transactionMessages", JSON.stringify(messages));
-        navigate("/groups");
+        // save the message to redux
+        const messageDetails = {
+          message: response.data.message,
+          time: response.data.formattedDateTime
+        }
+        dispatch(addMessage(messageDetails));
+        dispatch(incrementUnreadMessages())
+        navigate("/dashboard/groups");
       } else {
         alert(response.data.message);
       }
@@ -332,14 +338,19 @@ const EachgroupUser = () => {
         console.log(response.data);
         alert(response.data.message);
 
-        messages.push(response.data.message);
-        localStorage.setItem("transactionMessages", JSON.stringify(messages));
+        // save the message to redux
+        const messageDetails = {
+          message: response.data.message,
+          time: response.data.formattedDateTime
+        }
+        dispatch(addMessage(messageDetails));
+        dispatch(incrementUnreadMessages())
         localStorage.setItem("currentWithdarwer", currentWithdrawer);
 
 
         localStorage.setItem("currentWithdrawer", currentWithdrawer);
         localStorage.setItem("totalWithdraws", totalWithdraws);
-        navigate("/groups");
+        navigate("/dashboard/groups");
       })
       .catch((error) => {
         console.error(error);
@@ -356,123 +367,118 @@ const EachgroupUser = () => {
 
   return (
     <div>
-      <AppNav />
-      <div className="row w-100">
-        <div className="col-3 d-none  d-md-block">
-          <Sidenav />
-        </div>
-        <div className="col-12 col-sm-9 med">
-          <div className="d-flex m-4 w-100 align-items-center justify-content-between px-2">
-            {!paymentCompleted ? (
-              <Tooltip title="Pay Thrift">
-                <button
-                  onClick={fundWallet}
-                  className="btn  btn-light contribute text-secondary shadow rounded-5 "
-                >
-                  Pay Thrift
-                </button>
-              </Tooltip>
-            ) : (
-              <Tooltip title="Withdraw Funds">
-                <button
-                  onClick={withdraw}
-                  className="btn  btn-light contribute text-secondary shadow rounded-5 "
-                >
-                  Withdraw
-                </button>
-              </Tooltip>
-            )}
 
-            <Tooltip title="Wallet Balance">
-              <p
-                style={{ cursor: "pointer" }}
-                className="py-2 px-3 contribute  text-secondary shadow rounded-5  bal"
+      <div className="w-100 container-fluid med">
+        <div className="d-flex m-4 w-100 align-items-center justify-content-between px-2">
+          {!paymentCompleted ? (
+            <Tooltip title="Pay Thrift">
+              <button
+                onClick={fundWallet}
+                className="btn  btn-light contribute text-secondary shadow rounded-5 "
               >
-                {Number(groupWallet) > 0
-                  ? `Balance : ₦ ${groupWallet}`
-                  : "Balance : ₦ 0.00"}
-              </p>
-            </Tooltip>
-          </div>
-          <h1 className="fs-1 text-center text-primary fw-bolder mt-2">
-            {groupname?.toUpperCase()}
-          </h1>
-          <div className="tableData">
-            <table className="border rounded-3 w-100 p-3 text-center">
-              {renderTableHeader()}
-              {renderTableData()}
-            </table>
-          </div>
-
-          <div className={payment ? "funding" : "funding hidden"}>
-            <div
-              onClick={cancelModal}
-              title="cancel"
-              className="bg-white  rounded-circle closebtn"
-            >
-              <AiOutlineClose className="text-dark fw-bolder" size={20} />
-            </div>
-            <h1 className="fs-1 fw-bolder text-light ">Pay Thrift</h1>
-            <div className="card p-3 col-10 col-sm-9 col-md-8 col-lg-5 mx-auto d-flex flex-direction-column align-items-end">
-              <input
-                onChange={(ev) => setAmount(ev.target.value)}
-                className="form-control my-2 mx-2"
-                type="number"
-                placeholder="Enter Amount"
-              />
-              <button onClick={makePayment} className="btn btn-primary addfund">
-                {loaddata ? (
-                  "Add Fund"
-                ) : (
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                )}
+                Pay Thrift
               </button>
-            </div>
-          </div>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Withdraw Funds">
+              <button
+                onClick={withdraw}
+                className="btn  btn-light contribute text-secondary shadow rounded-5 "
+              >
+                Withdraw
+              </button>
+            </Tooltip>
+          )}
 
-          <div className=" shadow  rounded-2 withraws ">
-            <div className=" d-flex flex-wrap align-items-center justify-content-between text-center w-100  py-2">
-              <div
-                className="d-grid  text-center  nextwithdraw"
-                style={{ maxWidth: "300px" }}
+          <Tooltip title="Wallet Balance">
+            <p
+              style={{ cursor: "pointer" }}
+              className="py-2 px-3 contribute  text-secondary shadow rounded-5  bal"
+            >
+              {Number(groupWallet) > 0
+                ? `Balance : ₦ ${groupWallet}`
+                : "Balance : ₦ 0.00"}
+            </p>
+          </Tooltip>
+        </div>
+        <h1 className="fs-1 text-center text-primary fw-bolder mt-2">
+          {groupname?.toUpperCase()}
+        </h1>
+        <div className="tableData">
+          <table className="border rounded-3 w-100 p-3 text-center">
+            {renderTableHeader()}
+            {renderTableData()}
+          </table>
+        </div>
+
+        <div className={payment ? "funding" : "funding hidden"}>
+          <div
+            onClick={cancelModal}
+            title="cancel"
+            className="bg-white  rounded-circle closebtn"
+          >
+            <AiOutlineClose className="text-dark fw-bolder" size={20} />
+          </div>
+          <h1 className="fs-1 fw-bolder text-light ">Pay Thrift</h1>
+          <div className="card p-3 col-10 col-sm-9 col-md-8 col-lg-5 mx-auto d-flex flex-direction-column align-items-end">
+            <input
+              onChange={(ev) => setAmount(ev.target.value)}
+              className="form-control my-2 mx-2"
+              type="number"
+              placeholder="Enter Amount"
+            />
+            <button onClick={makePayment} className="btn btn-primary addfund">
+              {loaddata ? (
+                "Add Fund"
+              ) : (
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
+            </button>
+          </div>
+        </div>
+
+        <div className=" shadow  rounded-2 withraws  ">
+          <div className=" d-flex flex-wrap align-items-center justify-content-between text-center w-100  py-2">
+            <div
+              className="d-grid  text-center  nextwithdraw"
+              style={{ maxWidth: "300px" }}
+            >
+              <h5 className="text-primary pt-1 fw-bolder">Next Withdrawer</h5>
+              <p>{getNextWithdrawer()?.toUpperCase()}</p>
+            </div>
+            <div
+              className="d-grid   py-2  border-div nextwithdraw "
+              style={{ minWidth: "300px" }}
+            >
+              <h5 className="text-primary text-center fw-bolder">
+                Total Withdraws
+              </h5>
+              <p className="text-center">{totalWithdraws}</p>
+            </div>
+            <div
+              className="d-grid nextwithdraw   "
+              style={{ maxWidth: "300px" }}
+            >
+              <h5 className="text-primary fw-bolder">Invite More Users</h5>
+
+              <Button onClick={handleOpen}>Get Invite Link</Button>
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
               >
-                <h5 className="text-primary pt-1 fw-bolder">Next Withdrawer</h5>
-                <p>{getNextWithdrawer()?.toUpperCase()}</p>
-              </div>
-              <div
-                className="d-grid   py-2  border-div nextwithdraw "
-                style={{ minWidth: "300px" }}
-              >
-                <h5 className="text-primary text-center fw-bolder">
-                  Total Withdraws
-                </h5>
-                <p className="text-center">{totalWithdraws}</p>
-              </div>
-              <div
-                className="d-grid nextwithdraw   "
-                style={{ maxWidth: "300px" }}
-              >
-                <h5 className="text-primary fw-bolder">Invite More Users</h5>
-               
-                <Button onClick={handleOpen}>Get Invite Link</Button>
-                <Modal
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                  <Box sx={style} style={{border :"2px solid #0D6EFD", borderRadius : "10px"}}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                      Invite Link
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                       <CopyToClipboard text={linkTojoinGroup} />
-                    </Typography>
-                  </Box>
-                </Modal>
-              </div>
+                <Box sx={style} className="invite" style={{ border: "2px solid #0D6EFD", borderRadius: "10px" }}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Invite Link
+                  </Typography>
+                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <CopyToClipboard text={linkTojoinGroup} />
+                  </Typography>
+                </Box>
+              </Modal>
             </div>
           </div>
         </div>

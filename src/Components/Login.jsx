@@ -12,6 +12,8 @@ import {
   PostingSuccessful,
   PostingFailed,
 } from "../Redux/AllUsers";
+import { addMessage } from "../Redux/messages";
+import {incrementUnreadMessages}  from '../Redux/UnreadMessages'
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -49,6 +51,13 @@ const Login = () => {
           // save the userdata to store
           dispatch(PostingSuccessful(response.data.result));
 
+          // save the message to redux
+          const messageDetails = {
+            message: response.data.message,
+            time: response.data.formattedDateTime
+          }
+          dispatch(addMessage(messageDetails));
+          dispatch(incrementUnreadMessages());
           // delayed the time for navigation
           setTimeout(() => {
             navigate("/dashboard");
@@ -104,7 +113,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="signup_div bg-dark py-3">
+    <div className="signup_div  py-3">
       <form
         autoComplete={false}
         className="form mx-auto my-2  rounded-3 bg-light shadow"

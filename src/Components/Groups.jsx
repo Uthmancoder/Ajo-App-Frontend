@@ -108,7 +108,7 @@ const Groups = () => {
         response.data.groupMembers.length
       );
 
-      Navigate("/contribution");
+      Navigate("/dashboard/groups/contribution");
     } catch (error) {
       console.error("Error fetching group members:", error);
       dispatch(fetchingMembersFailed(error));
@@ -122,12 +122,7 @@ const Groups = () => {
 
   return (
     <div>
-      <AppNav />
-      <div className="row w-100 h-100">
-        <div className="d-none d-sm-block  col-3">
-          <Sidenav />
-        </div>
-        <div className="col-12 col-sm-9  med account_rel">
+        <div className="med account_rel">
           <h1>Groups</h1>
 
           {showLoader ? <Loading /> : null}
@@ -188,7 +183,7 @@ const Groups = () => {
             <NoGroups />
           )}
           {data && data.length > 0 ? (
-            <Link to="/createThrift" className="text-primary create fw-bold">
+            <Link to="/dashboard/createThrift" className="text-primary create fw-bold">
               Create A Thrift{" "}
               <AiOutlineArrowRight
                 style={{ fontWeight: "500", fontSize: "17px" }}
@@ -196,7 +191,6 @@ const Groups = () => {
             </Link>
           ) : null}
         </div>
-      </div>
     </div>
   );
 };

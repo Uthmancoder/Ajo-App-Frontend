@@ -57,7 +57,7 @@ const JoinGroup = () => {
         const errorMessage = error.response.data.message;
         toast.error(errorMessage);
         setTimeout(() => {
-          navigate("/groups");
+          navigate("/dashboard/groups");
         }, 3000);
         if (error.response.status === 404) {
           sessionStorage.setItem("joinGroupIntent", groupData.groupName);
