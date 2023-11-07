@@ -152,7 +152,7 @@ const AppNav = () => {
 
   return (
     <div>
-      <AppBar className="bg-primary position-sticky top-0 w-full">
+      <AppBar className="bg-primary position-sticky top-0  navbar w-full" style={{height : "fitContent"}} >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography

@@ -123,7 +123,7 @@ const CreateThrift = () => {
 
             //  delayed the time for the navigation
             setTimeout(() => {
-              Navigate("/groups");
+              Navigate("/dashboard/groups");
             }, 3000);
           });
       } catch (error) {

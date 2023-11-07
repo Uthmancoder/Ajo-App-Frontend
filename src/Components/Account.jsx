@@ -11,8 +11,10 @@ import { PaystackButton } from "react-paystack";
 import Loading from "./Loading";
 import { useNavigate } from "react-router-dom";
 import { BiExit } from "react-icons/bi";
+import Tooltip from "@mui/material/Tooltip";
 import { addMessage } from "../Redux/messages";
-import {incrementUnreadMessages}  from '../Redux/UnreadMessages'
+import { incrementUnreadMessages } from '../Redux/UnreadMessages'
+import { IoMdRefreshCircle } from 'react-icons/io'
 
 const Account = () => {
   // paystack initialization
@@ -71,6 +73,7 @@ const Account = () => {
           });
       });
 
+   
       paymentPromise
         .then((newResponse) => {
           // Update the component's state with the new wallet balance and deposit count
@@ -80,10 +83,10 @@ const Account = () => {
             navigate("/dashboard/account");
           }, 500);
           setGetUsersDeposit((prevDeposit) => prevDeposit + 1);
-            const messageDetails = {
-              message: newResponse.data.message,
-              time : newResponse.data.formattedDateTime
-            }
+          const messageDetails = {
+            message: newResponse.data.message,
+            time: newResponse.data.formattedDateTime
+          }
           // Add the new message to the array
           dispatch(addMessage(messageDetails))
           dispatch(incrementUnreadMessages())
@@ -95,6 +98,11 @@ const Account = () => {
     },
     onClose: () => alert("Wait! You need this oil, don't go!!!!"),
   };
+
+     // handling the refresh function
+     const handleRefresh = ()=>{
+      window.location.reload()
+   }
 
   // checking loading state
   if (isLoading) {
@@ -114,13 +122,16 @@ const Account = () => {
   return (
     <div>
 
-      <div className="account_rel pt-16 med w-100 ">
+      <div className="account_rel pt-8 med w-100 ">
         <h1 className="fs-2 m-3">
           My <span className="fs-3 text-secondary">Account</span>
         </h1>
         <div className="card w-100 shadow  p-2 ">
           <div>
-            <h5 className="fw-bolder">{name}</h5>
+            <div className="d-flex align-items-center justify-content-between">
+              <h5 className="fw-bolder">{name}</h5>
+              <div onClick={handleRefresh}><Tooltip title="Refresh"> <IoMdRefreshCircle size={30} className="text-secondary"/> </Tooltip></div>
+            </div>
             <div className=" justify-content-between rounded-2 p-2  bg-primary my-2  d-flex align-items-center w-100 history">
               <div
                 className="d-grid shadow py-2 px-4 text-center balance text-light rounded-3 "
@@ -154,12 +165,12 @@ const Account = () => {
           <div className="bg-light d-flex flex-wrap align-items-center justify-content-between py-3  px-5">
             <div className="text-start smallsc" style={{ maxWidth: "300px" }}>
               <p className="fw-bolder trackPayment m-2 text-primary fw-bolder fs-5">
-                Pending payment
+                Transaction History
               </p>
               <h5>₦0.00</h5>
-              <p>Next transfer</p>
+              <p>Recent Transaction</p>
               <p className="mt-3">
-                Next transfer <FaAngleRight />
+                Check History <FaAngleRight />
               </p>
             </div>
             <hr className="p-2 line" />

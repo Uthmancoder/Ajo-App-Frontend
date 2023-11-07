@@ -270,7 +270,7 @@ const EachgroupUser = () => {
     setLoadData(false);
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/paythrift",
+        "https://ultimate-thrift-app.onrender.com/user/paythrift",
         dataToBeSent
       );
 

@@ -1,33 +1,53 @@
-import { configureStore } from "@reduxjs/toolkit";
-import FetchUserByToken from "../Components/FetchUserByToken";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage"; // You can choose a storage method (localStorage, sessionStorage, etc.)
+
+// Import your reducers
+import AllUsers from "./AllUsers";
+import signedUser from "./SignedUser";
 import GroupUsers from "./GroupUsers";
 import GetLink from "./GetLink";
 import AllGroups from "./AllGroups";
-import AllUsers from "./AllUsers";
-import signedUser from "./SignedUser";
-import AllMessages from "./messages"
+import AllMessages, { addMessage } from "./messages";
 import UnreadMessages from "./UnreadMessages";
-import { addMessage } from "./messages";
-export const Store = configureStore({
-  reducer: {
-    AllUsers,
-    signedUser,
-    GroupUsers,
-    GetLink,
-    AllGroups,
-    AllMessages,
-    UnreadMessages
-  }
-})
-// Retrieve the user token from local storage
-const userToken = localStorage.getItem('token');
+
+// Combine your reducers
+const rootReducer = combineReducers({
+  AllUsers,
+  signedUser,
+  GroupUsers,
+  GetLink,
+  AllGroups,
+  AllMessages,
+  UnreadMessages,
+});
+
+// Configure the persist options
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["AllUsers", "signedUser", "AllMessages", "UnreadMessages", "GroupUsers"], // Define the reducers you want to persist
+};
+
+// Create a persisted reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Create the Redux store
+const Store = configureStore({
+  reducer: persistedReducer,
+});
+
+// Create a persistor object for persisting and rehydrating the Redux store
+const persistor = persistStore(Store);
 
 // Dispatch the FetchUserByToken action on page refresh
+const userToken = localStorage.getItem("token");
 if (userToken) {
-  FetchUserByToken(userToken, Store.dispatch);
-  // Dispatch a new message
   Store.dispatch(addMessage());
 }
+
+export { Store, persistor };
+
 
 
 

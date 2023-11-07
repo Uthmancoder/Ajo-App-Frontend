@@ -56,7 +56,7 @@ const Dashboard = () => {
 
   return (
     <div>
-        <div className="med">
+        <div className="med ">
           <h1 className="fw-bolder my-2 mx-3">
             Dashboard <span className="text-secondary fs-3">Control Panel</span>
           </h1>

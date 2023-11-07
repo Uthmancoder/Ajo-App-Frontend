@@ -13,25 +13,25 @@ const JoinGroup = () => {
 
   const navigate = useNavigate();
 
-   // Get the group ID from the URL
-   const InviteLink = window.location.href;
-   const parts = InviteLink.split('/');
-   const groupId = parts[parts.length - 1]; // knowing that  the group ID is the last part of the URL
+  // Get the group ID from the URL
+  const InviteLink = window.location.href;
+  const parts = InviteLink.split('/');
+  const groupId = parts[parts.length - 1]; // knowing that  the group ID is the last part of the URL
 
-   useEffect(() => {
-     const getGroupData = async () => {
-       try {
-         // Send a GET request to your server using the groupId as a URL parameter
-         const response = await axios.get(`http://localhost:3000/user/getDetails/${groupId}`);
-         // Handle the response from the server, which should contain the group data
-         console.log('Group Data:', response.data);
-         setGroupData(response.data);
-       } catch (error) {
-         console.error('Error fetching group data:', error);
-       }
-     }
-     getGroupData();
-   }, [groupId]);
+  useEffect(() => {
+    const getGroupData = async () => {
+      try {
+        // Send a GET request to your server using the groupId as a URL parameter
+        const response = await axios.get(`https://ultimate-thrift.onrender.com/user/getDetails/${groupId}`);
+        // Handle the response from the server, which should contain the group data
+        console.log('Group Data:', response.data);
+        setGroupData(response.data);
+      } catch (error) {
+        console.error('Error fetching group data:', error);
+      }
+    }
+    getGroupData();
+  }, [groupId]);
   console.log("logged Data :", groupData);
   const username = localStorage.getItem("currentUser") || "";
 
@@ -70,9 +70,13 @@ const JoinGroup = () => {
   };
 
   // Check if groupData is still null and show Loading component
-  if (groupData === null) { 
+  if (groupData === null) {
     return (
-      <img className="img-fluid joinThriftloader" src="https://www.rankbyfocus.com/wp-content/uploads/2021/12/loading-screen-featured-image.jpg" alt="loader" />
+      <div className="JoinGrpLoader">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
     )
   }
 

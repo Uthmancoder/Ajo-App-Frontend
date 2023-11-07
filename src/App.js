@@ -38,7 +38,7 @@ function App() {
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/about" element={<About />} />
-        <Route path="jointhrift/:id" element={<JoinGroup />} />
+        <Route path="/jointhrift/:id" element={<JoinGroup />} />
         <Route path="*" element={<NonFound />} />
       </Routes>
     </div>

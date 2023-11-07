@@ -94,7 +94,7 @@ const Settings = () => {
         dispatch(incrementUnreadMessages());
         navigate("/dashboard");
         setTimeout(() => {
-          navigate("/settings")
+          navigate("/dashboard/settings")
         }, 500)
       }
     } catch (error) {
