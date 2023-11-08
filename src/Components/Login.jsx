@@ -85,33 +85,6 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const forgetPassword = async (ev) => {
-    ev.preventDefault();
-    if (!username || !email) {
-      toast.error(
-        "if you've forgotten your password input your username and email then click on the forgotPassword for your password reset "
-      );
-    } else {
-      try {
-        setloading(!loading);
-        const url = "https://ultimate-thrift.onrender.com/user/forgotPassword";
-        const data = {
-          email,
-          username,
-        };
-        const response = await axios.post(url, data);
-        console.log(response.data);
-        const userData = response.data.data;
-        localStorage.setItem("userData", JSON.stringify(userData));
-        setTimeout(() => {
-          navigate("/forgotPassword");
-        }, 3000);
-      } catch (error) {
-        console.log(error);
-        alert("error.data.message");
-      }
-    }
-  };
   return (
     <div className="signup_div  py-3">
       <form
@@ -173,9 +146,9 @@ const Login = () => {
 
           {/* end of signin button */}
 
-          <button onClick={forgetPassword} className="forget text-primary">
+          <Link to="/sendMail"  className="forget text-primary">
             Forget password?
-          </button>
+          </Link>
           <p className="signup-link">
             Don't have an account? <Link to="/signup" className="fw-bold mx-2">Sign up</Link>
           </p>

@@ -15,7 +15,7 @@ const ForgotPassword = () => {
 
   // Focusing on the first input immeiately you're landing on the page
   useEffect(() => {
-    inputRef.current[0].focus(); 
+    inputRef.current[0].focus();
   }, []);
 
   // Handling OTP input
@@ -32,17 +32,21 @@ const ForgotPassword = () => {
   };
 
   const verifyCode = (ev) => {
-    setloading(!loading)
     ev.preventDefault();
     const FullOtp = OTP.join("");
+    if(!FullOtp){
+       alert("Inputs cannot be empty ")
+    }
     if (Number(FullOtp) !== Number(otp)) {
       alert(
-         "Invalid activation number, the code you entered is not correct check your email for the correct code"
+        "Invalid activation number, the code you entered is not correct check your email for the correct code"
       );
     } else {
-     setTimeout(() => {
-      Navigate("/resetPassword");
-     }, 3000);
+      alert("Code Verification successful!!, consider resetting your password  ")
+      setloading(!loading)
+      setTimeout(() => {
+        Navigate("/resetPassword");
+      }, 3000);
     }
   };
   return (
@@ -52,20 +56,17 @@ const ForgotPassword = () => {
         src={require("../images/Microfinance.png")}
         alt=""
       />
-      <div className="row container">
-        <h1 className="text-secondary d-flex align-items-center justify-content-center text-start col-12 gap-8 col-sm-12 col-md-6 px-2 ">
-          Forgotten password ??, No issues you can actually reset your password
-          without stress
-        </h1>
+      <div className="row container " > 
+        <h2 className="text-light text-center">
+          Enter the 4 digit OTP sent to your email address
+        </h2>
         <form
           action=""
-          className="col-12 col-sm-12 forgot_form col-md-6  mx-auto mt-5 shadow  rounded-3  border p-5 w-fit-content h-fit-content"
+          className="col-12 col-sm-12 joinGroup_card enterOtp col-md-6  mx-auto mt-5 shadow-lg  rounded-3   p-5 w-fit-content h-fit-content"
+          style={{position : "relative", height : "180px"}}
         >
-          <h2 className="text-secondary text-center">
-            Enter the 4 digit OTP sent to your email address
-          </h2>
           <div className="mx-auto inputs_div">
-           
+
             {OTP.map((digit, index) => (
               <input
                 key={index}
@@ -83,14 +84,13 @@ const ForgotPassword = () => {
             ))}
           </div>
 
-          <div className=" verify_div mx-auto">
-            <button
-              onClick={verifyCode}
-              className="btn btn-secondary fs-5  mt-3 px-4 rounded-5"
-            >
-              Verify
-            </button>
-          </div>
+          <button
+          // style={{position : "absolute", right : "20px", bottom :"10px"}}
+            onClick={verifyCode}
+            className="btn btn joingroup fw-bold w-50  mt-4 mx-auto"
+          >
+            Verify
+          </button>
         </form>
         {loading ? (
           <div className="loading">

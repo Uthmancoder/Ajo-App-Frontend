@@ -17,6 +17,7 @@ import ForgotPassword from "./Components/ForgotPassword";
 import NonFound from "./Components/NonFound";
 import ResetPassword from "./Components/ResetPassword";
 import Layout from "./Container/Layout";
+import SendMail from "./SendMail";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="/resetPassword" element={<ResetPassword />} />
+        <Route path="/sendMail" element={<SendMail />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/about" element={<About />} />
         <Route path="/jointhrift/:id" element={<JoinGroup />} />

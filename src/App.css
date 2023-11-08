@@ -448,6 +448,13 @@
     padding-left: 0;
   }
 }
+.forgot{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4;
+}
 .profilebg {
   background-color: rgb(25, 118, 214);
 }
@@ -496,6 +503,13 @@
   background-color: rgb(84, 91, 232) !important;
   border-color: skyblue !important;
   color: white; /* You can change the text color if needed */
+}
+
+.enterOtp{
+  display : flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .goback {
@@ -1173,4 +1187,4 @@ td {
     margin-top: 10px!important;
   }
 }
-/* join thrift styles */
+
