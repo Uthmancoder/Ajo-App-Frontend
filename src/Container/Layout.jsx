@@ -9,7 +9,7 @@ const Layout = () => {
             <AppNav />
             <div className="w-100  row bg-light layout">
                 <div className="col-3 d-none d-sm-block">
-                    <Sidenav />
+                    <Sidenav className="sidenavvv" />
                 </div>
                 <div className="col-12 col-sm-9">
                     <Outlet />

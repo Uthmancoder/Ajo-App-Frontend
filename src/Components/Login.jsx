@@ -6,10 +6,10 @@ import { AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AllUsers from "../Redux/AllUsers";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   PostingUser,
-  PostingSuccessful,
+  fetchingSuccessful,
   PostingFailed,
 } from "../Redux/AllUsers";
 import { addMessage } from "../Redux/messages";
@@ -18,43 +18,42 @@ import {incrementUnreadMessages}  from '../Redux/UnreadMessages'
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setusername] = useState("");
+  // const [username, setusername] = useState("");o
   const [showPassword, setShowPassword] = useState(false);
   const [loaddata, setloadData] = useState(true);
   const [loading, setloading] = useState(false);
   const [remember, setRemember] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const fetchedUser = useSelector((state) => state.AllUsers);
+  // const fetchingSuccessful = useSelector((state) => state.AllUsers);
 
   const signin = async (ev) => {
     ev.preventDefault();
-
-    if (!email || !password || !username) {
+    if (!email || !password ) {
       toast.error("Input fields cannot be empty");
     } else {
       setloadData(!loaddata);
-      const uri = "https://ultimate-thrift.onrender.com/user/signin";
-      const data = { username, password };
+      const uri = "http://localhost:3000/user/signin";
+      const data = { email, password };
       try {
         dispatch(PostingUser());
-
         const response = await axios.post(uri, data);
         console.log(response);
 
         if (response?.data?.status) {
           // show success message
-          toast.success("Login successful");
+          toast.success(`welcome ${response.data.userData.username}`);
 
           localStorage.setItem("token", response.data.token);
+          localStorage.setItem("Username", response.data.userData.username);
 
           // save the userdata to store
-          dispatch(PostingSuccessful(response.data.result));
+          dispatch(fetchingSuccessful(response.data.userData));
 
           // save the message to redux
           const messageDetails = {
             message: response.data.message,
-            time: response.data.formattedDateTime
+            time: response.data.userData.formattedDateTime
           }
           dispatch(addMessage(messageDetails));
           dispatch(incrementUnreadMessages());
@@ -93,13 +92,7 @@ const Login = () => {
       >
         <div className="header">Sign In</div>
         <div className="m-3">
-          <input
-            value={username}
-            onChange={(e) => setusername(e.target.value)}
-            placeholder="Username"
-            className="input form-control w-100"
-            type="text"
-          />
+
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}

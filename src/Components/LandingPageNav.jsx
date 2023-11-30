@@ -18,8 +18,8 @@ const LandingPageNav = () => {
     },
     {
       id: 3,
-      text: "Products",
-      URL: "/https://uthmancoder-hexashop.netlify.app",
+      text: "Contact",
+      URL: "/contact",
     },
     {
       id: 4,
@@ -34,7 +34,7 @@ const LandingPageNav = () => {
 
   return (
     <div>
-      <div className="d-flex align-items-center justify-content-between navv py-3 px-5">
+      <div className="d-flex align-items-center justify-content-between navv  py-3 px-5">
         <div>
           <div className="d-flex align-items-center justify-content-center">
             <AiFillPayCircle size={40} />
@@ -120,7 +120,7 @@ const LandingPageNav = () => {
             <div className="d-grid fixed">
               {pages.map((page) => (
                 <Link
-                  className="p-4 text-decoration-none text-light fw-semibold"
+                  className="p-1 text-decoration-none text-light fw-semibold"
                   key={page.id}
                   to={page.URL}
                 >

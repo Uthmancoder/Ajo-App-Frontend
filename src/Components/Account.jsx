@@ -15,6 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { addMessage } from "../Redux/messages";
 import { incrementUnreadMessages } from '../Redux/UnreadMessages'
 import { IoMdRefreshCircle } from 'react-icons/io'
+import { fetchingMembersSuccessful } from "../Redux/GroupUsers";
 
 const Account = () => {
   // paystack initialization
@@ -36,11 +37,11 @@ const Account = () => {
   const { fetchedUser } = useSelector((state) => state.AllUsers, []);
 
   // getting all the user's data
-  const username = fetchedUser?.user?.username || "";
+  const username = fetchedUser?.username || "";
   const name = username.toUpperCase();
-  const email = fetchedUser?.user?.email || ""; // Add a conditional check for email
-  const Wallet = fetchedUser?.user?.wallet;
-  const isLoading = fetchedUser?.user?.loading; // Update the loading property path
+  const email = fetchedUser?.email || ""; // Add a conditional check for email
+  const Wallet = fetchedUser?.wallet;
+  const isLoading = fetchedUser?.loading; // Update the loading property path
 
   // data to be sent to paystack
   const componentProps = {
@@ -53,7 +54,7 @@ const Account = () => {
     publicKey,
     text: "Add Fund",
     onSuccess: (response) => {
-      const url = "https://ultimate-thrift.onrender.com/user/updateWallet";
+      const url = "http://localhost:3000/user/updateWallet";
       const data = {
         amount: amount,
         username: username,
@@ -73,14 +74,16 @@ const Account = () => {
           });
       });
 
-   
+
       paymentPromise
         .then((newResponse) => {
+          dispatch(fetchingMembersSuccessful(newResponse.data.userData))
+          console.log("payment Data : ", newResponse.data.userData);
           // Update the component's state with the new wallet balance and deposit count
-          setAmount("");  // Reset the input field
-          navigate("/dashboard");
+          // navigate("/dashboard");
           setTimeout(() => {
             navigate("/dashboard/account");
+            window.location.reload()
           }, 500);
           setGetUsersDeposit((prevDeposit) => prevDeposit + 1);
           const messageDetails = {
@@ -99,10 +102,10 @@ const Account = () => {
     onClose: () => alert("Wait! You need this oil, don't go!!!!"),
   };
 
-     // handling the refresh function
-     const handleRefresh = ()=>{
-      window.location.reload()
-   }
+  // handling the refresh function
+  const handleRefresh = () => {
+    window.location.reload()
+  }
 
   // checking loading state
   if (isLoading) {
@@ -130,7 +133,7 @@ const Account = () => {
           <div>
             <div className="d-flex align-items-center justify-content-between">
               <h5 className="fw-bolder">{name}</h5>
-              <div onClick={handleRefresh}><Tooltip title="Refresh"> <IoMdRefreshCircle size={30} className="text-secondary"/> </Tooltip></div>
+              <div onClick={handleRefresh}><Tooltip title="Refresh"> <IoMdRefreshCircle size={30} className="text-secondary" /> </Tooltip></div>
             </div>
             <div className=" justify-content-between rounded-2 p-2  bg-primary my-2  d-flex align-items-center w-100 history">
               <div

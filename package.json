@@ -17,6 +17,7 @@
     "bootstrap-icons": "^1.10.5",
     "formik": "^2.4.2",
     "framer-motion": "^10.16.4",
+    "jwt-decode": "^4.0.0",
     "paystack": "^2.0.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0-beta.0",

@@ -2,7 +2,7 @@ import React from "react";
 import { BsArrowRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import LandingPageNav from "./LandingPageNav";
-import laptop from "../images/desktop-removebg-preview (1).png";
+import coin from "../images/coin.png";
 
 const LandingPage = () => {
   return (
@@ -26,8 +26,8 @@ const LandingPage = () => {
               </button>
             </Link>
           </div>
-          <div className="col-12 col-sm-6 col-md-6">
-            <img className="img-fluid animated-image" src={laptop} alt="laptop" />
+          <div className="col-12 col-sm-6 col-md-6 ">
+            <img className="img-fluid animated-image w-100" src={coin} alt="laptop" />
           </div>
         </div>
       </div>

@@ -16,7 +16,7 @@ const Sidenav = (props) => {
   };
   return (
     <div>
-      <div className={`bg-dark px-3 user_dashboard sidenav ${props.className}`}>
+      <div className={`bg-dark px-3 user_dashboard sidenav ${props.className}`} >
         <Link to="/dashboard">
           <button className="text-light btn btn-dark w-100 rounded-5 p-3 shadow">
             <BiSolidDashboard style={{ fontSize: "23px" }} /> Dashboard

@@ -31,23 +31,13 @@ const SignUp = () => {
   const { handleSubmit, handleChange, touched, errors, handleBlur } = useFormik(
     {
       initialValues: {
-        firstname: "",
-        lastname: "",
         username: "",
         email: "",
         password: "",
         confirmPassword: "",
-        image : userImage
+        image: userImage
       },
       validationSchema: yup.object().shape({
-        firstname: yup
-          .string()
-          .min(5, "Firstname must be at least 5 characters")
-          .required("This input field is required"),
-        lastname: yup
-          .string()
-          .min(5, "Lastname must be at least 5 characters")
-          .required("This input field is required"),
         username: yup
           .string()
           .min(5, "Username must be at least 5 characters")
@@ -86,7 +76,7 @@ const SignUp = () => {
         try {
           setloadData(!loaddata);
           const response = await axios.post(
-            "https://ultimate-thrift.onrender.com/user/signup",
+            "http://localhost:3000/user/signup",
             values
           );
           console.log(response.data);
@@ -95,9 +85,9 @@ const SignUp = () => {
             Navigate("/login");
           }, 6000);
         } catch (error) {
-          toast.error(error.data.response.data.message);
-          console.error(error);
-        }finally {
+          toast.error(error.response.data.message);
+          console.error("error : ", error.error.response.data.messag);
+        } finally {
           setloadData(true); // Hide the loader
         }
       },
@@ -105,13 +95,13 @@ const SignUp = () => {
   );
 
   return (
-    <div className="signup_div  py-2 w-100 ">
+    <div className="signup_div  py-2 ">
       <form
         onSubmit={handleSubmit}
         className="form   rounded-3  bg-light shadow"
       >
         {/* <div className="header py-3">Sign Up</div> */}
-     
+
         <div>
           <div className="userimage mx-auto">
             <img
@@ -124,42 +114,6 @@ const SignUp = () => {
         </div>
         <h2 className="m-4 fw-bolder text-secondary">Sign Up</h2>
         <div className="inputs row">
-          <div className="col-12 col-sm-6 col-md-6">
-            <label htmlFor="username">First Name</label>
-            <input
-              onChange={handleChange}
-              onBlur={handleBlur}
-              type="text"
-              className={
-                errors?.firstname && touched.firstname
-                  ? "is-invalid form-control"
-                  : "form-control"
-              }
-              name="firstname"
-            />
-            {errors?.firstname && touched.firstname ? (
-              <small className="text-danger">{errors.firstname}</small>
-            ) : null}
-          </div>
-          <div className="col-12 col-sm-6 col-md-6">
-            <label className="mx-1" htmlFor="username ">
-              Last Name
-            </label>
-            <input
-              onChange={handleChange}
-              onBlur={handleBlur}
-              type="text"
-              className={
-                errors.lastname && touched.lastname
-                  ? "is-invalid form-control"
-                  : "form-control"
-              }
-              name="lastname"
-            />
-            {errors.lastname && touched.lastname ? (
-              <small className="text-danger">{errors.lastname}</small>
-            ) : null}
-          </div>
           <div className="col-12 col-sm-6 col-md-6">
             <label htmlFor="username">Username</label>
             <input

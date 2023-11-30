@@ -22,16 +22,22 @@ import { BsBookHalf } from "react-icons/bs";
 import Loading from "./Loading";
 import Sidenav from "./Sidenav"
 import { Badge } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
 import { resetUnreadMessages } from '../Redux/UnreadMessages'
+import { fetchingSuccessful } from "../Redux/AllUsers";
+
 
 const AppNav = () => {
   const { fetchedUser } = useSelector((state) => state.AllUsers);
+  console.log("Fetched User :", fetchedUser)
   const { unreadMessages } = useSelector((state) => state.UnreadMessages);
   console.log("Unread Messages :", unreadMessages)
   const isLoading = fetchedUser?.loading;
-  const userimage = fetchedUser?.user?.image;
+  const userimage = fetchedUser?.image;
+
   const { currentPath } = useLocation();
   const location = useLocation();
+
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -44,20 +50,7 @@ const AppNav = () => {
     }
   }, [location]);
 
-  const pages = [
-    {
-      text: "About",
-      link: "/about",
-    },
-    {
-      text: "Products",
-      link: "https://uthmancoder-hexashop.netlify.app",
-    },
-    {
-      text: "Portfolio",
-      link: "https://uthmancoder-portfolio.netlify.app",
-    },
-  ];
+
   const smallpages = [
     {
       text: "Dashboard",
@@ -100,19 +93,55 @@ const AppNav = () => {
   ];
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-
+  const username = localStorage.getItem("Username");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const userToken = localStorage.getItem("token");
   useEffect(() => {
-    if (!userToken) {
-      navigate("/signup");
-      alert("User not found, try signing up for a new account");
-    } else {
-      FetchUserByToken(userToken, dispatch);
-    }
-  }, [dispatch]);
+    const fetchData = async () => {
+      try {
+        // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint for fetching user data
+        const response = await fetch(`http://localhost:3000/user/getData?username=${encodeURIComponent(username)}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${userToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        console.log(data)
+        dispatch(fetchingSuccessful(data.userData)); // Dispatch action to update Redux store
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        toast.error("Unable to Fetch user data");
+      }
+    };
+
+    const tokenExpirationCheck = setInterval(async () => {
+      if (!userToken || !FetchUserByToken(userToken)) {
+        clearInterval(tokenExpirationCheck);
+        alert('Your login session has expired, try logging in again');
+        localStorage.removeItem('token');
+        navigate('/login');
+      } else {
+        // Token is still valid, fetch user data
+        await fetchData();
+      }
+    }, 100000);
+
+    // Fetch initial user data
+    fetchData();
+
+    return () => {
+      clearInterval(tokenExpirationCheck);
+    };
+  }, [navigate, userToken, username, dispatch]);
 
   useEffect(() => {
     handleCloseNavMenu()
@@ -152,9 +181,10 @@ const AppNav = () => {
 
   return (
     <div>
-      <AppBar className="bg-primary position-sticky top-0  navbar w-full" style={{height : "fitContent"}} >
+      <AppBar className="bg-primary position-sticky top-0  navbar w-full" style={{ height: "fitContent" }} >
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
+          <Toolbar disableGutters className="d-flex itmes-center justify-content-between">
+
             <Typography
               variant="h6"
               noWrap
@@ -173,7 +203,7 @@ const AppNav = () => {
             >
               <div className="d-flex align-items-center ">
                 <img
-                  className="dashboard_logo img-fluid rounded-2"
+                  className="dashboard_logo img-fluid rounded-1"
                   src={require("../images/Microfinance.png")}
                   alt=""
                 />
@@ -236,98 +266,89 @@ const AppNav = () => {
                 <span className="text-dark fw-bolder">B</span>
               </h5>
             </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Link to={`${page.link}`}>
-                  <Button
-                    key={page}
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: "white", display: "block" }}
-                  >
-                    {page.text}
-                  </Button>
-                </Link>
-              ))}
-            </Box>
-            <Tooltip title="Account" >
-              <Link to="/dashboard/account" className=" text-light ">
-                <BsBookHalf style={{ fontSize: "17px", color: "white" }} />
-              </Link>
-            </Tooltip>
-            <Tooltip title="Notification">
-              <Link to="/dashboard/messages" className="mx-3 text-light">
-                {unreadMessages > 0 ? (
-                  <Badge color="secondary" badgeContent={unreadMessages} variant="dot">
-                    <IoIosNotifications style={{ fontSize: "20px", color: "white" }} />
-                  </Badge>
-                ) : (
-                  <IoIosNotifications style={{ fontSize: "20px", color: "white" }} />
-                )}
-              </Link>
-            </Tooltip>
 
-            <Box
-              sx={{
-                mt: 1,
-                flexGrow: 0,
-                display: { xs: "block", md: "flex" },
-                width: "50px",
-                height: "50px",
-              }}
-            >
-              <Tooltip title="Open settings">
-                <p
-                  onClick={handleOpenUserMenu}
-                  className="shadow balance rounded-3"
-                >
-                  <img
-                    className="dashboard_logo img-fluid rounded-circle"
-                    style={{ width: "50px", height: "50px" }}
-                    src={userimage}
-                    alt=""
-                  />
-                </p>
+            <div className="d-flex align-items-center justify-content-between gap-2">
+              <Tooltip title="Account" >
+                <Link to="/dashboard/account" className=" text-light ">
+                  <BsBookHalf style={{ fontSize: "17px", color: "white" }} />
+                </Link>
               </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+              <Tooltip title="Notification">
+                <Link to="/dashboard/messages" className="mx-3 text-light">
+                  {unreadMessages > 0 ? (
+                    <Badge color="secondary" badgeContent={unreadMessages} variant="dot">
+                      <IoIosNotifications style={{ fontSize: "20px", color: "white" }} />
+                    </Badge>
+                  ) : (
+                    <IoIosNotifications style={{ fontSize: "20px", color: "white" }} />
+                  )}
+                </Link>
+              </Tooltip>
+
+              <Box
+                sx={{
+                  mt: 1,
+                  flexGrow: 0,
+                  display: { xs: "block", md: "flex" },
+                  width: "50px",
+                  height: "50px",
                 }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Link to={setting.link} className="text-decoration-none">
-                      <Typography textAlign="center">
-                        {setting.text}
-                        {setting.link === "/" && (
-                          <Tooltip title="Logout">
-                            <span
-                              onClick={handleLogout}
-                              style={{ cursor: "pointer", marginLeft: "8px" }}
-                            >
-                              <BiExit style={{ fontSize: "20px" }} />
-                            </span>
-                          </Tooltip>
-                        )}
-                      </Typography>
-                    </Link>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
+                <Tooltip title="Open settings">
+                  <p
+                    onClick={handleOpenUserMenu}
+                    className="shadow balance rounded-3"
+                  >
+                    <img
+                      className="dashboard_logo img-fluid rounded-circle"
+                      style={{ width: "50px", height: "50px" }}
+                      src={userimage}
+                      alt=""
+                    />
+                  </p>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <Link to={setting.link} className="text-decoration-none">
+                        <Typography textAlign="center">
+                          {setting.text}
+                          {setting.link === "/" && (
+                            <Tooltip title="Logout">
+                              <span
+                                onClick={handleLogout}
+                                style={{ cursor: "pointer", marginLeft: "8px" }}
+                              >
+                                <BiExit style={{ fontSize: "20px" }} />
+                              </span>
+                            </Tooltip>
+                          )}
+                        </Typography>
+                      </Link>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            </div>
           </Toolbar>
         </Container>
       </AppBar>
+      <ToastContainer />
     </div>
   );
 };

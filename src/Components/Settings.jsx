@@ -19,16 +19,12 @@ const Settings = () => {
   const { fetchedUser } = useSelector((state) => state.AllUsers);
   console.log(fetchedUser);
   const dispatch = useDispatch();
-  const firstname = fetchedUser?.user?.firstname;
-  const lastname = fetchedUser?.user?.lastname;
-  const username = fetchedUser?.user?.username;
-  const email = fetchedUser?.user?.email;
-  const userImage = fetchedUser?.user?.image;
+  const username = fetchedUser?.username;
+  const email = fetchedUser?.email;
+  const userImage = fetchedUser?.image;
   const isLoading = fetchedUser?.loading;
 
   // Initialize state variables with user data
-  const [Firstname, setFirstName] = useState(firstname || "");
-  const [LastName, setLastName] = useState(lastname || "");
   const [Username, setUsername] = useState(username || "");
   const [Email, setEmail] = useState(email || "");
   const [oldPass, setOldPass] = useState("");
@@ -60,8 +56,6 @@ const Settings = () => {
 
   // updating data to be sent to the server
   const updatingData = {
-    firstname: Firstname,
-    lastname: LastName,
     username: Username,
     email: Email,
     image: selectedImage,
@@ -164,24 +158,6 @@ const Settings = () => {
 
           <div className="col-12 col-lg-10 px-4">
             <div className="row w-100">
-              <div className="d-grid text-start col-12 col-sm-6 col-md-6 my-2 text-secondary">
-                <label htmlFor="First Name">First Name</label>
-                <input
-                  onChange={(e) => setFirstName(e.target.value)}
-                  value={Firstname}
-                  type="text"
-                  className="form-control"
-                />
-              </div>
-              <div className="d-grid text-start col-12 col-sm-6 col-md-6 my-2 text-secondary">
-                <label htmlFor="First Name">Last Name</label>
-                <input
-                  onChange={(e) => setLastName(e.target.value)}
-                  value={LastName}
-                  type="text"
-                  className="form-control"
-                />
-              </div>
               <div className="d-grid text-start col-12 col-sm-6 col-md-6 my-2 text-secondary">
                 <label htmlFor="First Name">Username</label>
                 <input

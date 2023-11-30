@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import Sidenav from "./Sidenav";
-import AppNav from "./AppNav";
+import React, { useEffect } from "react";
+
 import { Link } from "react-router-dom";
 import AllUsers from "../Redux/AllUsers";
 import axios from "axios";
@@ -9,8 +8,8 @@ import Loading from "./Loading";
 
 const Dashboard = () => {
   const { fetchedUser } = useSelector((state) => state.AllUsers);
-  const balance = fetchedUser?.user?.wallet;
-  const username = fetchedUser?.user?.username;
+  const balance = fetchedUser?.wallet;
+  const username = fetchedUser?.username;
   const isLoading = fetchedUser?.loading; // Add a loading check
 
   // getting user's connection from the localstorage
