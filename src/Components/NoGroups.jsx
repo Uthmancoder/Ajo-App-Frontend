@@ -20,7 +20,7 @@ const NoGroups = () => {
               join an existing group
             </p>
             <div className="row  create-div">
-              <Link to="/createThrift" className="col-8 col-sm-6 mx-auto p-2 create_thrift">
+              <Link to="/dashboard/createThrift" className="col-8 col-sm-6 mx-auto p-2 create_thrift">
                 <button
                   className={`btn ${
                     activeButton === "create"
@@ -32,7 +32,7 @@ const NoGroups = () => {
                   Create a Thrift
                 </button>
               </Link>
-              <Link to="/groups" className="col-8 col-sm-6 mx-auto p-2">
+              <Link to="/dashboard/groups" className="col-8 col-sm-6 mx-auto p-2">
                 <button
                   className={`btn ${
                     activeButton === "join"

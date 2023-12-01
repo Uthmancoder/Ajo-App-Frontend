@@ -294,14 +294,13 @@ const AppNav = () => {
                   height: "50px",
                 }}
               >
-                <Tooltip title="Open settings">
+                <Tooltip title="Open settings" className="userImg">
                   <p
                     onClick={handleOpenUserMenu}
                     className="shadow balance rounded-3"
                   >
                     <img
-                      className="dashboard_logo img-fluid rounded-circle"
-                      style={{ width: "50px", height: "50px" }}
+                      className=" w-100 h-100 img-fluid rounded-circle"
                       src={userimage}
                       alt=""
                     />

@@ -42,10 +42,10 @@ function App() {
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/sendMail" element={<SendMail />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/about" element={<About />} />
-        {/* <Route path="/contact" element={<Contact />} />
-        <Route path="/testimonials" element={<MultipleItems />} />
-        <Route path="/jointhrift/:id" element={<JoinGroup />} /> */}
+        {/* <Route path="/about" element={<About />} /> */}
+        {/* <Route path="/contact" element={<Contact />} /> */}
+        {/* <Route path="/testimonials" element={<MultipleItems />} /> */}
+        <Route path="/jointhrift/:id" element={<JoinGroup />} />
         <Route path="*" element={<NonFound />} />
       </Routes>
     </div>

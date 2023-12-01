@@ -455,6 +455,11 @@
     width: 98%;
   }
 }
+.userImg{
+  width: 50px!important;
+  height: 50px !important;
+  object-fit: contain;
+}
 @media (max-width: 700px) {
   .signup_div {
     width: 100%;
