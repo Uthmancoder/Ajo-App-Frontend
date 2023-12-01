@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const ForgotPassword = () => {
   const userData = JSON.parse(localStorage.getItem("userData") || "");
   const otp = userData?.generatedNum || "";
-  console.log(otp);
+  // console.log(otp);
   const username = userData?.username || "";
   localStorage.setItem("username", username);
   const Navigate = useNavigate();

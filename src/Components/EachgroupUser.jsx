@@ -131,7 +131,7 @@ const EachgroupUser = () => {
   // }
 
   // Declaring the link to joinnthrift here for a purpose
-  const linkTojoinGroup = `https://ajo-app-frontend.vercel.app/${groupId}`;
+  const linkTojoinGroup = `https://ajo-app-frontend.vercel.app/jointhrift/${groupId}`;
 
 
   // Trigger the modal

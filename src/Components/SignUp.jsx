@@ -76,7 +76,7 @@ const SignUp = () => {
         try {
           setloadData(!loaddata);
           const response = await axios.post(
-            "http://localhost:3000/user/signup",
+            "https://ultimate-thrift.onrender.com/user/signup",
             values
           );
           console.log(response.data);
@@ -95,7 +95,7 @@ const SignUp = () => {
   );
 
   return (
-    <div className="signup_div  py-2 ">
+    <div className="signup_div " style={{paddingTop:  "30px"}}>
       <form
         onSubmit={handleSubmit}
         className="form   rounded-3  bg-light shadow"

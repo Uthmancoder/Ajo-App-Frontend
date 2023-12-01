@@ -102,7 +102,7 @@ const AppNav = () => {
     const fetchData = async () => {
       try {
         // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint for fetching user data
-        const response = await fetch(`http://localhost:3000/user/getData?username=${encodeURIComponent(username)}`, {
+        const response = await fetch(`https://ultimate-thrift.onrender.com/user/getData?username=${encodeURIComponent(username)}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${userToken}`,

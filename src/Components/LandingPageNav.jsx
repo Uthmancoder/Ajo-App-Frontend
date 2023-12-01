@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiFillPayCircle } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import logo from '../images/Microfinance.png'
 
 const LandingPageNav = () => {
+
   const [menu, setMenu] = useState(false);
   const pages = [
     {
@@ -22,8 +24,8 @@ const LandingPageNav = () => {
       URL: "/contact",
     },
     {
-      id: 4,
-      text: "Portfolio",
+      id: 5,
+      text: "Testimonial",
       URL: "/https://uthmancoder-portfolio.netlify.app",
     },
   ];
@@ -34,28 +36,29 @@ const LandingPageNav = () => {
 
   return (
     <div>
-      <div className="d-flex align-items-center justify-content-between navv  py-3 px-5">
+      <div id="navBar" className="d-flex align-items-center justify-content-between navv  py-3 px-5" style={{ height: "80px" }}>
         <div>
           <div className="d-flex align-items-center justify-content-center">
-            <AiFillPayCircle size={40} />
+            {/* <AiFillPayCircle size={40} />
             <h1 className="fs-2 pt-2 fw-bolder ">
               <span className="text-danger fw-bolder">Ul</span>
               <span className="text-alert alert-secondary fw-bolder">tim</span>
               <span className="text-light fw-bolder">ate</span>
-            </h1>
+            </h1> */}
+            <img className="img-fluid logo" src={logo} alt="" />
           </div>
         </div>
 
         <div className="d-flex align-items-center justify-content-between">
           <div className="homelinks">
             {pages.map((page) => (
-              <Link
-                className="p-4 text-decoration-none text-light fw-semibold"
+              <NavLink
+                className="p-4 text-decoration-none NavLink text-light fw-semibold"
                 key={page.id}
                 to={page.URL}
               >
                 {page.text}
-              </Link>
+              </NavLink>
             ))}
             <Link to="/login" className=" text-decoration-none  ">
               <button className="btn btn-light rounded-2 px-4 ">Login</button>
@@ -71,30 +74,31 @@ const LandingPageNav = () => {
         <div className="sidebar">
           <div>
             <div className="d-flex align-items-center m-3">
-              <AiFillPayCircle size={40} />
+              {/* <AiFillPayCircle size={40} />
               <h1 className="fs-2 pt-2 fw-bolder ">
                 <span className="text-danger fw-bolder">Ul</span>
                 <span className="text-alert alert-secondary fw-bolder">
                   tim
                 </span>
                 <span className="text-light fw-bolder">ate</span>
-              </h1>
+              </h1> */}
+              <img className="img-fluid " style={{width : "30%", height : "30%"}} src={logo} alt="" />
             </div>
           </div>
 
           <div className="side1">
-            <div className="d-grid fixed">
+            <div className="d-grid fixed shadow-lg">
               {pages.map((page) => (
-                <Link
-                  className="p-5 text-start px-3 border-bottom  mediascr text-decoration-none text-dark fw-semibold"
+                <NavLink
+                  className="py-4 text-start px-5 border-bottom  NavLink mediascr text-decoration-none text-dark fw-semibold"
                   key={page.id}
                   to={page.URL}
                 >
                   {page.text}
-                </Link>
+                </NavLink>
               ))}
-              <Link to="/login"  className=" text-decoration-none   mt-4 login-button">
-                <button className="btn btn-secondary w-75 mt-4 ">  
+              <Link to="/login" className=" text-decoration-none   my-4 login-button">
+                <button className="btn btn-secondary w-75 mt-4 ">
                   Log In
                 </button>
               </Link>
@@ -120,7 +124,7 @@ const LandingPageNav = () => {
             <div className="d-grid fixed">
               {pages.map((page) => (
                 <Link
-                  className="p-1 text-decoration-none text-light fw-semibold"
+                  className="p-1 text-decoration-none NavLink text-light fw-semibold"
                   key={page.id}
                   to={page.URL}
                 >

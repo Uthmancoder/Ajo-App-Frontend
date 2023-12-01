@@ -54,7 +54,7 @@ const Account = () => {
     publicKey,
     text: "Add Fund",
     onSuccess: (response) => {
-      const url = "http://localhost:3000/user/updateWallet";
+      const url = "https://ultimate-thrift.onrender.com/user/updateWallet";
       const data = {
         amount: amount,
         username: username,
