@@ -23,13 +23,13 @@ const Contact = () => {
                     <form id="quote" className="w-full  px-8 md:px-0 container w-100">
                         <div className="row  ">
                             <div className="col-12 col-sm-6 col-md-6 my-2">
-                                <input className="form-control " type="text" placeholder="Your Name" name="" id="" />
+                                <input className="form-control " type="text" placeholder="Your Name..." name="" id="" />
                             </div>
                             <div className="col-12 col-sm-6 col-md-6 my-2">
-                                <input className="form-control  " type="text" placeholder="Your Email" name="" id="" />
+                                <input className="form-control  " type="text" placeholder="Your Email..." name="" id="" />
                             </div>
                             <div className="col-12 col-sm-6 col-md-6 my-2">
-                                <input className="form-control " type="number" placeholder="Your Phone" name="" id="" />
+                                <input className="form-control " type="number" placeholder="Your Phone..." name="" id="" />
                             </div>
                             <div className="col-12 col-sm-6 col-md-6 my-2">
                                 <input className="form-control " type="text" placeholder="Subject" name="" id="" />

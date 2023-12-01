@@ -18,6 +18,8 @@ import NonFound from "./Components/NonFound";
 import ResetPassword from "./Components/ResetPassword";
 import Layout from "./Container/Layout";
 import SendMail from "./SendMail";
+import Contact from "./Components/Contact";
+import MultipleItems from "./Components/Carousel";
 
 
 function App() {
@@ -41,7 +43,9 @@ function App() {
         <Route path="/sendMail" element={<SendMail />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/about" element={<About />} />
-        <Route path="/jointhrift/:id" element={<JoinGroup />} />
+        {/* <Route path="/contact" element={<Contact />} />
+        <Route path="/testimonials" element={<MultipleItems />} />
+        <Route path="/jointhrift/:id" element={<JoinGroup />} /> */}
         <Route path="*" element={<NonFound />} />
       </Routes>
     </div>

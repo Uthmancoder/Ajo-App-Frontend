@@ -43,7 +43,7 @@ const Footer = () => {
                     <li className="text-slate-400 p-3">Power Tools</li>
                 </ul>
             </div>
-
+     <p className="text-center my-3 shadow p-2">© 2023 Ultimate MicroFinance Bank. All rights reserved.</p>
         </div>
     </footer>
     )

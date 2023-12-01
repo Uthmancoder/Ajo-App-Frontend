@@ -3,43 +3,52 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import TestimonialCard from "./TestimonialCard";
+import user from '../images/Profile.png'
 
 
 export default class MultipleItems extends Component {
   render() {
-    const settings = {
+    var settings = {
       dots: true,
-      infinite: true,
+      infinite: false,
       speed: 500,
-      slidesToScroll: 1,
+      slidesToShow: 3,
+      slidesToScroll: 3,
+      initialSlide: 0,
       responsive: [
         {
-          breakpoint: 576, // Adjust this breakpoint as needed for small screens
-          settings: {
-            slidesToShow: 1,
-          },
-        },
-        {
-          breakpoint: 768, // Adjust this breakpoint as needed for medium screens
-          settings: {
-            slidesToShow: 2,
-          },
-        },
-        {
-          breakpoint: 992, // Adjust this breakpoint as needed for large screens
+          breakpoint: 1024,
           settings: {
             slidesToShow: 3,
-          },
+            slidesToScroll: 3,
+            infinite: true,
+            dots: true
+          }
         },
-      ],
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            initialSlide: 2
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
     };
-    
+
     return (
       <div className=" w-100 mx-auto bg-transparent">
         {/* <h2> Multiple items </h2> */}
         <Slider {...settings}>
           <div className="" style={{ backgroundColor: "white" }}>
-            <TestimonialCard image="https://media.cnn.com/api/v1/images/stellar/prod/130715172607-jk-rowling-male-pseudonym.jpg?q=w_3000,h_1996,x_0,y_0,c_fill/h_618" text=" Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem sed aut quod ea eius magni itaque officiis, atque dolorum, nulla porro ex, asperiores cum labore quasi provident. Cupiditate, minima optio!" username="Uthmancoder" />
+            <TestimonialCard image={user} text=" Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem sed aut quod ea eius magni itaque officiis, atque dolorum, nulla porro ex, asperiores cum labore quasi provident. Cupiditate, minima optio!" username="Uthmancoder" />
           </div>
           <div>
             <TestimonialCard image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfco7o2LxrdZJUovHUiRmN662LFaf5vxaVlRpIroAmyxbtOlkZsD4nLhr4o53Sd-5mr6g&usqp=CAU" text=" Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem sed aut quod ea eius magni itaque officiis, atque dolorum, nulla porro ex, asperiores cum labore quasi provident. Cupiditate, minima optio!" username="John Doe" />

@@ -9,29 +9,34 @@ const LandingPageNav = () => {
   const [menu, setMenu] = useState(false);
   const pages = [
     {
-      id: 1,
+      id: "home",
       text: "Home",
-      URL: "/",
+      // URL: "/",
     },
     {
-      id: 2,
+      id: "about",
       text: "About Us",
-      URL: "/about",
+      // URL: "/about",
     },
     {
-      id: 3,
+      id: "contact",
       text: "Contact",
-      URL: "/contact",
+      // URL: "/contact",
     },
     {
-      id: 5,
+      id: 'testimonials',
       text: "Testimonial",
-      URL: "/https://uthmancoder-portfolio.netlify.app",
+      // URL: "/testimonials",
     },
   ];
 
   const handleClick = () => {
     setMenu(!menu);
+  };
+
+  const handleNavLinkClick = (id) => {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    setMenu(false);
   };
 
   return (
@@ -55,7 +60,8 @@ const LandingPageNav = () => {
               <NavLink
                 className="p-4 text-decoration-none NavLink text-light fw-semibold"
                 key={page.id}
-                to={page.URL}
+                onClick={() => handleNavLinkClick(page.id)}
+                // to={page.URL}
               >
                 {page.text}
               </NavLink>
@@ -82,7 +88,7 @@ const LandingPageNav = () => {
                 </span>
                 <span className="text-light fw-bolder">ate</span>
               </h1> */}
-              <img className="img-fluid " style={{width : "30%", height : "30%"}} src={logo} alt="" />
+              <img className="img-fluid " style={{ width: "30%", height: "30%" }} src={logo} alt="" />
             </div>
           </div>
 
@@ -92,7 +98,8 @@ const LandingPageNav = () => {
                 <NavLink
                   className="py-4 text-start px-5 border-bottom  NavLink mediascr text-decoration-none text-dark fw-semibold"
                   key={page.id}
-                  to={page.URL}
+                  onClick={() => handleNavLinkClick(page.id)}
+                  // to={page.URL}
                 >
                   {page.text}
                 </NavLink>
@@ -126,7 +133,8 @@ const LandingPageNav = () => {
                 <Link
                   className="p-1 text-decoration-none NavLink text-light fw-semibold"
                   key={page.id}
-                  to={page.URL}
+                  onClick={() => handleNavLinkClick(page.id)}
+                  // to={page.URL}
                 >
                   {page.text}
                 </Link>

@@ -16,7 +16,7 @@ const LandingPage = () => {
       <div id="navBar" className="navBar" style={{ height: "80px" }}>
         <LandingPageNav />
       </div>
-      <div className="landing  ">
+      <div id="home" className="landing  ">
         <div id="Home" className="px-5 row container">
           <div className="text-light mt-5 col-12 co l-sm-6 col-md-6">
             <p className="fw-bolder all text-light">
@@ -40,11 +40,11 @@ const LandingPage = () => {
         </div>
       </div>
       {/* About Section */}
-      <div id="About">
+      <div id="about">
         <About />
       </div>
       {/* Testimonials Section */}
-      <div id="Testimonials" className="m-5" >
+      <div id="testimonials" className="m-5" >
         <h2 className="fs-2 fw-bold my-5">  Testimonials</h2>
         <div className="text-center w-100 my-4">
           <MultipleItems />
@@ -54,10 +54,10 @@ const LandingPage = () => {
       
       <div>
  {/* Contact section */}
-      <div id="Contact" className="contact-info">
+      <div id="contact" className="contact-info">
           <h2 className="fs-2 fw-bold m-5">Contact Us</h2>
           <Contact/>
-          <p>
+          <p className="text-center ">
             If you have any questions or need assistance, please don't hesitate
             to contact our support team at
             support@adewaleagbolahan025@gmail.com.
