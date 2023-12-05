@@ -13,7 +13,7 @@ import {
   PostingFailed,
 } from "../Redux/AllUsers";
 import { addMessage } from "../Redux/messages";
-import {incrementUnreadMessages}  from '../Redux/UnreadMessages'
+import { incrementUnreadMessages } from '../Redux/UnreadMessages'
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -29,38 +29,87 @@ const Login = () => {
 
   const signin = async (ev) => {
     ev.preventDefault();
-    if (!email || !password ) {
+  
+    if (!email || !password) {
       toast.error("Input fields cannot be empty");
+      return;
     } else {
       setloadData(!loaddata);
-      const uri = "https://ultimate-thrift.onrender.com/user/signin"; 
+      const uri = "https://ultimate-thrift.onrender.com/user/signin";
       const data = { email, password };
+  
       try {
         dispatch(PostingUser());
         const response = await axios.post(uri, data);
         console.log(response);
-
+  
         if (response?.data?.status) {
           // show success message
-          toast.success(`welcome ${response.data.userData.username}`);
-
+          toast.success(`Welcome ${response.data.userData.username}`);
+  
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("Username", response.data.userData.username);
-
-          // save the userdata to store
+  
+          // save the userdata to the store
           dispatch(fetchingSuccessful(response.data.userData));
-
+  
           // save the message to redux
           const messageDetails = {
             message: response.data.message,
-            time: response.data.userData.formattedDateTime
-          }
+            time: response.data.userData.formattedDateTime,
+          };
           dispatch(addMessage(messageDetails));
           dispatch(incrementUnreadMessages());
+  
           // delayed the time for navigation
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 2000);
+          const delayedNavigation = async () => {
+            // Check for joinIntent in sessionStorage
+            const joinIntent = sessionStorage.getItem("groupname");
+  
+            if (joinIntent) {
+              // If joinIntent exists, ask the user for confirmation
+              const shouldJoinGroup = window.confirm("Do you want to join the group?");
+  
+              if (shouldJoinGroup) {
+                // If the user confirms, send a request to join the group
+                const username = response.data.userData.username;
+                const groupname = joinIntent;
+  
+                try {
+                  const joinGroupResponse = await axios.post("https://ultimate-thrift.onrender.com/user/addusers", {
+                    username,
+                    groupname,
+                  });
+  
+                  if (joinGroupResponse.data.status === true) {
+                    // If successfully joined the group, show a success message
+                    toast.success(joinGroupResponse.data.message);
+  
+                    // Remove the joinIntent from sessionStorage
+                    sessionStorage.removeItem("groupname");
+  
+                    // Navigate the user to the dashboard/groups route
+                    navigate("/dashboard/groups");
+                  } else {
+                    // If there was an issue joining the group, show an error message
+                    toast.error(joinGroupResponse.data.message);
+                  }
+                } catch (joinGroupError) {
+                  console.error(joinGroupError);
+                  // Handle any errors that may occur during the join group process
+                  toast.error("An error occurred while joining the group");
+                }
+              } else {
+                // If the user chooses not to join the group, navigate to the dashboard
+                navigate("/dashboard");
+              }
+            } else {
+              // If there's no joinIntent, simply navigate to the dashboard
+              navigate("/dashboard");
+            }
+          };
+  
+          setTimeout(delayedNavigation, 2000);
         } else {
           toast(response?.data?.message || "Server error");
           dispatch(PostingFailed("Server error"));
@@ -74,6 +123,9 @@ const Login = () => {
       }
     }
   };
+  
+
+
 
   const handleClick = () => {
     setRemember(true);
@@ -139,7 +191,7 @@ const Login = () => {
 
           {/* end of signin button */}
 
-          <Link to="/sendMail"  className="forget text-primary">
+          <Link to="/sendMail" className="forget text-primary">
             Forget password?
           </Link>
           <p className="signup-link">

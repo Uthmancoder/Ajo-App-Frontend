@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
+  position: sticky;
   background-image: linear-gradient(to right, #145de4, #4259ef, #3d7de6);
   top: 0;
 }
@@ -49,7 +50,7 @@
   background-image: linear-gradient(to right, #145de4, #4259ef, #3d7de6);
 }
 .sidenav {
-  height: 90vh;
+  height: 89vh;
   overflow-y: scroll;
 }
 .sidenav::-webkit-scrollbar {
@@ -66,10 +67,12 @@
 }
 
 .layout {
-  width: 100vh;
+  width: 110vh;
+  background-color: #2e2e2e;
   overflow-y: hidden;
 }
 .sidenavvv {
+  /* padding: 100px 0; */
   height: 89vh;
 }
 
@@ -577,10 +580,10 @@
   font-weight: 500;
 }
 .groupname {
-  color: #13c1f1;
+  color: rgb(219, 222, 223)
 }
 .join_header {
-  background: linear-gradient(to bottom, #13c1f1, #4a6871);
+  background: linear-gradient(to bottom, #99b9c2, #424445);
   -webkit-background-clip: text; /* Clip the background to the text */
   -webkit-text-fill-color: transparent;
 }
@@ -627,6 +630,14 @@
   height: 50px;
   border-radius: 10%;
   margin: auto;
+}
+.Transactionhistory{
+  width: 100%;
+ height : 60vh;
+ display : flex ;
+ align-items : center;
+ text-align: center;
+ justify-content: center;
 }
 .line {
   transform: rotate(90deg);

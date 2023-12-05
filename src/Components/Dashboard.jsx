@@ -10,39 +10,14 @@ const Dashboard = () => {
   const { fetchedUser } = useSelector((state) => state.AllUsers);
   const balance = fetchedUser?.wallet;
   const username = fetchedUser?.username;
+  const TotalDeposit = fetchedUser?.TotalDeposit;
+  const TotalTransactions = fetchedUser?.TotalTransactions;
+  const TotalWithdrawal = fetchedUser?.TotalWithdrawal;
   const isLoading = fetchedUser?.loading; // Add a loading check
 
   // getting user's connection from the localstorage
   const connection = localStorage.getItem("usersConnection") || 0
 
-  // getting total transactions
-  const TotalTransactions = localStorage.getItem("totalTransactions") || 0
-
-  // getting the  user's total deposits 
-  const totalDeposit =  Number(localStorage.getItem("GetUsersDeposit")) || 0
-
-  // After successful signup and login
-  useEffect(() => {
-    const joinGroupIntent = sessionStorage.getItem("joinGroupIntent") || "";
-    if (joinGroupIntent) {
-      // User had an intention to join a group
-      try {
-        const response = axios.post(
-          "https://ultimate-thrift.onrender.com/user/addusertogroup",
-          { username }
-        );
-        console.log(response.data);
-        // Clear the stored intent
-        sessionStorage.removeItem("joinGroupIntent");
-        // You can proceed with some action like displaying a success message or updating state
-      } catch (error) {
-        console.log(error);
-        // Handle errors if needed
-      }
-    }
-  }, [username]);
-
-  const totalWithdraws = localStorage.getItem("totalWithdraws") || 0;
 
   if (isLoading) {
     // Show a loading indicator or message
@@ -75,7 +50,7 @@ const Dashboard = () => {
               className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
             >
               <div className="card p-3 bbb text-light">
-                <h4>{totalWithdraws}</h4>
+                <h4>{TotalWithdrawal}</h4>
                 <h4>Total Withdrawal</h4>
               </div>
             </Link>
@@ -102,7 +77,7 @@ const Dashboard = () => {
               className="col-12 dash col-sm-12 col-md-6 col-lg-6 my-2 "
             >
               <div className="card p-3 bbb text-light">
-                <h4>{totalDeposit}</h4>
+                <h4>{TotalDeposit}</h4>
                 <h4>Total Deposits</h4>
               </div>
             </Link>

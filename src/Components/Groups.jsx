@@ -27,7 +27,7 @@ const Groups = () => {
 
   // Getting the current signed user
   const { fetchedUser } = useSelector((state) => state.AllUsers);
-  const currentUserUsername = fetchedUser?.user?.username;
+  const currentUserUsername = fetchedUser?.username;
   const isLoadingUser = fetchedUser?.loading;
 
   
@@ -100,7 +100,7 @@ const Groups = () => {
       // Serialize the data before saving to localStorage
       const serializedData = JSON.stringify(response.data);
       localStorage.setItem("groupdata", serializedData);
-      localStorage.setItem("currentUser", currentUserUsername);
+      localStorage.setItem("Username", currentUserUsername);
 
       // Save the length of the groupMembers array to localStorage
       localStorage.setItem(

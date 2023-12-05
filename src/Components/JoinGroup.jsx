@@ -33,41 +33,60 @@ const JoinGroup = () => {
     getGroupData();
   }, [groupId]);
   console.log("logged Data :", groupData);
-  const username = localStorage.getItem("currentUser") || "";
+  const username = localStorage.getItem("Username") || "";
 
   const handleJoin = async () => {
     setloadData(!loaddata);
+  
     try {
       const response = await axios.post("https://ultimate-thrift.onrender.com/user/addusers", {
         username,
-        groupname: groupData.groupDetails.groupName, // Access groupData properties directly
+        groupname: groupData.groupDetails.groupName,
       });
-
+  
       console.log(response.data);
-
-      if (response.status === 200) {
-        toast.success(response.data.message);
+  
+      if (response.data.status === "new_user") {
+        const groupName = groupData.groupDetails.groupName;
+  
+        // Store information in sessionStorage
+        sessionStorage.setItem("groupname", groupName);
+        toast.error("Action Needed, signup Required before joining a group");
+  
         setTimeout(() => {
-          navigate("/groups");
+          // Redirect to login after showing the toast message
+          navigate("/login");
+        }, 3000);
+      }
+  
+      if (response.data.status === true) {
+        toast.success(response.data.message);
+  
+        setTimeout(() => {
+          navigate("/dashboard/groups");
         }, 3000);
       }
     } catch (error) {
       console.log(error);
+  
       if (error.response) {
         const errorMessage = error.response.data.message;
         toast.error(errorMessage);
+  
         setTimeout(() => {
           navigate("/dashboard/groups");
         }, 3000);
+  
         if (error.response.status === 404) {
           sessionStorage.setItem("joinGroupIntent", groupData.groupName);
-          navigate("/signup");
+          navigate("/login");
         }
       }
     } finally {
       setloadData(true);
     }
   };
+  
 
   // Check if groupData is still null and show Loading component
   if (groupData === null) {
@@ -90,7 +109,7 @@ const JoinGroup = () => {
         </h5>
         <h5 className="groupname fw-bold mt-3">{groupData.groupDetails.groupName}</h5>
         <p className="text-uppercase group_Details">
-          {groupData.groupDetails.Amount} {groupData.groupDetails.plan}, {groupData.RequiredUsers}{" "}
+          {groupData.groupDetails.Amount} {groupData.groupDetails.plan}, {groupData.groupDetails.RequiredUsers}{" "}
           required users, pack : {groupData.groupDetails.Total}{" "}
         </p>
         <button

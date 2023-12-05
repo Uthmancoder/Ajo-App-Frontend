@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import AppNav from "./AppNav";
-import Sidenav from "./Sidenav";
 import { useSelector } from "react-redux";
 import CopyToClipboard from "./CopyToClipboard";
 import Loading from "./Loading";
+import { ToastContainer, toast } from "react-toastify";
 import { Tooltip } from "@mui/material";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import axios from "axios";
 import { addMessage } from "../Redux/messages";
-import {incrementUnreadMessages}  from '../Redux/UnreadMessages'
+import { incrementUnreadMessages } from '../Redux/UnreadMessages'
 
 
 const style = {
@@ -37,11 +36,12 @@ const EachgroupUser = () => {
 
   const groupMembers = fetchedUser?.groupMembers || [];
 
-  const currentUser = localStorage.getItem("currentUser");
+  const currentUser = localStorage.getItem("Username");
 
   const groupWallet = fetchedUser?.wallet;
 
-  const amountPerThrift = fetchedUser?.amount;
+  const amountPerThrift = fetchedUser?.Amount;
+  console.log("Amount Per Thrift:", amountPerThrift)
 
   const groupId = fetchedUser?.groupId;
 
@@ -131,7 +131,7 @@ const EachgroupUser = () => {
   // }
 
   // Declaring the link to joinnthrift here for a purpose
-  const linkTojoinGroup = `https://ajo-app-frontend.vercel.app/jointhrift/${groupId}`;
+  const linkTojoinGroup = `http://localhost:3001/jointhrift/${groupId}`;
 
 
   // Trigger the modal
@@ -267,32 +267,40 @@ const EachgroupUser = () => {
 
   // Making payments to group wallet
   const makePayment = async () => {
+    if (parseInt(dataToBeSent.amount) < parseInt(amountPerThrift)) {
+      toast.error("The amount you're trying to pay is lesser than the specified amount");
+      return; // Exit the function
+    } else if (parseInt(dataToBeSent.amount) > parseInt(amountPerThrift)) {
+      toast.error(`The amount you're trying to pay is greater than the specified amount, the specified amount is: ${amountPerThrift}`);
+      return; // Exit the function
+    }
+
     setLoadData(false);
     try {
       const response = await axios.post(
-        "https://ultimate-thrift-app.onrender.com/user/paythrift",
+        "https://ultimate-thrift.onrender.com/user/paythrift",
         dataToBeSent
       );
 
       console.log(response.data.message);
-      if (response.data.status === "true") {
-        setTransactionCount((prevCount) => prevCount + 1);
-        localStorage.setItem("totalTransactions", transactionCount + 1);
-        alert(response.data.message);
-        // save the message to redux
-        const messageDetails = {
-          message: response.data.message,
-          time: response.data.formattedDateTime
-        }
-        dispatch(addMessage(messageDetails));
-        dispatch(incrementUnreadMessages())
-        navigate("/dashboard/groups");
-      } else {
-        alert(response.data.message);
+      // save the message to redux
+      const messageDetails = {
+        message: response.data.message,
+        time: response.data.formattedDateTime
       }
+      dispatch(addMessage(messageDetails));
+      dispatch(incrementUnreadMessages())
+      setTransactionCount((prevCount) => prevCount + 1);
+      localStorage.setItem("totalTransactions", transactionCount + 1);
+      toast.success(response.data.message);
+      navigate("/dashboard");
+      setTimeout(() => {
+        navigate("/dashboard/groups");
+      }, 500)
+
     } catch (err) {
       console.log(err);
-      alert(err.response.data.message);
+      toast.error(err.response.data.message);
     } finally {
       setLoadData(true);
     }
@@ -315,10 +323,7 @@ const EachgroupUser = () => {
 
 
 
-  const withdraw = () => {
-    // Increment totalWithdraws
-    setTotalWithdraws(totalWithdraws + 1);
-
+  const withdraw = async () => {
     // Get the username of the current withdrawer
     const currentWithdrawer = getNextWithdrawer();
 
@@ -330,13 +335,18 @@ const EachgroupUser = () => {
       amount: groupWallet,
     };
 
+    if (updatedWithdrawingData.Withdrawer !== updatedWithdrawingData.username) {
+      toast.error("You're not the next withdrawer, Kindly wait for your turn");
+      return; // Exit the function
+    }
+
     // Make your API call with updatedWithdrawingData
     // You can replace this part with your actual API call
-    axios
+    await axios
       .post("https://ultimate-thrift.onrender.com/user/withdraw", updatedWithdrawingData)
       .then((response) => {
         console.log(response.data);
-        alert(response.data.message);
+        toast.success(response.data.message);
 
         // save the message to redux
         const messageDetails = {
@@ -346,15 +356,17 @@ const EachgroupUser = () => {
         dispatch(addMessage(messageDetails));
         dispatch(incrementUnreadMessages())
         localStorage.setItem("currentWithdarwer", currentWithdrawer);
-
-
-        localStorage.setItem("currentWithdrawer", currentWithdrawer);
         localStorage.setItem("totalWithdraws", totalWithdraws);
-        navigate("/dashboard/groups");
+        navigate("/dashboard");
+        setTimeout(() => {
+          navigate("/dashboard/groups");
+        }, 500)
+        // Increment totalWithdraws
+        setTotalWithdraws(totalWithdraws + 1);
       })
       .catch((error) => {
         console.error(error);
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       });
 
     // Move to the next user
@@ -481,6 +493,7 @@ const EachgroupUser = () => {
               </Modal>
             </div>
           </div>
+          <ToastContainer />
         </div>
       </div>
     </div>

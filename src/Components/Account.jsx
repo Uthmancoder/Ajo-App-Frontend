@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import AppNav from "./AppNav";
-import Sidenav from "./Sidenav";
 import { FaAngleRight } from "react-icons/fa";
-import AllUsers from "../Redux/AllUsers";
+// import AllUsers from "../Redux/AllUsers";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
@@ -10,7 +9,7 @@ import axios from "axios";
 import { PaystackButton } from "react-paystack";
 import Loading from "./Loading";
 import { useNavigate } from "react-router-dom";
-import { BiExit } from "react-icons/bi";
+// import { BiExit } from "react-icons/bi";
 import Tooltip from "@mui/material/Tooltip";
 import { addMessage } from "../Redux/messages";
 import { incrementUnreadMessages } from '../Redux/UnreadMessages'
@@ -27,11 +26,6 @@ const Account = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // trying to get the user's total deposits
-  const [GetUsersDeposit, setGetUsersDeposit] = useState(
-    Number(localStorage.getItem("GetUsersDeposit")) || 0
-  );
-
   const AllMembers = localStorage.getItem("AllMembers") || 0;
 
   const { fetchedUser } = useSelector((state) => state.AllUsers, []);
@@ -41,6 +35,7 @@ const Account = () => {
   const name = username.toUpperCase();
   const email = fetchedUser?.email || ""; // Add a conditional check for email
   const Wallet = fetchedUser?.wallet;
+  const SuccessfulPayment = fetchedUser?.TotalDeposit;
   const isLoading = fetchedUser?.loading; // Update the loading property path
 
   // data to be sent to paystack
@@ -85,7 +80,6 @@ const Account = () => {
             navigate("/dashboard/account");
             window.location.reload()
           }, 500);
-          setGetUsersDeposit((prevDeposit) => prevDeposit + 1);
           const messageDetails = {
             message: newResponse.data.message,
             time: newResponse.data.formattedDateTime
@@ -158,7 +152,7 @@ const Account = () => {
                 style={{ minHeight: "70px", minWidth: "250px" }}
               >
                 <h5 className="fw-bolder text-light">Successful Payments </h5>
-                <p>{GetUsersDeposit}</p>
+                <p>{SuccessfulPayment}</p>
               </div>
             </div>
           </div>
@@ -170,11 +164,11 @@ const Account = () => {
               <p className="fw-bolder trackPayment m-2 text-primary fw-bolder fs-5">
                 Transaction History
               </p>
-              <h5>₦0.00</h5>
-              <p>Recent Transaction</p>
-              <p className="mt-3">
+              {/* <h5>₦0.00</h5> */}
+              <p className="mt-4">Recent Transaction</p>
+              <Link to="/dashboard/account/history" className="mt-3 text-dark font-bold text-decoration-none">
                 Check History <FaAngleRight />
-              </p>
+              </Link>
             </div>
             <hr className="p-2 line" />
             <div className="text-start smallsc" style={{ maxWidth: "300px" }}>

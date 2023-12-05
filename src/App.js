@@ -6,20 +6,21 @@ import SignUp from "./Components/SignUp";
 import Dashboard from "./Components/Dashboard";
 import Groups from "./Components/Groups";
 import Account from "./Components/Account";
+import History from "./Components/History";
 import Messages from "./Components/Messages";
 import CreateThrift from "./Components/CreateThrift";
 import EachgroupUser from "./Components/EachgroupUser";
 import Fetch from "./Components/Fetch";
 import JoinGroup from "./Components/JoinGroup";
 import Settings from "./Components/Settings";
-import About from "./Components/About";
+// import About from "./Components/About";
 import ForgotPassword from "./Components/ForgotPassword";
 import NonFound from "./Components/NonFound";
 import ResetPassword from "./Components/ResetPassword";
 import Layout from "./Container/Layout";
 import SendMail from "./SendMail";
-import Contact from "./Components/Contact";
-import MultipleItems from "./Components/Carousel";
+// import Contact from "./Components/Contact";
+// import MultipleItems from "./Components/Carousel";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <Route path="groups" element={<Groups />} />
           <Route path="groups/contribution" element={<EachgroupUser />} />
           <Route path="account" element={<Account />} />
+          <Route path="account/history" element={<History />} />
           <Route path="messages" element={<Messages />} />
           <Route path="createThrift" element={<CreateThrift />} />
           <Route path="pay" element={<Fetch />} />

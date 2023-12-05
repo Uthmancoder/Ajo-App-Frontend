@@ -26,7 +26,7 @@ const CreateThrift = () => {
   // Addeed a state variable to track the successful creation of the thrift group
   const [thriftGroupCreated, setThriftGroupCreated] = useState(false);
 
-  const creatorUsername = fetchedUser?.user?.username;
+  const creatorUsername = fetchedUser?.username;
   // inputs intialization
   const [groupName, setgroupName] = useState("");
 
@@ -64,13 +64,14 @@ const CreateThrift = () => {
   const handleSubmit = async (ev) => {
     ev.preventDefault();
 
-    const pack = Number(Amount) * Number(users); // Convert Amount and users to numbers
+    const pack = Number(Amount) * Number(users) * Number(users) ; // Convert Amount and users to numbers
 
     //  getting the token from localstorage
     const token = localStorage.getItem("token");
     console.log(token);
     if (Number(users) > 8) {
       alert("Maximum of 8 users can be accepted in a group, please try reducing your users");
+      return;
     } else if (
       groupName === "" ||
       Amount === "" ||
@@ -79,6 +80,7 @@ const CreateThrift = () => {
       imageFile === ""
     ) {
       alert("imput field cannot be empty");
+      return;
     }
     else {
       // data to be sent to the server
