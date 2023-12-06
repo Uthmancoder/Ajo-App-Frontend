@@ -40,7 +40,12 @@ const EachgroupUser = () => {
 
   const groupWallet = fetchedUser?.wallet;
 
+  const NextWithdrawal = fetchedUser?.NextWithdrawal;
+
+  const totalWithdraws = fetchedUser?.TotalWithdraws;
+
   const amountPerThrift = fetchedUser?.Amount;
+
   console.log("Amount Per Thrift:", amountPerThrift)
 
   const groupId = fetchedUser?.groupId;
@@ -92,18 +97,7 @@ const EachgroupUser = () => {
     return 0;
   });
 
-  // Initializing the totalWithdraws state with the value from localStorage, if available
-  const [totalWithdraws, setTotalWithdraws] = useState(() => {
-    const storedTotalWithdraws = localStorage.getItem("totalWithdraws");
 
-    // If there's a value for 'totalWithdraws' in localStorage, parse it as an integer
-    if (storedTotalWithdraws !== null) {
-      return parseInt(storedTotalWithdraws);
-    }
-
-    // Default: Start with 0
-    return 0;
-  });
 
   // checking if all the payments are conpleted
   const [paymentCompleted, setPaymentCompleted] = useState(false);
@@ -307,25 +301,25 @@ const EachgroupUser = () => {
   };
 
   // getting the next withdrawer
-  const getNextWithdrawer = () => {
-    if (currentWithdrawalIndex === -1) {
-      // Start with the first user
-      return groupMembers[0]?.username;
-    }
+  // const getNextWithdrawer = () => {
+  //   if (currentWithdrawalIndex === -1) {
+  //     // Start with the first user
+  //     return groupMembers[0]?.username;
+  //   }
 
-    // Increment the currentWithdrawalIndex, and if it exceeds the length of groupMembers, reset it to 0
-    const nextIndex =
-      currentWithdrawalIndex === groupMembers.length - 1
-        ? 0
-        : currentWithdrawalIndex + 1;
-    return groupMembers[nextIndex]?.username;
-  };
+  //   // Increment the currentWithdrawalIndex, and if it exceeds the length of groupMembers, reset it to 0
+  //   const nextIndex =
+  //     currentWithdrawalIndex === groupMembers.length - 1
+  //       ? 0
+  //       : currentWithdrawalIndex + 1;
+  //   return groupMembers[nextIndex]?.username;
+  // };
 
 
 
   const withdraw = async () => {
     // Get the username of the current withdrawer
-    const currentWithdrawer = getNextWithdrawer();
+    const currentWithdrawer = NextWithdrawal;
 
     // Update the WithdrawingData object with the current username
     const updatedWithdrawingData = {
@@ -356,13 +350,11 @@ const EachgroupUser = () => {
         dispatch(addMessage(messageDetails));
         dispatch(incrementUnreadMessages())
         localStorage.setItem("currentWithdarwer", currentWithdrawer);
-        localStorage.setItem("totalWithdraws", totalWithdraws);
+
         navigate("/dashboard");
         setTimeout(() => {
           navigate("/dashboard/groups");
         }, 500)
-        // Increment totalWithdraws
-        setTotalWithdraws(totalWithdraws + 1);
       })
       .catch((error) => {
         console.error(error);
@@ -458,7 +450,7 @@ const EachgroupUser = () => {
               style={{ maxWidth: "300px" }}
             >
               <h5 className="text-primary pt-1 fw-bolder">Next Withdrawer</h5>
-              <p>{getNextWithdrawer()?.toUpperCase()}</p>
+              <p>{NextWithdrawal?.toUpperCase()}</p>
             </div>
             <div
               className="d-grid   py-2  border-div nextwithdraw "
